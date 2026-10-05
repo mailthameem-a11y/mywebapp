@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>நமது ஆன்லைன் ஸ்டோர்</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; margin: 0; padding: 20px; }
+        h1 { text-align: center; color: #1f2937; }
+        /* கார்டுகளை வரிசையாகக் காட்ட Grid முறை */
+        .products-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
+        /* ஒவ்வொரு பொருளுக்குமான டிசைன் */
+        .card { background-color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 250px; text-align: center; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { color: #2563eb; margin: 0 0 10px 0; text-transform: capitalize; }
+        .price { font-size: 24px; font-weight: bold; color: #16a34a; margin: 10px 0; }
+        .stock { color: #6b7280; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h1>🛒 நமது ஆன்லைன் ஸ்டோர்</h1>
+    
+    <!-- பொருட்கள் இங்குதான் காட்டப்படும் -->
+    <div class="products-container" id="product-list">
+        <p>பொருட்கள் லோட் ஆகிறது...</p>
+    </div>
+
+    <script>
+        // நாம் உருவாக்கிய /products API-யில் இருந்து தகவல்களைப் பெறுதல்
+        fetch('/products')
+            .then(response => response.json())
+            .then(products => {
+                const productList = document.getElementById('product-list');
+                productList.innerHTML = ''; // "லோட் ஆகிறது..." என்பதை அழித்துவிடுகிறோம்
+
+                // ஒவ்வொரு பொருளுக்கும் ஒரு HTML கார்டை உருவாக்குதல்
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p class="price">₹${product.price}</p>
+                        <p class="stock">ஸ்டாக்: ${product.stock} உள்ளது</p>
+                    `;
+                    productList.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+
+</body>
+</html>
