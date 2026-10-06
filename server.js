@@ -90,9 +90,6 @@ app.get('/update-price/:id/:newPrice', async (req, res) => {
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/store.html');
 });
-app.get('/shop', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
 // 7. பொருளின் தகவல்களை மாற்றுவதற்கான Route (Update)
 app.put('/update-product/:id', express.json(), async (req, res) => {
   try {
