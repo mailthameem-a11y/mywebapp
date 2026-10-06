@@ -3,39 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>நமது ஆன்லைன் ஸ்டோர்</title>
+    <title>நமது ஆன்லைன் ஸ்டோர் - அட்மின் பேனல்</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; margin: 0; padding: 20px; }
-        h1 { text-align: center; color: #1f2937; }
-        /* கார்டுகளை வரிசையாகக் காட்ட Grid முறை */
-        .products-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
-        /* ஒவ்வொரு பொருளுக்குமான டிசைன் */
-        .card { background-color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 250px; text-align: center; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-5px); }
-        .card h3 { color: #2563eb; margin: 0 0 10px 0; text-transform: capitalize; }
-        .price { font-size: 24px; font-weight: bold; color: #16a34a; margin: 10px 0; }
-        .stock { color: #6b7280; font-size: 14px; }
+        /* Modern Theme Settings */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%); 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh;
+        }
+        h1 { text-align: center; color: #1e293b; font-size: 2.5rem; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #64748b; margin-top: 0; margin-bottom: 40px; font-size: 1.2rem; }
+
+        /* Split Layout Container */
+        .dashboard-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        /* Left Side: Form Section */
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white; 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
+        }
+        .form-section h3 { margin-top: 0; color: #0f172a; font-size: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;}
+        .form-section label { display: block; margin: 15px 0 5px; color: #475569; font-weight: 600; font-size: 0.9rem;}
+        .form-section input {
+            width: 100%; 
+            padding: 12px; 
+            box-sizing: border-box;
+            border: 1px solid #cbd5e1; 
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-section input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .submit-btn {
+            background-color: #16a34a; 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .submit-btn:hover { background-color: #15803d; transform: translateY(-2px); }
+
+        /* Right Side: Products Section */
+        .products-section {
+            flex: 2;
+            min-width: 300px;
+        }
+        .products-section h2 { color: #0f172a; margin-top: 0; margin-bottom: 20px;}
+        
+        .products-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px; 
+        }
+
+        /* Product Cards */
+        .card { 
+            background-color: white; 
+            padding: 25px; 
+            border-radius: 16px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+            transition: transform 0.3s, box-shadow 0.3s; 
+        }
+        .card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); 
+        }
+        .card h3 { color: #0f172a; margin: 0 0 10px 0; text-transform: capitalize; font-size: 1.3rem;}
+        .price { font-size: 26px; font-weight: 800; color: #0f172a; margin: 10px 0; }
+        
+        /* Stock Badge */
+        .stock-badge { 
+            display: inline-block;
+            background-color: #dcfce7;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Card Buttons */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
+        }
+        .edit-btn, .delete-btn {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+        .edit-btn { background-color: #eab308; }
+        .delete-btn { background-color: #ef4444; }
+        .edit-btn:hover, .delete-btn:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
 
     <h1>🛒 நமது ஆன்லைன் ஸ்டோர்</h1>
-    <!-- புதிய பொருளைச் சேர்க்கும் படிவம் -->
-    <div style="background-color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto 30px auto; text-align: center;">
-        <h3 style="margin-top: 0; color: #2563eb;">புதிய பொருளைச் சேர்க்க</h3>
-        <form action="/add-product-dynamic" method="POST">
-            <input type="text" name="name" placeholder="பொருளின் பெயர்" required style="width: 90%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;"><br>
-            <input type="number" name="price" placeholder="விலை (₹)" required style="width: 90%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;"><br>
-            <input type="number" name="stock" placeholder="ஸ்டாக் அளவு" required style="width: 90%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px;"><br>
-            <button type="submit" style="background-color: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 95%; font-weight: bold;">
-                💾 டேட்டாபேஸில் சேமி
-            </button>
-        </form>
-    </div>
-    
-    <!-- பொருட்கள் இங்குதான் காட்டப்படும் -->
-    <div class="products-container" id="product-list">
-        <p>பொருட்கள் லோட் ஆகிறது...</p>
+    <p class="subtitle">அட்மின் பேனல்</p>
+
+    <div class="dashboard-container">
+        
+        <!-- Left Side: Form Section -->
+        <div class="form-section">
+            <h3>புதிய பொருளைச் சேர்க்க</h3>
+            <form action="/add-product-dynamic" method="POST">
+                <label>பொருளின் பெயர்</label>
+                <input type="text" name="name" required>
+                
+                <label>விலை (₹)</label>
+                <input type="number" name="price" required>
+                
+                <label>ஸ்டாக் அளவு</label>
+                <input type="number" name="stock" required>
+                
+                <button type="submit" class="submit-btn">
+                    💾 டேட்டாபேஸில் சேமி
+                </button>
+            </form>
+        </div>
+
+        <!-- Right Side: Products Section -->
+        <div class="products-section">
+            <h2>பொருட்களின் பட்டியல்</h2>
+            <div class="products-grid" id="product-list">
+                <p>பொருட்கள் லோட் ஆகிறது...</p>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -52,13 +183,16 @@
                     card.innerHTML = `
                         <h3>${product.name}</h3>
                         <p class="price">₹${product.price}</p>
-                        <p class="stock">ஸ்டாக்: ${product.stock} உள்ளது</p>
-                        <button onclick="editProduct('${product._id}', '${product.name}', '${product.price}', '${product.stock}')" style="background-color: #eab308; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin-top: 10px; margin-right: 5px;">
-                            ✏️ Edit
-                        </button>
-                        <button onclick="deleteProduct('${product._id}')" style="background-color: #ef4444; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
-                            🗑️ Delete
-                        </button>
+                        <span class="stock-badge">ஸ்டாக்: ${product.stock} உள்ளது</span>
+                        
+                        <div class="card-actions">
+                            <button class="edit-btn" onclick="editProduct('${product._id}', '${product.name}', '${product.price}', '${product.stock}')">
+                                ✏️️ Edit
+                            </button>
+                            <button class="delete-btn" onclick="deleteProduct('${product._id}')">
+                                🗑️ Delete
+                            </button>
+                        </div>
                     `;
                     productList.appendChild(card);
                 });
