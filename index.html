@@ -20,6 +20,18 @@
 <body>
 
     <h1>🛒 நமது ஆன்லைன் ஸ்டோர்</h1>
+    <!-- புதிய பொருளைச் சேர்க்கும் படிவம் -->
+    <div style="background-color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto 30px auto; text-align: center;">
+        <h3 style="margin-top: 0; color: #2563eb;">புதிய பொருளைச் சேர்க்க</h3>
+        <form action="/add-product-dynamic" method="POST">
+            <input type="text" name="name" placeholder="பொருளின் பெயர்" required style="width: 90%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;"><br>
+            <input type="number" name="price" placeholder="விலை (₹)" required style="width: 90%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;"><br>
+            <input type="number" name="stock" placeholder="ஸ்டாக் அளவு" required style="width: 90%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px;"><br>
+            <button type="submit" style="background-color: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 95%; font-weight: bold;">
+                💾 டேட்டாபேஸில் சேமி
+            </button>
+        </form>
+    </div>
     
     <!-- பொருட்கள் இங்குதான் காட்டப்படும் -->
     <div class="products-container" id="product-list">

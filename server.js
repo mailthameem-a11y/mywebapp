@@ -45,7 +45,7 @@ app.post('/add-product-dynamic', async (req, res) => {
     });
     
     await newProduct.save();
-    res.send('<h1>பொருள் வெற்றிகரமாக சேமிக்கப்பட்டது! 🎉 <a href="/products">பட்டியலைப் பார்க்க இங்கே கிளிக் செய்யவும்</a></h1>');
+    res.redirect('<h1>பொருள் வெற்றிகரமாக சேமிக்கப்பட்டது! 🎉 <a href="/products">பட்டியலைப் பார்க்க இங்கே கிளிக் செய்யவும்</a></h1>');
   } catch (err) {
     res.send("பிழை: " + err.message);
   }
