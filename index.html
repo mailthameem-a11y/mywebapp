@@ -40,13 +40,27 @@
                     card.className = 'card';
                     card.innerHTML = `
                         <h3>${product.name}</h3>
-                        <p class="price">₹${product.price}</p>
-                        <p class="stock">ஸ்டாக்: ${product.stock} உள்ளது</p>
+<p class="price">₹${product.price}</p>
+<p class="stock">ஸ்டாக்: ${product.stock} உள்ளது</p>
+<button onclick="deleteProduct('${product._id}')" style="background-color: #ef4444; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+    🗑️ Delete
+</button>
                     `;
                     productList.appendChild(card);
                 });
             })
             .catch(error => console.error('Error fetching data:', error));
+            // பொருளை அழிப்பதற்கான ஃபங்ஷன்
+function deleteProduct(id) {
+    if(confirm("இந்தப் பொருளை நிச்சயமாக அழிக்க வேண்டுமா?")) {
+        fetch('/delete-product/' + id)
+        .then(response => {
+            alert("பொருள் வெற்றிகரமாக அழிக்கப்பட்டது!");
+            window.location.reload(); 
+        })
+        .catch(err => console.error(err));
+    }
+}
     </script>
 
 </body>
