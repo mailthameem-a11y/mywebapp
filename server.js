@@ -6,27 +6,28 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // JSON டேட்டாவைப் படிக்க இது அவசியம்
+app.use(express.json()); 
 
-// MongoDB உடன் இணைத்தல்
+// MongoDB இணைப்பு
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB வெற்றிகரமாக இணைக்கப்பட்டது! 🎉"))
   .catch((err) => console.log("MongoDB இணைப்பில் பிழை:", err));
 
-// Product Schema
+// Product Schema (இதில் Category புதிதாகச் சேர்க்கப்பட்டுள்ளது)
 const productSchema = new mongoose.Schema({
   name: String,
   price: Number,
-  stock: Number
+  stock: Number,
+  category: String 
 });
 const Product = mongoose.model('Product', productSchema);
 
-// 1. வாடிக்கையாளர் பக்கம் (Customer Storefront) - இது உங்களின் நேரடி டொமைனில் வரும்
+// 1. வாடிக்கையாளர் பக்கம்
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/store.html');
 });
 
-// 2. அட்மின் பேனல் (Admin Dashboard) - இது /shop என்று தட்டச்சு செய்தால் வரும்
+// 2. அட்மின் பேனல்
 app.get('/shop', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
@@ -37,10 +38,10 @@ app.post('/add-product-dynamic', async (req, res) => {
     const newProduct = new Product({
       name: req.body.name,
       price: req.body.price,
-      stock: req.body.stock
+      stock: req.body.stock,
+      category: req.body.category // ஃபார்மில் இருந்து Category-ஐ எடுக்கும்
     });
     await newProduct.save();
-    // சேமித்தவுடன் அட்மின் பேனலுக்கே திரும்பச் செல்லும்
     res.redirect('/shop'); 
   } catch (err) {
     res.send("பிழை: " + err.message);
@@ -57,7 +58,7 @@ app.get('/products', async (req, res) => {
   }
 });
 
-// 5. டேட்டாபேஸிலிருந்து ஒரு பொருளை அழித்தல்
+// 5. ஒரு பொருளை அழித்தல்
 app.get('/delete-product/:id', async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
@@ -67,7 +68,7 @@ app.get('/delete-product/:id', async (req, res) => {
   }
 });
 
-// 6. பொருளின் தகவல்களை மாற்றுவதற்கான Route (Update)
+// 6. ஒரு பொருளை அப்டேட் செய்தல்
 app.put('/update-product/:id', async (req, res) => {
   try {
     await Product.findByIdAndUpdate(req.params.id, {

@@ -6,162 +6,32 @@
     <title>Royal Nuts & Dates | Premium Quality</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Premium Theme Variables */
-        :root {
-            --primary-dark: #064e3b; /* Deep Emerald */
-            --gold: #d4af37; /* Premium Gold */
-            --bg-color: #fafaf9; /* Warm White */
-            --text-dark: #1c1917;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 0;
-            color: var(--text-dark);
-        }
-
-        /* Elegant Navbar */
-        header {
-            background-color: white;
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            color: var(--primary-dark);
-            text-decoration: none;
-            letter-spacing: 1px;
-        }
+        :root { --primary-dark: #064e3b; --gold: #d4af37; --bg-color: #fafaf9; --text-dark: #1c1917; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-dark); }
+        header { background-color: white; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary-dark); text-decoration: none; letter-spacing: 1px; }
         .logo span { color: var(--gold); }
-        .cart-btn {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--primary-dark);
-        }
-
-        /* Hero Banner */
-        .hero {
-            background: linear-gradient(rgba(6, 78, 59, 0.85), rgba(6, 78, 59, 0.85)), url('https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=1200') center/cover;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-        }
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            margin: 0 0 15px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .hero p {
-            font-size: 1.2rem;
-            margin: 0;
-            color: #e5e7eb;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        /* Products Section */
-        .container {
-            max-width: 1200px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-        .section-title {
-            text-align: center;
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--primary-dark);
-            margin-bottom: 40px;
-        }
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background-color: var(--gold);
-            margin: 15px auto 0;
-        }
-
-        /* Premium Product Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-        }
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-        }
-        .product-img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-bottom: 3px solid var(--gold);
-        }
-        .product-info {
-            padding: 25px 20px;
-            text-align: center;
-        }
-        .product-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            margin: 0 0 10px 0;
-            color: var(--text-dark);
-            text-transform: capitalize;
-        }
-        .product-price {
-            font-size: 1.3rem;
-            color: var(--primary-dark);
-            font-weight: 600;
-            margin: 0 0 20px 0;
-        }
-        .buy-btn {
-            background-color: var(--primary-dark);
-            color: white;
-            border: 1px solid var(--primary-dark);
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-        .buy-btn:hover {
-            background-color: transparent;
-            color: var(--primary-dark);
-        }
-        .out-of-stock {
-            opacity: 0.6;
-            pointer-events: none;
-        }
+        .cart-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--primary-dark); }
+        .hero { background: linear-gradient(rgba(6, 78, 59, 0.85), rgba(6, 78, 59, 0.85)), url('https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=1200') center/cover; height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; margin: 0 0 15px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.2rem; margin: 0; color: #e5e7eb; letter-spacing: 2px; text-transform: uppercase; }
+        .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
+        
+        .category-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary-dark); margin: 50px 0 20px 0; border-bottom: 2px solid var(--gold); padding-bottom: 10px; display: inline-block;}
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-bottom: 50px;}
+        
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: transform 0.3s ease; }
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
+        .product-img { width: 100%; height: 220px; object-fit: cover; border-bottom: 3px solid var(--gold); }
+        .product-info { padding: 25px 20px; text-align: center; }
+        .product-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin: 0 0 10px 0; color: var(--text-dark); text-transform: capitalize; }
+        .product-price { font-size: 1.3rem; color: var(--primary-dark); font-weight: 600; margin: 0 0 20px 0; }
+        .buy-btn { background-color: var(--primary-dark); color: white; border: 1px solid var(--primary-dark); padding: 12px 25px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; }
+        .buy-btn:hover { background-color: transparent; color: var(--primary-dark); }
+        .out-of-stock { opacity: 0.6; pointer-events: none; }
     </style>
 </head>
 <body>
-
     <header>
         <a href="#" class="logo">Royal<span>Nuts</span></a>
         <button class="cart-btn">🛒 Cart (0)</button>
@@ -172,45 +42,61 @@
         <p>Finest Dates, Nuts & Dry Fruits</p>
     </div>
 
-    <div class="container">
-        <h2 class="section-title">Our Exclusive Collection</h2>
-        <div class="grid" id="customer-product-list">
-            <p style="text-align: center; width: 100%; color: #666;">பொருட்கள் லோட் ஆகிறது...</p>
-        </div>
+    <div class="container" id="customer-product-list">
+        <p style="text-align: center; color: #666;">பொருட்கள் லோட் ஆகிறது...</p>
     </div>
 
     <script>
-        // டேட்டாபேஸில் உள்ள பொருட்களை வாடிக்கையாளர் பக்கத்தில் காட்டுதல்
         fetch('/products')
             .then(response => response.json())
             .then(products => {
-                const productList = document.getElementById('customer-product-list');
-                productList.innerHTML = ''; 
+                const container = document.getElementById('customer-product-list');
+                container.innerHTML = ''; 
 
+                // பொருட்களை Category வாரியாகப் பிரித்தல்
+                const categories = {};
                 products.forEach(product => {
-                    // ஸ்டாக் அடிப்படையில் பட்டனை மாற்றுதல்
-                    const isOutOfStock = product.stock <= 0;
-                    const btnText = isOutOfStock ? 'Out of Stock' : 'Add to Cart';
-                    const btnClass = isOutOfStock ? 'buy-btn out-of-stock' : 'buy-btn';
-
-                    // பிரீமியம் தோற்றத்திற்காக ஒரு பொதுவான படம்
-                    const placeholderImg = "https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=500";
-
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    card.innerHTML = `
-                        <img src="${placeholderImg}" alt="${product.name}" class="product-img">
-                        <div class="product-info">
-                            <h3 class="product-name">${product.name}</h3>
-                            <p class="product-price">₹${product.price}</p>
-                            <button class="${btnClass}">${btnText}</button>
-                        </div>
-                    `;
-                    productList.appendChild(card);
+                    // பழைய பொருட்களுக்கு Category இல்லையென்றால் 'Others' என வைக்கிறோம்
+                    const cat = product.category || 'Others';
+                    if (!categories[cat]) { categories[cat] = []; }
+                    categories[cat].push(product);
                 });
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    </script>
 
+                // ஒவ்வொரு Category-க்கும் தனித் தலைப்பு மற்றும் Grid உருவாக்குதல்
+                for (const [categoryName, items] of Object.entries(categories)) {
+                    // Category Title
+                    const title = document.createElement('h2');
+                    title.className = 'category-title';
+                    title.innerText = categoryName;
+                    container.appendChild(title);
+
+                    // Product Grid
+                    const grid = document.createElement('div');
+                    grid.className = 'grid';
+
+                    items.forEach(product => {
+                        const isOutOfStock = product.stock <= 0;
+                        const btnText = isOutOfStock ? 'Out of Stock' : 'Add to Cart';
+                        const btnClass = isOutOfStock ? 'buy-btn out-of-stock' : 'buy-btn';
+                        const placeholderImg = "https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=500";
+
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+                        card.innerHTML = `
+                            <img src="${placeholderImg}" alt="${product.name}" class="product-img">
+                            <div class="product-info">
+                                <h3 class="product-name">${product.name}</h3>
+                                <p class="product-price">₹${product.price}</p>
+                                <button class="${btnClass}">${btnText}</button>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    
+                    container.appendChild(grid);
+                }
+            })
+            .catch(error => console.error(error));
+    </script>
 </body>
 </html>
