@@ -89,6 +89,19 @@ app.get('/update-price/:id/:newPrice', async (req, res) => {
 app.get('/shop', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
+// 7. பொருளின் தகவல்களை மாற்றுவதற்கான Route (Update)
+app.put('/update-product/:id', express.json(), async (req, res) => {
+  try {
+    // டேட்டாபேஸில் புதிய விலை மற்றும் ஸ்டாக்கை அப்டேட் செய்கிறோம்
+    await Product.findByIdAndUpdate(req.params.id, {
+      price: req.body.price,
+      stock: req.body.stock
+    });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 app.listen(PORT, () => {
   console.log(`சர்வர் வெற்றிகரமாக http://localhost:${PORT} -ல் இயங்குகிறது`);
 });
