@@ -86,6 +86,10 @@ app.get('/update-price/:id/:newPrice', async (req, res) => {
   }
 });
 // 6. Frontend HTML பக்கத்தைக் காட்டுவதற்கான Route
+// வாடிக்கையாளர்களுக்கான முகப்புப் பக்கம் (Customer Storefront)
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/store.html');
+});
 app.get('/shop', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
