@@ -39,18 +39,16 @@
     </div>
 
     <script>
-        // நாம் உருவாக்கிய /products API-யில் இருந்து தகவல்களைப் பெறுதல்
+        // 1. பொருட்களை எடுக்கும் ஃபங்ஷன்
         fetch('/products')
             .then(response => response.json())
             .then(products => {
                 const productList = document.getElementById('product-list');
-                productList.innerHTML = ''; // "லோட் ஆகிறது..." என்பதை அழித்துவிடுகிறோம்
+                productList.innerHTML = ''; // லோடிங் டெக்ஸ்ட்டை அழித்தல்
 
-                // ஒவ்வொரு பொருளுக்கும் ஒரு HTML கார்டை உருவாக்குதல்
                 products.forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'card';
-                    card.innerHTML = `
                     card.innerHTML = `
                         <h3>${product.name}</h3>
                         <p class="price">₹${product.price}</p>
@@ -62,17 +60,31 @@
                             🗑️ Delete
                         </button>
                     `;
-                    // பொருளை அப்டேட் செய்வதற்கான ஃபங்ஷன்
+                    productList.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+        // 2. பொருளை அழிப்பதற்கான ஃபங்ஷன்
+        function deleteProduct(id) {
+            if(confirm("இந்தப் பொருளை நிச்சயமாக அழிக்க வேண்டுமா?")) {
+                fetch('/delete-product/' + id)
+                .then(response => {
+                    alert("பொருள் வெற்றிகரமாக அழிக்கப்பட்டது!");
+                    window.location.reload(); 
+                })
+                .catch(err => console.error(err));
+            }
+        }
+
+        // 3. பொருளை மாற்றுவதற்கான ஃபங்ஷன் (Edit)
         function editProduct(id, name, oldPrice, oldStock) {
-            // புதிய விலையைக் கேட்பது
             let newPrice = prompt(name + " - புதிய விலையை உள்ளிடவும்:", oldPrice);
-            if (newPrice === null) return; // Cancel செய்தால் நின்றுவிடும்
+            if (newPrice === null) return; 
             
-            // புதிய ஸ்டாக் அளவைக் கேட்பது
             let newStock = prompt(name + " - புதிய ஸ்டாக் அளவை உள்ளிடவும்:", oldStock);
             if (newStock === null) return;
 
-            // புதிய தகவல்களைச் சர்வருக்கு அனுப்புதல் (PUT Request)
             fetch('/update-product/' + id, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -81,26 +93,10 @@
             .then(response => response.json())
             .then(data => {
                 alert("பொருள் வெற்றிகரமாக அப்டேட் செய்யப்பட்டது!");
-                window.location.reload(); // புதிய தகவல்களுடன் பக்கத்தை ரீலோட் செய்ய
+                window.location.reload(); 
             })
             .catch(err => console.error(err));
         }
-                    productList.appendChild(card);
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
-            // பொருளை அழிப்பதற்கான ஃபங்ஷன்
-function deleteProduct(id) {
-    if(confirm("இந்தப் பொருளை நிச்சயமாக அழிக்க வேண்டுமா?")) {
-        fetch('/delete-product/' + id)
-        .then(response => {
-            alert("பொருள் வெற்றிகரமாக அழிக்கப்பட்டது!");
-            window.location.reload(); 
-        })
-        .catch(err => console.error(err));
-    }
-}
     </script>
-
 </body>
 </html>
