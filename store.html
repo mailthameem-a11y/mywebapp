@@ -6,7 +6,6 @@
     <title>Li Ahsan — Premium Dry Fruits, Naturally Delicious</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Li Ahsan Premium Theme Settings */
         :root {
             --primary: #153a25; 
             --accent: #d4af37; 
@@ -17,7 +16,6 @@
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); margin: 0; padding: 0; color: var(--text-dark); }
         h1, h2, h3 { font-family: 'Playfair Display', serif; }
         
-        /* Navbar */
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: white; box-shadow: 0 1px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--primary); text-decoration: none; }
         .nav-links { display: flex; gap: 30px; }
@@ -26,7 +24,6 @@
         .nav-actions { display: flex; gap: 20px; align-items: center; }
         .cart-btn { background: none; border: none; font-size: 1rem; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 5px;}
 
-        /* Hero Section */
         .hero { position: relative; height: 85vh; display: flex; align-items: center; padding: 0 5%; background: url('https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=1600') center/cover; }
         .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to right, rgba(21, 58, 37, 0.9) 0%, rgba(21, 58, 37, 0.6) 50%, transparent 100%); }
         .hero-content { position: relative; z-index: 1; max-width: 600px; color: white; }
@@ -38,19 +35,16 @@
         .btn-outline { background: transparent; color: white; padding: 15px 35px; text-decoration: none; font-weight: 600; border: 1px solid white; border-radius: 4px; margin-left: 15px; transition: all 0.3s;}
         .btn-outline:hover { background: white; color: var(--primary); }
 
-        /* Features */
         .features { display: flex; justify-content: space-between; padding: 60px 5%; background: white; border-bottom: 1px solid #eee; }
         .feature-box { text-align: center; flex: 1; padding: 0 20px; }
         .feature-box h4 { font-family: 'Inter', sans-serif; margin: 10px 0 5px; font-size: 1.1rem; }
         .feature-box p { color: var(--text-light); font-size: 0.9rem; margin: 0; }
 
-        /* Common Titles */
         .section-title { text-align: center; padding: 80px 5% 40px; }
         .section-title h2 { font-size: 2.5rem; margin: 0; color: var(--primary); }
         .section-title p { color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; font-weight: 600; margin-bottom: 15px; }
         .section-subtitle { color: var(--text-light); margin-top: 15px; font-size: 1.1rem; }
 
-        /* Shop by Category Section */
         .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 5% 40px; }
         .category-card { text-align: center; cursor: pointer; }
         .cat-img-wrapper { border-radius: 50%; overflow: hidden; width: 220px; height: 220px; margin: 0 auto 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: transform 0.4s; }
@@ -62,7 +56,6 @@
         .cat-link { color: var(--primary); font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 3px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
         .cat-link:hover { color: var(--accent); }
 
-        /* Featured Products Section */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding: 0 5% 80px; }
         .product-card { background: white; border-radius: 8px; overflow: hidden; transition: box-shadow 0.3s; position: relative; border: 1px solid #eee; }
         .product-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
@@ -81,7 +74,6 @@
         .add-to-cart { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 10px 20px; border-radius: 4px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .add-to-cart:hover { background: var(--primary); color: white; }
 
-        /* Our Promise Section (Stats) */
         .promise-section { display: flex; flex-wrap: wrap; background: white; padding: 80px 5%; border-top: 1px solid #eee; align-items: center; gap: 50px; }
         .promise-text { flex: 1; min-width: 300px; }
         .promise-text h2 { font-size: 2.5rem; color: var(--primary); margin: 10px 0 20px; }
@@ -91,7 +83,6 @@
         .stat-box h3 { font-size: 2.5rem; color: var(--primary); margin: 0 0 5px 0; }
         .stat-box p { margin: 0; color: var(--text-light); font-weight: 500; font-size: 1rem; }
 
-        /* Footer */
         footer { background: var(--primary); color: white; padding: 80px 5% 40px; }
         .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; margin-bottom: 60px; }
         .footer-logo { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; display: block; }
@@ -110,7 +101,6 @@
 </head>
 <body>
 
-    <!-- Navigation -->
     <header>
         <a href="/" class="logo">Li Ahsan</a>
         <nav class="nav-links">
@@ -125,7 +115,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <span class="hero-subtitle">Nature's Finest, Delivered Fresh</span>
@@ -136,7 +125,6 @@
         </div>
     </section>
 
-    <!-- Features -->
     <section class="features">
         <div class="feature-box">
             <h4>Premium Quality</h4>
@@ -156,7 +144,6 @@
         </div>
     </section>
 
-    <!-- Shop by Category -->
     <section id="categories">
         <div class="section-title">
             <p>OUR COLLECTIONS</p>
@@ -191,7 +178,6 @@
         </div>
     </section>
 
-    <!-- Featured Products -->
     <section id="shop">
         <div class="section-title">
             <p>HANDPICKED</p>
@@ -203,7 +189,6 @@
         </div>
     </section>
 
-    <!-- Our Promise (Stats) -->
     <section class="promise-section">
         <div class="promise-text">
             <p style="color:var(--accent); letter-spacing:2px; font-weight:600; font-size:0.85rem; margin:0;">OUR PROMISE</p>
@@ -231,7 +216,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-grid">
             <div>
@@ -240,4 +224,101 @@
             </div>
             <div>
                 <h4 class="footer-title">QUICK LINKS</h4>
-                <ul class="footer-links
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#shop">Shop</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-title">CUSTOMER SUPPORT</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-title">NEWSLETTER</h4>
+                <p class="footer-desc">Get fresh updates and exclusive offers.</p>
+                <div class="newsletter-box">
+                    <input type="email" placeholder="Your email">
+                    <button>Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Li Ahsan. All rights reserved. | Built with Render & MongoDB
+        </div>
+    </footer>
+
+    <!-- பிழைகளைக் கண்டுபிடிப்பதற்கான புதிய JavaScript -->
+    <script>
+        fetch('/products')
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error(`சர்வர் பிழை: ${response.status} ${response.statusText}`);
+                }
+                const text = await response.text();
+                try {
+                    return JSON.parse(text); 
+                } catch (err) {
+                    throw new Error("டேட்டாபேஸிலிருந்து சரியான தகவல் வரவில்லை. சர்வர் அனுப்பியது: " + text.substring(0, 100));
+                }
+            })
+            .then(products => {
+                const container = document.getElementById('customer-product-list');
+                container.innerHTML = ''; 
+
+                if(products.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #d97706; font-weight: bold; grid-column: 1 / -1; padding: 30px;">டேட்டாபேஸில் பொருட்கள் எதுவும் இல்லை! முதலில் அட்மின் பேனலில் சேர்க்கவும்.</p>';
+                    return;
+                }
+
+                products.forEach((product, index) => {
+                    const badges = ['BEST SELLER', 'PREMIUM', 'NEW', 'FRESH ARRIVAL'];
+                    const randomBadge = badges[index % badges.length];
+                    
+                    const images = [
+                        "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=600",
+                        "https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=600",
+                        "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?q=80&w=600"
+                    ];
+                    const randomImg = images[index % images.length];
+
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    
+                    card.innerHTML = `
+                        <span class="badge">${randomBadge}</span>
+                        <div class="product-img-wrapper">
+                            <img src="${randomImg}" alt="${product.name}" class="product-img">
+                        </div>
+                        <div class="product-details">
+                            <div class="rating">★ 4.8 <span>(124)</span></div>
+                            <span class="category-text">${product.category || 'NUTS & DATES'}</span>
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-desc">Premium quality ${product.name}, hand-sorted for the best experience.</p>
+                            
+                            <div class="price-row">
+                                <span class="price">₹${product.price} <span style="font-size:0.9rem; color:#999; font-weight:normal;">/ 500g</span></span>
+                                <button class="add-to-cart">${product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => {
+                const container = document.getElementById('customer-product-list');
+                container.innerHTML = `<div style="text-align: center; color: #b91c1c; background: #fee2e2; border: 2px solid #ef4444; padding: 20px; border-radius: 8px; grid-column: 1 / -1;">
+                    <h3 style="margin-top: 0;">⚠️ ஒரு பிழை ஏற்பட்டுள்ளது!</h3>
+                    <p>${error.message}</p>
+                </div>`;
+            });
+    </script>
+</body>
+</html>
