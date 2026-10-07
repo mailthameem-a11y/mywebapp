@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | Royal Nuts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #153a25; --accent: #d4af37; --text-dark: #111827; --text-light: #6b7280; --bg-main: #f9fafb; --border-color: #e5e7eb;}
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); margin: 0; padding: 0; color: var(--text-dark); }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: white; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .nav-links { display: flex; gap: 35px; }
+        .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 400; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .cart-btn { background: none; border: none; font-size: 1rem; cursor: pointer; color: var(--text-dark); }
+
+        /* Shop Layout */
+        .shop-container { display: grid; grid-template-columns: 260px 1fr; gap: 50px; padding: 60px 5%; max-width: 1400px; margin: 0 auto; }
+
+        /* Sidebar Filters */
+        .sidebar { position: sticky; top: 100px; height: fit-content; }
+        .sidebar h3 { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 20px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .filter-group { margin-bottom: 40px; }
+        .filter-group input[type="text"] { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 20px; font-family: 'Inter'; box-sizing: border-box; }
+        
+        .category-list { list-style: none; padding: 0; margin: 0; }
+        .category-list li { margin-bottom: 12px; }
+        .category-list button { background: none; border: none; text-align: left; padding: 0; color: var(--text-light); font-size: 0.95rem; cursor: pointer; font-family: 'Inter'; transition: color 0.2s;}
+        .category-list button:hover, .category-list button.active { color: var(--text-dark); font-weight: 600; }
+
+        .price-range { width: 100%; margin-top: 10px; }
+        .price-label { color: var(--text-light); font-size: 0.9rem; margin-top: 10px; display: block; }
+        .checkbox-label { display: flex; align-items: center; gap: 10px; color: var(--text-light); font-size: 0.95rem; cursor: pointer;}
+        
+        /* Products Grid */
+        .shop-header { margin-bottom: 40px; }
+        .shop-header p { color: var(--text-light); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; font-weight: 500;}
+        .shop-header h2 { font-size: 3rem; margin: 0 0 15px 0; }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+        .product-card { background: white; border: 1px solid var(--border-color); transition: transform 0.3s, box-shadow 0.3s; position: relative;}
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .badge { position: absolute; top: 15px; left: 15px; background: white; color: var(--text-dark); padding: 4px 10px; font-size: 0.7rem; font-weight: 600; border: 1px solid var(--border-color); z-index: 2;}
+        .product-img { width: 100%; height: 260px; object-fit: cover; border-bottom: 1px solid var(--border-color); }
+        .product-details { padding: 20px; }
+        .rating { font-size: 0.85rem; margin-bottom: 10px; font-weight: 600; }
+        .category-text { font-size: 0.7rem; color: var(--text-light); text-transform: uppercase; font-weight: 500; margin-bottom: 5px; display: block; }
+        .product-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin: 0 0 8px 0; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px;}
+        .price { font-size: 1.2rem; font-weight: 600; }
+        .add-to-cart { background: transparent; border: 1px solid var(--text-dark); color: var(--text-dark); padding: 8px 16px; font-weight: 500; cursor: pointer; transition: all 0.3s;}
+        .add-to-cart:hover { background: var(--text-dark); color: white; }
+
+        footer { background: var(--bg-main); padding: 60px 5%; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-light); font-size: 0.9rem;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">Royal Nuts</a>
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/shop">Shop</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+        </nav>
+        <button class="cart-btn">🛒 Cart</button>
+    </header>
+
+    <div class="shop-container">
+        <!-- Left Sidebar Filters -->
+        <aside class="sidebar">
+            <div class="filter-group">
+                <h3>Filters</h3>
+                <input type="text" id="searchInput" placeholder="Search products..." onkeyup="filterProducts()">
+            </div>
+            <div class="filter-group">
+                <h3>Category</h3>
+                <ul class="category-list" id="categoryFilter">
+                    <li><button class="active" onclick="setCategory('All', this)">All</button></li>
+                    <li><button onclick="setCategory('Premium Dates', this)">Dates</button></li>
+                    <li><button onclick="setCategory('Nuts', this)">Nuts</button></li>
+                    <li><button onclick="setCategory('Anjeer', this)">Anjeer</button></li>
+                    <li><button onclick="setCategory('Kismiss', this)">Kismiss</button></li>
+                </ul>
+            </div>
+            <div class="filter-group">
+                <h3>Max Price</h3>
+                <input type="range" id="priceRange" min="0" max="3000" value="3000" class="price-range" oninput="filterProducts()">
+                <span class="price-label" id="priceLabel">Up to ₹3,000</span>
+            </div>
+            <div class="filter-group">
+                <h3>Availability</h3>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="inStockCheck" onchange="filterProducts()"> In Stock Only
+                </label>
+            </div>
+        </aside>
+
+        <!-- Right Side Products -->
+        <div class="shop-content">
+            <div class="shop-header">
+                <p>THE COLLECTION</p>
+                <h2>Shop Premium Dry Fruits</h2>
+                <p style="color: var(--text-light);">Hand-graded badam, cashews and dates — sealed fresh and ready to ship.</p>
+            </div>
+            <div class="products-grid" id="customer-product-list">
+                <p style="padding: 20px;">Products loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Royal Nuts. Premium Quality Dry Fruits.
+    </footer>
+
+    <script>
+        let allProducts = [];
+        let currentCategory = 'All';
+
+        // 1. Fetch Data
+        fetch('/products')
+            .then(res => res.json())
+            .then(data => {
+                allProducts = data;
+                renderProducts(allProducts);
+            })
+            .catch(err => console.error("Error loading products", err));
+
+        // 2. Render UI
+        function renderProducts(products) {
+            const container = document.getElementById('customer-product-list');
+            container.innerHTML = '';
+            
+            if(products.length === 0) {
+                container.innerHTML = '<p>No products found matching your filters.</p>';
+                return;
+            }
+
+            products.forEach((product, index) => {
+                const badges = ['PREMIUM', 'BEST SELLER', 'NEW'];
+                const badge = badges[index % badges.length];
+                
+                let img = "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500"; 
+                if(product.category === 'Nuts') img = "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?q=80&w=500";
+                if(product.category === 'Anjeer' || product.category === 'Kismiss') img = "https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=500";
+
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <span class="badge">${badge}</span>
+                    <img src="${img}" class="product-img">
+                    <div class="product-details">
+                        <div class="rating">★ 4.8 <span style="color:#6b7280;font-weight:normal;">(124)</span></div>
+                        <span class="category-text">${product.category || 'Premium'}</span>
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="price-row">
+                            <span class="price">₹${product.price}</span>
+                            <button class="add-to-cart">${product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 3. Filtering Logic
+        function setCategory(cat, btnElement) {
+            currentCategory = cat;
+            // Update active styling on buttons
+            document.querySelectorAll('.category-list button').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const maxPrice = document.getElementById('priceRange').value;
+            const inStockOnly = document.getElementById('inStockCheck').checked;
+            
+            document.getElementById('priceLabel').innerText = 'Up to ₹' + maxPrice;
+
+            const filtered = allProducts.filter(p => {
+                // Category Filter
+                const matchCategory = (currentCategory === 'All') || (p.category === currentCategory);
+                // Search Filter
+                const matchSearch = p.name.toLowerCase().includes(searchTerm);
+                // Price Filter
+                const matchPrice = p.price <= maxPrice;
+                // Stock Filter
+                const matchStock = inStockOnly ? (p.stock > 0) : true;
+
+                return matchCategory && matchSearch && matchPrice && matchStock;
+            });
+
+            renderProducts(filtered);
+        }
+    </script>
+</body>
+</html>
