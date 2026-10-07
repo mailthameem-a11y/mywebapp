@@ -28,7 +28,7 @@
         
         .category-list { list-style: none; padding: 0; margin: 0; }
         .category-list li { margin-bottom: 12px; }
-        .category-list button { background: none; border: none; text-align: left; padding: 0; color: var(--text-light); font-size: 0.95rem; cursor: pointer; font-family: 'Inter'; transition: color 0.2s;}
+        .category-list button { background: none; border: none; text-align: left; padding: 0; color: var(--text-light); font-size: 0.95rem; cursor: pointer; font-family: 'Inter'; transition: color 0.2s; text-transform: capitalize;}
         .category-list button:hover, .category-list button.active { color: var(--text-dark); font-weight: 600; }
 
         .price-range { width: 100%; margin-top: 10px; }
@@ -77,16 +77,15 @@
                 <h3>Filters</h3>
                 <input type="text" id="searchInput" placeholder="Search products..." onkeyup="filterProducts()">
             </div>
+            
             <div class="filter-group">
                 <h3>Category</h3>
+                <!-- Categories will be loaded dynamically from Database here -->
                 <ul class="category-list" id="categoryFilter">
-                    <li><button class="active" onclick="setCategory('All', this)">All</button></li>
-                    <li><button onclick="setCategory('Premium Dates', this)">Dates</button></li>
-                    <li><button onclick="setCategory('Nuts', this)">Nuts</button></li>
-                    <li><button onclick="setCategory('Anjeer', this)">Anjeer</button></li>
-                    <li><button onclick="setCategory('Kismiss', this)">Kismiss</button></li>
+                    <li>Loading categories...</li>
                 </ul>
             </div>
+            
             <div class="filter-group">
                 <h3>Max Price</h3>
                 <input type="range" id="priceRange" min="0" max="3000" value="3000" class="price-range" oninput="filterProducts()">
@@ -121,16 +120,33 @@
         let allProducts = [];
         let currentCategory = 'All';
 
-        // 1. Fetch Data
+        // 1. Fetch Data from MongoDB
         fetch('/products')
             .then(res => res.json())
             .then(data => {
                 allProducts = data;
+                renderCategories(allProducts); // Categories-ஐ Dynamic ஆக எடுக்க
                 renderProducts(allProducts);
             })
             .catch(err => console.error("Error loading products", err));
 
-        // 2. Render UI
+        // 2. Render Categories Dynamically (அட்மின் பேனலில் உள்ளவை மட்டுமே வரும்)
+        function renderCategories(products) {
+            const categoryList = document.getElementById('categoryFilter');
+            
+            // டேட்டாபேஸில் உள்ள தனித்துவமான (Unique) Categories-ஐ மட்டும் பிரித்தெடுக்கிறோம்
+            const uniqueCategories = [...new Set(products.map(p => p.category).filter(c => c))];
+            
+            let html = '<li><button class="active" onclick="setCategory(\'All\', this)">All</button></li>';
+            
+            uniqueCategories.forEach(cat => {
+                html += '<li><button onclick="setCategory(\'' + cat + '\', this)">' + cat + '</button></li>';
+            });
+            
+            categoryList.innerHTML = html;
+        }
+
+        // 3. Render Products
         function renderProducts(products) {
             const container = document.getElementById('customer-product-list');
             container.innerHTML = '';
@@ -167,10 +183,9 @@
             });
         }
 
-        // 3. Filtering Logic
+        // 4. Filtering Logic
         function setCategory(cat, btnElement) {
             currentCategory = cat;
-            // Update active styling on buttons
             document.querySelectorAll('.category-list button').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
             filterProducts();
@@ -184,13 +199,9 @@
             document.getElementById('priceLabel').innerText = 'Up to ₹' + maxPrice;
 
             const filtered = allProducts.filter(p => {
-                // Category Filter
                 const matchCategory = (currentCategory === 'All') || (p.category === currentCategory);
-                // Search Filter
                 const matchSearch = p.name.toLowerCase().includes(searchTerm);
-                // Price Filter
                 const matchPrice = p.price <= maxPrice;
-                // Stock Filter
                 const matchStock = inStockOnly ? (p.stock > 0) : true;
 
                 return matchCategory && matchSearch && matchPrice && matchStock;
