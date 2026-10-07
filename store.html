@@ -3,49 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Nuts & Dates | Premium Quality</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Li Ahsan — Premium Dry Fruits, Naturally Delicious</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-dark: #064e3b; --gold: #d4af37; --bg-color: #fafaf9; --text-dark: #1c1917; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-dark); }
-        header { background-color: white; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-        .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary-dark); text-decoration: none; letter-spacing: 1px; }
-        .logo span { color: var(--gold); }
-        .cart-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--primary-dark); }
-        .hero { background: linear-gradient(rgba(6, 78, 59, 0.85), rgba(6, 78, 59, 0.85)), url('https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=1200') center/cover; height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; margin: 0 0 15px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-        .hero p { font-size: 1.2rem; margin: 0; color: #e5e7eb; letter-spacing: 2px; text-transform: uppercase; }
-        .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
+        /* Li Ahsan Premium Theme */
+        :root {
+            --primary: #153a25; /* Deep Green */
+            --accent: #d4af37; /* Gold Accent */
+            --text-dark: #1a1a1a;
+            --text-light: #666666;
+            --bg-light: #fdfbf7;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); margin: 0; padding: 0; color: var(--text-dark); }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
         
-        .category-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary-dark); margin: 50px 0 20px 0; border-bottom: 2px solid var(--gold); padding-bottom: 10px; display: inline-block;}
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-bottom: 50px;}
+        /* Navbar */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: white; box-shadow: 0 1px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-actions { display: flex; gap: 20px; align-items: center; }
+        .cart-btn { background: none; border: none; font-size: 1rem; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 5px;}
+
+        /* Hero Section */
+        .hero { position: relative; height: 85vh; display: flex; align-items: center; padding: 0 5%; background: url('https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=1600') center/cover; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to right, rgba(21, 58, 37, 0.9) 0%, rgba(21, 58, 37, 0.6) 50%, transparent 100%); }
+        .hero-content { position: relative; z-index: 1; max-width: 600px; color: white; }
+        .hero-subtitle { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; display: block; color: #e5e5e5;}
+        .hero h1 { font-size: 4rem; line-height: 1.1; margin: 0 0 20px 0; font-weight: 700; }
+        .hero p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px; color: #e5e5e5; }
+        .btn-primary { background: white; color: var(--primary); padding: 15px 35px; text-decoration: none; font-weight: 600; border-radius: 4px; transition: all 0.3s; display: inline-block;}
+        .btn-primary:hover { background: var(--accent); color: white; }
+        .btn-outline { background: transparent; color: white; padding: 15px 35px; text-decoration: none; font-weight: 600; border: 1px solid white; border-radius: 4px; margin-left: 15px; transition: all 0.3s;}
+        .btn-outline:hover { background: white; color: var(--primary); }
+
+        /* Features */
+        .features { display: flex; justify-content: space-between; padding: 60px 5%; background: white; border-bottom: 1px solid #eee; }
+        .feature-box { text-align: center; flex: 1; padding: 0 20px; }
+        .feature-box h4 { font-family: 'Inter', sans-serif; margin: 10px 0 5px; font-size: 1.1rem; }
+        .feature-box p { color: var(--text-light); font-size: 0.9rem; margin: 0; }
+
+        /* Featured Products Section */
+        .section-title { text-align: center; padding: 80px 5% 40px; }
+        .section-title h2 { font-size: 2.5rem; margin: 0; color: var(--primary); }
+        .section-title p { color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; font-weight: 600; margin-bottom: 15px; }
+
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding: 0 5% 80px; }
         
-        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: transform 0.3s ease; }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
-        .product-img { width: 100%; height: 220px; object-fit: cover; border-bottom: 3px solid var(--gold); }
-        .product-info { padding: 25px 20px; text-align: center; }
-        .product-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin: 0 0 10px 0; color: var(--text-dark); text-transform: capitalize; }
-        .product-price { font-size: 1.3rem; color: var(--primary-dark); font-weight: 600; margin: 0 0 20px 0; }
-        .buy-btn { background-color: var(--primary-dark); color: white; border: 1px solid var(--primary-dark); padding: 12px 25px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; width: 100%; }
-        .buy-btn:hover { background-color: transparent; color: var(--primary-dark); }
-        .out-of-stock { opacity: 0.6; pointer-events: none; }
+        /* Product Card - Li Ahsan Style */
+        .product-card { background: white; border-radius: 8px; overflow: hidden; transition: box-shadow 0.3s; position: relative; border: 1px solid #eee; }
+        .product-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .badge { position: absolute; top: 15px; left: 15px; background: var(--primary); color: white; padding: 4px 10px; font-size: 0.75rem; font-weight: 600; border-radius: 4px; letter-spacing: 1px; z-index: 2;}
+        .product-img-wrapper { height: 280px; overflow: hidden; background: #f5f5f5; }
+        .product-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .product-card:hover .product-img { transform: scale(1.05); }
+        
+        .product-details { padding: 25px; }
+        .rating { color: var(--accent); font-size: 0.9rem; margin-bottom: 10px; font-weight: 600; }
+        .rating span { color: var(--text-light); font-weight: 400; font-size: 0.8rem; margin-left: 5px; }
+        .category-text { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 5px; display: block; }
+        .product-title { font-size: 1.4rem; margin: 0 0 10px 0; color: var(--text-dark); }
+        .product-desc { color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; height: 40px; overflow: hidden; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; }
+        .price { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+        
+        .add-to-cart { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 10px 20px; border-radius: 4px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .add-to-cart:hover { background: var(--primary); color: white; }
+        
+        /* Footer */
+        footer { background: var(--primary); color: white; padding: 80px 5% 40px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+        .footer-logo { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; display: block; }
+        .footer-desc { color: #cbd5e1; line-height: 1.6; max-width: 300px; }
+        .footer-title { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 25px; letter-spacing: 1px; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 15px; }
+        .footer-links a { color: #cbd5e1; text-decoration: none; transition: color 0.3s; }
+        .footer-links a:hover { color: white; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; text-align: center; color: #cbd5e1; font-size: 0.9rem; }
     </style>
 </head>
 <body>
+
+    <!-- Navigation -->
     <header>
-        <a href="#" class="logo">Royal<span>Nuts</span></a>
-        <button class="cart-btn">🛒 Cart (0)</button>
+        <a href="/" class="logo">Li Ahsan</a>
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="#">Shop</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="cart-btn">🛒 Cart (0)</button>
+        </div>
     </header>
 
-    <div class="hero">
-        <h1>Premium Quality</h1>
-        <p>Finest Dates, Nuts & Dry Fruits</p>
-    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-subtitle">Nature's Finest, Delivered Fresh</span>
+            <h1>Premium Dry Fruits, Naturally Delicious.</h1>
+            <p>Discover carefully selected almonds, cashews and premium dates, packed with quality and delivered to your doorstep.</p>
+            <a href="#shop" class="btn-primary">Shop Now</a>
+            <a href="#shop" class="btn-outline">Explore Products</a>
+        </div>
+    </section>
 
-    <div class="container" id="customer-product-list">
-        <p style="text-align: center; color: #666;">பொருட்கள் லோட் ஆகிறது...</p>
-    </div>
+    <!-- Features -->
+    <section class="features">
+        <div class="feature-box">
+            <h4>Premium Quality</h4>
+            <p>Carefully selected, hand-graded produce.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Natural Goodness</h4>
+            <p>No added sugar, oil or preservatives.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Sealed Freshness</h4>
+            <p>Packed to preserve taste and aroma.</p>
+        </div>
+        <div class="feature-box">
+            <h4>Trusted Service</h4>
+            <p>Free delivery on orders above ₹1,500.</p>
+        </div>
+    </section>
 
+    <!-- Featured Products -->
+    <section id="shop">
+        <div class="section-title">
+            <p>HANDPICKED</p>
+            <h2>Featured Products</h2>
+        </div>
+        
+        <div class="products-grid" id="customer-product-list">
+            <p style="text-align: center; grid-column: 1 / -1;">பொருட்கள் டேட்டாபேஸிலிருந்து லோட் ஆகிறது...</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <span class="footer-logo">Li Ahsan</span>
+                <p class="footer-desc">Every batch at Li Ahsan is sourced from trusted growers, hand-graded for size and colour, then sealed within days so the aroma you open is the aroma we packed.</p>
+            </div>
+            <div>
+                <h4 class="footer-title">QUICK LINKS</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-title">CUSTOMER SUPPORT</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-title">NEWSLETTER</h4>
+                <p class="footer-desc">Get fresh updates and exclusive offers.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Li Ahsan. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- JavaScript to fetch products from your Database -->
     <script>
         fetch('/products')
             .then(response => response.json())
@@ -53,48 +185,41 @@
                 const container = document.getElementById('customer-product-list');
                 container.innerHTML = ''; 
 
-                // பொருட்களை Category வாரியாகப் பிரித்தல்
-                const categories = {};
-                products.forEach(product => {
-                    // பழைய பொருட்களுக்கு Category இல்லையென்றால் 'Others' என வைக்கிறோம்
-                    const cat = product.category || 'Others';
-                    if (!categories[cat]) { categories[cat] = []; }
-                    categories[cat].push(product);
-                });
-
-                // ஒவ்வொரு Category-க்கும் தனித் தலைப்பு மற்றும் Grid உருவாக்குதல்
-                for (const [categoryName, items] of Object.entries(categories)) {
-                    // Category Title
-                    const title = document.createElement('h2');
-                    title.className = 'category-title';
-                    title.innerText = categoryName;
-                    container.appendChild(title);
-
-                    // Product Grid
-                    const grid = document.createElement('div');
-                    grid.className = 'grid';
-
-                    items.forEach(product => {
-                        const isOutOfStock = product.stock <= 0;
-                        const btnText = isOutOfStock ? 'Out of Stock' : 'Add to Cart';
-                        const btnClass = isOutOfStock ? 'buy-btn out-of-stock' : 'buy-btn';
-                        const placeholderImg = "https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=500";
-
-                        const card = document.createElement('div');
-                        card.className = 'product-card';
-                        card.innerHTML = `
-                            <img src="${placeholderImg}" alt="${product.name}" class="product-img">
-                            <div class="product-info">
-                                <h3 class="product-name">${product.name}</h3>
-                                <p class="product-price">₹${product.price}</p>
-                                <button class="${btnClass}">${btnText}</button>
-                            </div>
-                        `;
-                        grid.appendChild(card);
-                    });
+                products.forEach((product, index) => {
+                    // Randomly assign Best Seller / Premium badges for the premium look
+                    const badges = ['BEST SELLER', 'PREMIUM', 'NEW', 'FRESH ARRIVAL'];
+                    const randomBadge = badges[index % badges.length];
                     
-                    container.appendChild(grid);
-                }
+                    // High-quality placeholder images matching the theme
+                    const images = [
+                        "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=600",
+                        "https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=600",
+                        "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?q=80&w=600"
+                    ];
+                    const randomImg = images[index % images.length];
+
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    
+                    card.innerHTML = `
+                        <span class="badge">${randomBadge}</span>
+                        <div class="product-img-wrapper">
+                            <img src="${randomImg}" alt="${product.name}" class="product-img">
+                        </div>
+                        <div class="product-details">
+                            <div class="rating">★ 4.8 <span>(124)</span></div>
+                            <span class="category-text">${product.category || 'NUTS & DATES'}</span>
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-desc">Premium quality ${product.name}, hand-sorted for the best experience.</p>
+                            
+                            <div class="price-row">
+                                <span class="price">₹${product.price} <span style="font-size:0.9rem; color:#999; font-weight:normal;">/ 500g</span></span>
+                                <button class="add-to-cart">${product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
             })
             .catch(error => console.error(error));
     </script>
