@@ -3,104 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Li Ahsan — Premium Dry Fruits, Naturally Delicious</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Shop Premium Almonds, Cashews & Dates — Li Ahsan</title>
+    <!-- ஒரிஜினல் Font Family -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #153a25; 
             --accent: #d4af37; 
-            --text-dark: #1a1a1a;
-            --text-light: #666666;
-            --bg-light: #fdfbf7;
+            --text-dark: #111827; /* ஒரிஜினல் அடர் சாம்பல் */
+            --text-light: #6b7280;
+            --bg-main: #f9fafb; /* Shop பக்கத்தின் வெளிர் பின்னணி */
+            --border-color: #e5e7eb;
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); margin: 0; padding: 0; color: var(--text-dark); }
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
-        
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: white; box-shadow: 0 1px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); margin: 0; padding: 0; color: var(--text-dark); }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        /* Menu Bar (ஒரிஜினல் பேட்டர்ன்) */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: white; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .nav-links { display: flex; gap: 35px; }
+        .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 400; font-size: 0.95rem; transition: color 0.3s; }
         .nav-links a:hover { color: var(--primary); }
-        .nav-actions { display: flex; gap: 20px; align-items: center; }
-        .cart-btn { background: none; border: none; font-size: 1rem; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 5px;}
+        .cart-btn { background: none; border: none; font-size: 1rem; cursor: pointer; font-weight: 400; color: var(--text-dark); }
 
-        .hero { position: relative; height: 85vh; display: flex; align-items: center; padding: 0 5%; background: url('https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=1600') center/cover; }
-        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to right, rgba(21, 58, 37, 0.9) 0%, rgba(21, 58, 37, 0.6) 50%, transparent 100%); }
-        .hero-content { position: relative; z-index: 1; max-width: 600px; color: white; }
-        .hero-subtitle { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; display: block; color: #e5e5e5;}
-        .hero h1 { font-size: 4rem; line-height: 1.1; margin: 0 0 20px 0; font-weight: 700; }
-        .hero p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px; color: #e5e5e5; }
-        .btn-primary { background: white; color: var(--primary); padding: 15px 35px; text-decoration: none; font-weight: 600; border-radius: 4px; transition: all 0.3s; display: inline-block;}
-        .btn-primary:hover { background: var(--accent); color: white; }
-        .btn-outline { background: transparent; color: white; padding: 15px 35px; text-decoration: none; font-weight: 600; border: 1px solid white; border-radius: 4px; margin-left: 15px; transition: all 0.3s;}
-        .btn-outline:hover { background: white; color: var(--primary); }
+        /* Hero Section (ஒரே லைனில் Title & ஒரிஜினல் Image) */
+        .hero { position: relative; height: 90vh; display: flex; align-items: center; padding: 0 5%;
+                background: url('https://images.unsplash.com/photo-1519996529931-28324d5a630e?q=80&w=1600') center/cover; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to right, rgba(21, 58, 37, 0.95) 0%, rgba(21, 58, 37, 0.4) 50%, transparent 100%); }
+        .hero-content { position: relative; z-index: 1; max-width: 850px; color: white; }
+        .hero-subtitle { font-family: 'Inter', sans-serif; font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 25px; display: block; font-weight: 500; color: #e5e7eb;}
+        .hero h1 { font-size: 5.5rem; line-height: 1.1; margin: 0 0 20px 0; font-weight: 600; white-space: nowrap; } /* white-space: nowrap மூலம் ஒரே லைனில் வரும் */
+        .hero h1 span { display: block; font-size: 5.5rem; }
+        .hero p { font-size: 1.15rem; line-height: 1.6; margin-bottom: 40px; color: #e5e7eb; max-width: 600px; font-weight: 300;}
+        .btn-primary { background: white; color: var(--text-dark); padding: 16px 40px; text-decoration: none; font-weight: 500; border-radius: 4px; transition: all 0.3s; display: inline-block;}
+        .btn-primary:hover { background: var(--bg-main); }
+        .btn-outline { background: transparent; color: white; padding: 16px 40px; text-decoration: none; font-weight: 500; border: 1px solid white; border-radius: 4px; margin-left: 15px; transition: all 0.3s;}
+        .btn-outline:hover { background: rgba(255,255,255,0.1); }
 
-        .features { display: flex; justify-content: space-between; padding: 60px 5%; background: white; border-bottom: 1px solid #eee; }
-        .feature-box { text-align: center; flex: 1; padding: 0 20px; }
-        .feature-box h4 { font-family: 'Inter', sans-serif; margin: 10px 0 5px; font-size: 1.1rem; }
-        .feature-box p { color: var(--text-light); font-size: 0.9rem; margin: 0; }
+        /* Shop Layout - Left Sidebar Filters & Right Products Grid */
+        .shop-container { display: grid; grid-template-columns: 260px 1fr; gap: 50px; padding: 60px 5%; max-width: 1400px; margin: 0 auto; }
 
-        .section-title { text-align: center; padding: 80px 5% 40px; }
-        .section-title h2 { font-size: 2.5rem; margin: 0; color: var(--primary); }
-        .section-title p { color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; font-weight: 600; margin-bottom: 15px; }
-        .section-subtitle { color: var(--text-light); margin-top: 15px; font-size: 1.1rem; }
+        /* Left Sidebar */
+        .sidebar { position: sticky; top: 100px; height: fit-content; }
+        .sidebar h3 { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 20px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: var(--text-dark);}
+        .filter-group { margin-bottom: 40px; }
+        .filter-group input[type="text"] { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 20px; font-family: 'Inter'; background: transparent; box-sizing: border-box;}
+        
+        .category-list { list-style: none; padding: 0; margin: 0; }
+        .category-list li { margin-bottom: 12px; }
+        .category-list a { text-decoration: none; color: var(--text-light); font-size: 0.95rem; transition: color 0.2s; }
+        .category-list a:hover, .category-list a.active { color: var(--text-dark); font-weight: 500; }
 
-        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 5% 40px; }
-        .category-card { text-align: center; cursor: pointer; }
-        .cat-img-wrapper { border-radius: 50%; overflow: hidden; width: 220px; height: 220px; margin: 0 auto 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: transform 0.4s; }
-        .cat-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-        .category-card:hover .cat-img-wrapper { transform: translateY(-10px); }
-        .category-card:hover .cat-img-wrapper img { transform: scale(1.1); }
-        .category-card h3 { font-size: 1.8rem; margin: 0 0 10px 0; color: var(--primary); }
-        .category-card p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 15px; padding: 0 20px; line-height: 1.5; }
-        .cat-link { color: var(--primary); font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 3px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
-        .cat-link:hover { color: var(--accent); }
+        .price-range { width: 100%; margin-top: 10px; }
+        .price-label { color: var(--text-light); font-size: 0.9rem; margin-top: 10px; display: block; }
+        .checkbox-label { display: flex; align-items: center; gap: 10px; color: var(--text-light); font-size: 0.95rem; cursor: pointer;}
+        .checkbox-label input { width: 16px; height: 16px; cursor: pointer; }
 
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding: 0 5% 80px; }
-        .product-card { background: white; border-radius: 8px; overflow: hidden; transition: box-shadow 0.3s; position: relative; border: 1px solid #eee; }
-        .product-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .badge { position: absolute; top: 15px; left: 15px; background: var(--primary); color: white; padding: 4px 10px; font-size: 0.75rem; font-weight: 600; border-radius: 4px; letter-spacing: 1px; z-index: 2;}
-        .product-img-wrapper { height: 280px; overflow: hidden; background: #f5f5f5; }
+        /* Shop Right Content */
+        .shop-header { margin-bottom: 40px; }
+        .shop-header p { color: var(--text-light); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; font-weight: 500;}
+        .shop-header h2 { font-size: 3rem; margin: 0 0 15px 0; color: var(--text-dark); }
+        .shop-header .desc { color: var(--text-light); font-size: 1.1rem; margin: 0; }
+
+        /* Product Cards */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .product-card { background: white; border-radius: 0px; overflow: hidden; position: relative; border: 1px solid var(--border-color); transition: transform 0.3s, box-shadow 0.3s; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .badge { position: absolute; top: 15px; left: 15px; background: white; color: var(--text-dark); padding: 4px 10px; font-size: 0.7rem; font-weight: 600; letter-spacing: 1px; z-index: 2; border: 1px solid var(--border-color);}
+        .product-img-wrapper { height: 300px; overflow: hidden; background: #f5f5f5; border-bottom: 1px solid var(--border-color); }
         .product-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
         .product-card:hover .product-img { transform: scale(1.05); }
-        .product-details { padding: 25px; }
-        .rating { color: var(--accent); font-size: 0.9rem; margin-bottom: 10px; font-weight: 600; }
-        .rating span { color: var(--text-light); font-weight: 400; font-size: 0.8rem; margin-left: 5px; }
-        .category-text { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 5px; display: block; }
-        .product-title { font-size: 1.4rem; margin: 0 0 10px 0; color: var(--text-dark); }
-        .product-desc { color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; height: 40px; overflow: hidden; }
+        .product-details { padding: 20px; }
+        .rating { color: var(--text-dark); font-size: 0.85rem; margin-bottom: 10px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .rating span { color: var(--text-light); font-weight: 400; font-size: 0.8rem; }
+        .category-text { font-size: 0.7rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; margin-bottom: 5px; display: block; }
+        .product-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin: 0 0 8px 0; color: var(--text-dark); }
+        .product-desc { color: var(--text-light); font-size: 0.85rem; margin-bottom: 20px; line-height: 1.5; height: 40px; overflow: hidden; }
         .price-row { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
-        .add-to-cart { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 10px 20px; border-radius: 4px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .add-to-cart:hover { background: var(--primary); color: white; }
+        .price { font-size: 1.2rem; font-weight: 600; color: var(--text-dark); }
+        .add-to-cart { background: transparent; border: 1px solid var(--text-dark); color: var(--text-dark); padding: 8px 16px; font-weight: 500; cursor: pointer; transition: all 0.3s; font-size: 0.9rem;}
+        .add-to-cart:hover { background: var(--text-dark); color: white; }
 
-        .promise-section { display: flex; flex-wrap: wrap; background: white; padding: 80px 5%; border-top: 1px solid #eee; align-items: center; gap: 50px; }
-        .promise-text { flex: 1; min-width: 300px; }
-        .promise-text h2 { font-size: 2.5rem; color: var(--primary); margin: 10px 0 20px; }
-        .promise-text p { color: var(--text-light); font-size: 1.1rem; line-height: 1.7; margin-bottom: 30px; }
-        .stats-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; min-width: 300px; }
-        .stat-box { border-left: 3px solid var(--accent); padding-left: 20px; }
-        .stat-box h3 { font-size: 2.5rem; color: var(--primary); margin: 0 0 5px 0; }
-        .stat-box p { margin: 0; color: var(--text-light); font-weight: 500; font-size: 1rem; }
-
-        footer { background: var(--primary); color: white; padding: 80px 5% 40px; }
+        /* Light Footer (வெப்சைட்டின் கீழ்ப்பகுதி அதே வெளிர் நிறத்தில்) */
+        footer { background: var(--bg-main); color: var(--text-dark); padding: 80px 5% 40px; border-top: 1px solid var(--border-color); }
         .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; margin-bottom: 60px; }
-        .footer-logo { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; display: block; }
-        .footer-desc { color: #cbd5e1; line-height: 1.6; max-width: 300px; }
-        .footer-title { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 25px; letter-spacing: 1px; }
+        .footer-logo { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; display: block; font-weight: 700; color: var(--primary);}
+        .footer-desc { color: var(--text-light); line-height: 1.6; max-width: 300px; font-size: 0.95rem; }
+        .footer-title { font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600; margin-bottom: 25px; letter-spacing: 1px; text-transform: uppercase; }
         .footer-links { list-style: none; padding: 0; margin: 0; }
         .footer-links li { margin-bottom: 15px; }
-        .footer-links a { color: #cbd5e1; text-decoration: none; transition: color 0.3s; }
-        .footer-links a:hover { color: white; }
+        .footer-links a { color: var(--text-light); text-decoration: none; transition: color 0.3s; font-size: 0.95rem; }
+        .footer-links a:hover { color: var(--primary); }
         
         .newsletter-box { display: flex; margin-top: 15px; }
-        .newsletter-box input { padding: 12px; border: none; border-radius: 4px 0 0 4px; width: 100%; outline: none; }
-        .newsletter-box button { background: var(--accent); color: white; border: none; padding: 12px 20px; border-radius: 0 4px 4px 0; cursor: pointer; font-weight: 600; }
-        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; text-align: center; color: #cbd5e1; font-size: 0.9rem; }
+        .newsletter-box input { padding: 12px; border: 1px solid var(--border-color); border-radius: 4px 0 0 4px; width: 100%; outline: none; background: white;}
+        .newsletter-box button { background: var(--text-dark); color: white; border: none; padding: 12px 20px; border-radius: 0 4px 4px 0; cursor: pointer; font-weight: 500; }
+        .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 30px; text-align: center; color: var(--text-light); font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
+    <!-- Menu Bar -->
     <header>
         <a href="/" class="logo">Li Ahsan</a>
         <nav class="nav-links">
@@ -110,112 +113,65 @@
             <a href="#">Contact</a>
             <a href="#">FAQ</a>
         </nav>
-        <div class="nav-actions">
-            <button class="cart-btn">🛒 Cart (0)</button>
-        </div>
+        <button class="cart-btn">🛒 Cart (0)</button>
     </header>
 
+    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <span class="hero-subtitle">Nature's Finest, Delivered Fresh</span>
-            <h1>Premium Dry Fruits, Naturally Delicious.</h1>
+            <h1>Premium Dry Fruits, <span>Naturally Delicious.</span></h1>
             <p>Discover carefully selected almonds, cashews and premium dates, packed with quality and delivered to your doorstep.</p>
             <a href="#shop" class="btn-primary">Shop Now</a>
-            <a href="#categories" class="btn-outline">Explore Products</a>
+            <a href="#shop" class="btn-outline">Explore Products</a>
         </div>
     </section>
 
-    <section class="features">
-        <div class="feature-box">
-            <h4>Premium Quality</h4>
-            <p>Carefully selected, hand-graded produce.</p>
-        </div>
-        <div class="feature-box">
-            <h4>Natural Goodness</h4>
-            <p>No added sugar, oil or preservatives.</p>
-        </div>
-        <div class="feature-box">
-            <h4>Sealed Freshness</h4>
-            <p>Packed to preserve taste and aroma.</p>
-        </div>
-        <div class="feature-box">
-            <h4>Trusted Service</h4>
-            <p>Free delivery on orders above ₹1,500.</p>
-        </div>
-    </section>
+    <!-- Shop Layout: Sidebar + Products -->
+    <div class="shop-container" id="shop">
+        
+        <!-- Left Sidebar Filters -->
+        <aside class="sidebar">
+            <div class="filter-group">
+                <h3>Filters</h3>
+                <input type="text" placeholder="Search products...">
+            </div>
+            <div class="filter-group">
+                <h3>Category</h3>
+                <ul class="category-list">
+                    <li><a href="#" class="active">All</a></li>
+                    <li><a href="#">Badam</a></li>
+                    <li><a href="#">Dates</a></li>
+                    <li><a href="#">Cashews</a></li>
+                </ul>
+            </div>
+            <div class="filter-group">
+                <h3>Max Price</h3>
+                <input type="range" min="0" max="2000" value="2000" class="price-range">
+                <span class="price-label">Up to ₹2,000</span>
+            </div>
+            <div class="filter-group">
+                <h3>Availability</h3>
+                <label class="checkbox-label">
+                    <input type="checkbox"> Wishlist only
+                </label>
+            </div>
+        </aside>
 
-    <section id="categories">
-        <div class="section-title">
-            <p>OUR COLLECTIONS</p>
-            <h2>Shop by Category</h2>
-            <div class="section-subtitle">Three signature collections, each sourced and graded with the same obsessive care.</div>
-        </div>
-        <div class="categories-grid">
-            <div class="category-card" onclick="window.location.href='#shop'">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1508061253366-f7da158b6d46?q=80&w=500" alt="Badam">
-                </div>
-                <h3>Badam</h3>
-                <p>Premium-quality almonds, hand-sorted for crunch and freshness.</p>
-                <a href="#shop" class="cat-link">Shop Now</a>
+        <!-- Right Side Products -->
+        <div class="shop-content">
+            <div class="shop-header">
+                <p>THE COLLECTION</p>
+                <h2>Shop Premium Dry Fruits</h2>
+                <p class="desc">Hand-graded badam, cashews and dates — sealed fresh and ready to ship.</p>
             </div>
-            <div class="category-card" onclick="window.location.href='#shop'">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500" alt="Premium Quality Dates">
-                </div>
-                <h3>Premium Quality Dates</h3>
-                <p>Soft, naturally sweet and generously sized premium dates.</p>
-                <a href="#shop" class="cat-link">Shop Now</a>
-            </div>
-            <div class="category-card" onclick="window.location.href='#shop'">
-                <div class="cat-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=500" alt="Cashews">
-                </div>
-                <h3>Cashews</h3>
-                <p>Rich, creamy and crunchy cashews with a buttery finish.</p>
-                <a href="#shop" class="cat-link">Shop Now</a>
+            <div class="products-grid" id="customer-product-list">
+                <p style="grid-column: 1 / -1; padding: 20px;">பொருட்கள் டேட்டாபேஸிலிருந்து லோட் ஆகிறது...</p>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section id="shop">
-        <div class="section-title">
-            <p>HANDPICKED</p>
-            <h2>Featured Products</h2>
-            <a href="#" style="color:var(--text-light); text-decoration:underline; font-size:0.9rem; margin-top:10px; display:inline-block;">View all products</a>
-        </div>
-        <div class="products-grid" id="customer-product-list">
-            <p style="text-align: center; grid-column: 1 / -1;">பொருட்கள் டேட்டாபேஸிலிருந்து லோட் ஆகிறது...</p>
-        </div>
-    </section>
-
-    <section class="promise-section">
-        <div class="promise-text">
-            <p style="color:var(--accent); letter-spacing:2px; font-weight:600; font-size:0.85rem; margin:0;">OUR PROMISE</p>
-            <h2>Great taste begins with great ingredients.</h2>
-            <p>Every batch at Li Ahsan is sourced from trusted growers, hand-graded for size and colour, then sealed within days so the aroma you open is the aroma we packed.</p>
-            <a href="#" class="btn-outline" style="border-color:var(--primary); color:var(--primary); margin-left:0; padding:12px 30px;">Read our story</a>
-        </div>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <h3>12+</h3>
-                <p>Years of sourcing</p>
-            </div>
-            <div class="stat-box">
-                <h3>30k+</h3>
-                <p>Happy customers</p>
-            </div>
-            <div class="stat-box">
-                <h3>100%</h3>
-                <p>Natural produce</p>
-            </div>
-            <div class="stat-box">
-                <h3>48h</h3>
-                <p>Pack-to-ship time</p>
-            </div>
-        </div>
-    </section>
-
+    <!-- Light Theme Footer -->
     <footer>
         <div class="footer-grid">
             <div>
@@ -255,27 +211,16 @@
         </div>
     </footer>
 
-    <!-- பிழைகளைக் கண்டுபிடிப்பதற்கான புதிய JavaScript -->
+    <!-- Database Script -->
     <script>
         fetch('/products')
-            .then(async (response) => {
-                if (!response.ok) {
-                    throw new Error(`சர்வர் பிழை: ${response.status} ${response.statusText}`);
-                }
-                const text = await response.text();
-                try {
-                    return JSON.parse(text); 
-                } catch (err) {
-                    throw new Error("டேட்டாபேஸிலிருந்து சரியான தகவல் வரவில்லை. சர்வர் அனுப்பியது: " + text.substring(0, 100));
-                }
-            })
+            .then(response => response.json())
             .then(products => {
                 const container = document.getElementById('customer-product-list');
                 container.innerHTML = ''; 
-
+                
                 if(products.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; color: #d97706; font-weight: bold; grid-column: 1 / -1; padding: 30px;">டேட்டாபேஸில் பொருட்கள் எதுவும் இல்லை! முதலில் அட்மின் பேனலில் சேர்க்கவும்.</p>';
-                    return;
+                    container.innerHTML = '<p>டேட்டாபேஸில் பொருட்கள் எதுவும் இல்லை!</p>'; return;
                 }
 
                 products.forEach((product, index) => {
@@ -304,7 +249,7 @@
                             <p class="product-desc">Premium quality ${product.name}, hand-sorted for the best experience.</p>
                             
                             <div class="price-row">
-                                <span class="price">₹${product.price} <span style="font-size:0.9rem; color:#999; font-weight:normal;">/ 500g</span></span>
+                                <span class="price">₹${product.price} <span style="font-size:0.85rem; color:#6b7280; font-weight:normal;">/ 500g</span></span>
                                 <button class="add-to-cart">${product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</button>
                             </div>
                         </div>
@@ -312,13 +257,7 @@
                     container.appendChild(card);
                 });
             })
-            .catch(error => {
-                const container = document.getElementById('customer-product-list');
-                container.innerHTML = `<div style="text-align: center; color: #b91c1c; background: #fee2e2; border: 2px solid #ef4444; padding: 20px; border-radius: 8px; grid-column: 1 / -1;">
-                    <h3 style="margin-top: 0;">⚠️ ஒரு பிழை ஏற்பட்டுள்ளது!</h3>
-                    <p>${error.message}</p>
-                </div>`;
-            });
+            .catch(error => console.error(error));
     </script>
 </body>
 </html>
