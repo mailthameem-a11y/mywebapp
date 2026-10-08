@@ -12,12 +12,14 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB வெற்றிகரமாக இணைக்கப்பட்டது! 🎉"))
   .catch((err) => console.log("MongoDB இணைப்பில் பிழை:", err));
 
+// Product Schema (இதில் weights புதிதாகச் சேர்க்கப்பட்டுள்ளது)
 const productSchema = new mongoose.Schema({
   name: String,
-  price: Number,
+  price: Number, // இது Default (குறைந்தபட்ச) விலை
   stock: Number,
   category: String,
-  image: String 
+  image: String,
+  weights: [{ weight: String, price: Number }] // எ.கா: [{weight: '250g', price: 300}, {weight: '500g', price: 600}]
 });
 const Product = mongoose.model('Product', productSchema);
 
@@ -27,12 +29,22 @@ app.get('/admin', (req, res) => res.sendFile(__dirname + '/index.html'));
 
 app.post('/add-product-dynamic', async (req, res) => {
   try {
+    // அட்மின் பேனலில் இருந்து வரும் எடைகளை பிரித்தெடுத்தல்
+    let weightsArray = [];
+    if (req.body.weight1 && req.body.price1) weightsArray.push({ weight: req.body.weight1, price: Number(req.body.price1) });
+    if (req.body.weight2 && req.body.price2) weightsArray.push({ weight: req.body.weight2, price: Number(req.body.price2) });
+    if (req.body.weight3 && req.body.price3) weightsArray.push({ weight: req.body.weight3, price: Number(req.body.price3) });
+
+    // Default விலையாக முதல் எடையின் விலையை செட் செய்கிறோம்
+    const defaultPrice = weightsArray.length > 0 ? weightsArray[0].price : req.body.price;
+
     const newProduct = new Product({
       name: req.body.name,
-      price: req.body.price,
+      price: defaultPrice,
       stock: req.body.stock,
       category: req.body.category,
-      image: req.body.image
+      image: req.body.image,
+      weights: weightsArray
     });
     await newProduct.save();
     res.redirect('/admin'); 

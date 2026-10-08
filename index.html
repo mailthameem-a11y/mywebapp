@@ -11,8 +11,9 @@
         .form-section { flex: 1; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-width: 300px; height: fit-content;}
         .form-section h3 { margin-top: 0; color: #16a34a; border-bottom: 2px solid #f0f4f8; padding-bottom: 10px;}
         .form-section input { width: 100%; padding: 12px; margin: 8px 0 20px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box;}
+        .weight-row { display: flex; gap: 10px;}
+        .weight-row input { margin-bottom: 10px;}
         .submit-btn { background: #16a34a; color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold; transition: 0.3s;}
-        .submit-btn:hover { background: #15803d; }
         
         .products-section { flex: 2; min-width: 300px;}
         .products-section h2 { margin-top: 0; }
@@ -21,29 +22,8 @@
         .card-info { flex: 1; }
         .card-info h3 { margin: 0 0 8px; color: #0f172a;}
         .card-info p { margin: 0; color: #475569; font-size: 0.95rem; line-height: 1.5;}
-        .card-actions button { padding: 10px 15px; border: none; border-radius: 8px; cursor: pointer; color: white; font-weight: bold; transition: 0.2s;}
-        .edit-btn { background: #eab308; color: #000 !important; margin-right: 10px;}
-        .edit-btn:hover { background: #ca8a04; color: white !important;}
+        .card-actions button { padding: 10px 15px; border: none; border-radius: 8px; cursor: pointer; color: white; font-weight: bold; margin-right:5px;}
         .del-btn { background: #ef4444; }
-        .del-btn:hover { background: #dc2626; }
-
-        /* Popup / Modal Box (Edit Window) CSS */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(3px);}
-        .modal { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; animation: slideDown 0.3s ease-out;}
-        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .modal h3 { margin-top: 0; color: #0f172a; font-size: 1.4rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px;}
-        .modal label { font-weight: 600; color: #475569; font-size: 0.9rem;}
-        .modal input { width: 100%; padding: 12px; margin: 8px 0 20px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 1rem;}
-        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 1.5rem; cursor: pointer; color: #94a3b8; border: none; background: none; transition: 0.2s;}
-        .close-modal:hover { color: #0f172a; }
-        
-        .modal-actions { display: flex; gap: 15px; justify-content: flex-end; margin-top: 10px;}
-        .modal-actions button { padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem; transition: 0.2s;}
-        .cancel-btn { background: #f1f5f9; color: #475569; }
-        .cancel-btn:hover { background: #e2e8f0; }
-        .save-btn { background: #2563eb; color: white; }
-        .save-btn:hover { background: #1d4ed8; }
     </style>
 </head>
 <body>
@@ -56,14 +36,31 @@
             <form action="/add-product-dynamic" method="POST">
                 <label>வகை (Category)</label>
                 <input type="text" name="category" placeholder="எ.கா: Dates, Nuts" required>
+                
                 <label>பெயர் (Product Name)</label>
-                <input type="text" name="name" placeholder="எ.கா: Ajwa Dates 500g" required>
-                <label>விலை (₹)</label>
-                <input type="number" name="price" required>
+                <input type="text" name="name" placeholder="எ.கா: Ajwa Dates (எடையைக் குறிக்க வேண்டாம்)" required>
+                
                 <label>ஸ்டாக் (Stock)</label>
                 <input type="number" name="stock" required>
+                
                 <label>படத்தின் லிங்க் (Image URL)</label>
                 <input type="text" name="image" placeholder="https://..." required>
+
+                <h4 style="margin-bottom: 5px;">எடை மற்றும் விலை (Variants)</h4>
+                
+                <div class="weight-row">
+                    <input type="text" name="weight1" placeholder="எடை 1 (எ.கா: 250g)">
+                    <input type="number" name="price1" placeholder="விலை (₹)">
+                </div>
+                <div class="weight-row">
+                    <input type="text" name="weight2" placeholder="எடை 2 (எ.கா: 500g)">
+                    <input type="number" name="price2" placeholder="விலை (₹)">
+                </div>
+                <div class="weight-row">
+                    <input type="text" name="weight3" placeholder="எடை 3 (எ.கா: 1kg)">
+                    <input type="number" name="price3" placeholder="விலை (₹)">
+                </div>
+
                 <button type="submit" class="submit-btn">💾 டேட்டாபேஸில் சேமி</button>
             </form>
         </div>
@@ -75,53 +72,29 @@
         </div>
     </div>
 
-    <!-- Edit Product Popup (Modal) -->
-    <div class="modal-overlay" id="editModal">
-        <div class="modal">
-            <button class="close-modal" onclick="closeModal()">✕</button>
-            <h3>பொருளை மாற்று (Edit Product)</h3>
-            
-            <input type="hidden" id="edit-id">
-            
-            <label>வகை (Category)</label>
-            <input type="text" id="edit-category">
-            
-            <label>பெயர் (Product Name)</label>
-            <input type="text" id="edit-name">
-            
-            <label>விலை (₹ Price)</label>
-            <input type="number" id="edit-price">
-            
-            <label>ஸ்டாக் (Stock)</label>
-            <input type="number" id="edit-stock">
-            
-            <label>படத்தின் லிங்க் (Image URL)</label>
-            <input type="text" id="edit-image">
-            
-            <div class="modal-actions">
-                <button class="cancel-btn" onclick="closeModal()">Cancel</button>
-                <button class="save-btn" onclick="saveEdit()">💾 Save Changes</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         fetch('/products').then(res => res.json()).then(products => {
             const list = document.getElementById('product-list');
             list.innerHTML = '';
             products.forEach(p => {
                 const imgSrc = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=200';
-                // HTML-ல் டேட்டாவை பாதுகாப்பாக அனுப்ப `encodeURIComponent` பயன்படுத்துகிறோம்
-                const encodedImg = encodeURIComponent(imgSrc);
+                
+                // எடைகளைக் காட்ட
+                let weightsText = '';
+                if(p.weights && p.weights.length > 0) {
+                    weightsText = p.weights.map(w => `${w.weight}: ₹${w.price}`).join(', ');
+                } else {
+                    weightsText = `₹${p.price}`; // பழைய பொருட்களுக்கு
+                }
+
                 list.innerHTML += `
                     <div class="card">
                         <img src="${imgSrc}" alt="${p.name}">
                         <div class="card-info">
                             <h3>${p.name}</h3>
-                            <p><strong>விலை:</strong> ₹${p.price} &nbsp;|&nbsp; <strong>ஸ்டாக்:</strong> ${p.stock} &nbsp;|&nbsp; <strong>வகை:</strong> ${p.category}</p>
+                            <p><strong>விலைகள்:</strong> ${weightsText} <br> <strong>ஸ்டாக்:</strong> ${p.stock} &nbsp;|&nbsp; <strong>வகை:</strong> ${p.category}</p>
                         </div>
                         <div class="card-actions">
-                            <button class="edit-btn" onclick="openEditModal('${p._id}', '${p.name}', '${p.category}', '${p.price}', '${p.stock}', '${encodedImg}')">✏️ Edit</button>
                             <button class="del-btn" onclick="deleteProduct('${p._id}')">🗑️ Delete</button>
                         </div>
                     </div>
@@ -133,45 +106,6 @@
             if(confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
                 fetch('/delete-product/' + id).then(() => window.location.reload());
             }
-        }
-
-        // --- Popup Box Functions ---
-        
-        function openEditModal(id, name, category, price, stock, encodedImage) {
-            // Popup-க்குள் பழைய டேட்டாவை நிரப்புதல்
-            document.getElementById('edit-id').value = id;
-            document.getElementById('edit-name').value = name;
-            document.getElementById('edit-category').value = category;
-            document.getElementById('edit-price').value = price;
-            document.getElementById('edit-stock').value = stock;
-            document.getElementById('edit-image').value = decodeURIComponent(encodedImage);
-            
-            // Popup-ஐ திரையில் காட்டுதல்
-            document.getElementById('editModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            // Popup-ஐ மறைத்தல்
-            document.getElementById('editModal').style.display = 'none';
-        }
-
-        function saveEdit() {
-            // மாற்றப்பட்ட புதிய டேட்டாவை எடுத்தல்
-            const id = document.getElementById('edit-id').value;
-            const updatedData = {
-                name: document.getElementById('edit-name').value,
-                category: document.getElementById('edit-category').value,
-                price: document.getElementById('edit-price').value,
-                stock: document.getElementById('edit-stock').value,
-                image: document.getElementById('edit-image').value
-            };
-
-            // சர்வருக்கு அனுப்புதல்
-            fetch('/update-product/' + id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedData)
-            }).then(() => window.location.reload()); // சேமித்ததும் பேஜ் Refresh ஆகும்
         }
     </script>
 </body>

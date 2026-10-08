@@ -192,9 +192,23 @@
                 const badge = badges[index % badges.length];
                 const img = product.image || "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500"; 
                 
-                // Add to cart Logic setup in Button
+                // Weight Variants Logic
+                let weightOptionsHtml = '';
+                let defaultPrice = product.price;
+                let defaultWeight = '';
+
+                if (product.weights && product.weights.length > 0) {
+                    defaultPrice = product.weights[0].price;
+                    defaultWeight = product.weights[0].weight;
+                    weightOptionsHtml = `<select class="weight-select" id="weight-${product._id}" onchange="updatePrice('${product._id}')" style="width:100%; padding:8px; margin-bottom:15px; border:1px solid #e5e7eb; border-radius:4px; font-family:'Inter';">`;
+                    product.weights.forEach((w, i) => {
+                        weightOptionsHtml += `<option value="${w.price}" data-weight="${w.weight}">${w.weight} - ₹${w.price}</option>`;
+                    });
+                    weightOptionsHtml += `</select>`;
+                }
+
                 const btnAttr = product.stock > 0 
-                    ? `onclick="addToCart('${product._id}', '${product.name}', ${product.price})"` 
+                    ? `onclick="addToCartWithWeight('${product._id}', '${product.name}')"` 
                     : 'disabled';
                 const btnText = product.stock > 0 ? 'Add to Cart' : 'Out of Stock';
 
@@ -207,8 +221,11 @@
                         <div class="rating">★ 4.8 <span style="color:#6b7280;font-weight:normal;">(124)</span></div>
                         <span class="category-text">${product.category || 'Premium'}</span>
                         <h3 class="product-title">${product.name}</h3>
+                        
+                        ${weightOptionsHtml}
+
                         <div class="price-row">
-                            <span class="price">₹${product.price}</span>
+                            <span class="price" id="price-display-${product._id}">₹${defaultPrice}</span>
                             <button class="add-to-cart" ${btnAttr}>${btnText}</button>
                         </div>
                     </div>
@@ -217,6 +234,31 @@
             });
         }
 
+        // எடையை மாற்றும்போது விலையை அப்டேட் செய்ய
+        function updatePrice(productId) {
+            const selectElement = document.getElementById(`weight-${productId}`);
+            const selectedPrice = selectElement.value;
+            document.getElementById(`price-display-${productId}`).innerText = `₹${selectedPrice}`;
+        }
+
+        // எடையுடன் கார்ட்டில் சேர்க்க
+        function addToCartWithWeight(id, name) {
+            const selectElement = document.getElementById(`weight-${id}`);
+            let finalPrice = 0;
+            let finalName = name;
+
+            if (selectElement) {
+                finalPrice = Number(selectElement.value);
+                const selectedWeight = selectElement.options[selectElement.selectedIndex].getAttribute('data-weight');
+                finalName = `${name} (${selectedWeight})`;
+            } else {
+                // பழைய பொருட்கள் (எடை இல்லாதவை)
+                const product = allProducts.find(p => p._id === id);
+                finalPrice = product.price;
+            }
+
+            addToCart(id + (selectElement ? selectElement.value : ''), finalName, finalPrice);
+        }
         function setCategory(cat, btnElement) {
             currentCategory = cat;
             document.querySelectorAll('.category-list button').forEach(btn => btn.classList.remove('active'));
