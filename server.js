@@ -64,9 +64,17 @@ app.get('/delete-product/:id', async (req, res) => {
 app.put('/update-product/:id', async (req, res) => {
   try {
     await Product.findByIdAndUpdate(req.params.id, {
+      name: req.body.name,
+      category: req.body.category,
       price: req.body.price,
-      stock: req.body.stock
+      stock: req.body.stock,
+      image: req.body.image
     });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
