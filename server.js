@@ -12,7 +12,6 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB வெற்றிகரமாக இணைக்கப்பட்டது! 🎉"))
   .catch((err) => console.log("MongoDB இணைப்பில் பிழை:", err));
 
-// Product Schema (இதில் image புதிதாகச் சேர்க்கப்பட்டுள்ளது)
 const productSchema = new mongoose.Schema({
   name: String,
   price: Number,
@@ -26,7 +25,6 @@ app.get('/', (req, res) => res.sendFile(__dirname + '/store.html'));
 app.get('/shop', (req, res) => res.sendFile(__dirname + '/shop.html'));
 app.get('/admin', (req, res) => res.sendFile(__dirname + '/index.html'));
 
-// புதிய பொருளைச் சேர்க்கும் போது படத்தையும் (image) சேர்த்து சேமித்தல்
 app.post('/add-product-dynamic', async (req, res) => {
   try {
     const newProduct = new Product({
@@ -34,7 +32,7 @@ app.post('/add-product-dynamic', async (req, res) => {
       price: req.body.price,
       stock: req.body.stock,
       category: req.body.category,
-      image: req.body.image // படத்தின் லிங்க்
+      image: req.body.image
     });
     await newProduct.save();
     res.redirect('/admin'); 
@@ -70,11 +68,6 @@ app.put('/update-product/:id', async (req, res) => {
       stock: req.body.stock,
       image: req.body.image
     });
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
