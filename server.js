@@ -8,51 +8,41 @@ const PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); 
 
-// MongoDB இணைப்பு
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB வெற்றிகரமாக இணைக்கப்பட்டது! 🎉"))
   .catch((err) => console.log("MongoDB இணைப்பில் பிழை:", err));
 
+// Product Schema (இதில் image புதிதாகச் சேர்க்கப்பட்டுள்ளது)
 const productSchema = new mongoose.Schema({
   name: String,
   price: Number,
   stock: Number,
-  category: String 
+  category: String,
+  image: String 
 });
 const Product = mongoose.model('Product', productSchema);
 
-// 1. முகப்புப் பக்கம் (Home Page)
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/store.html');
-});
+app.get('/', (req, res) => res.sendFile(__dirname + '/store.html'));
+app.get('/shop', (req, res) => res.sendFile(__dirname + '/shop.html'));
+app.get('/admin', (req, res) => res.sendFile(__dirname + '/index.html'));
 
-// 2. புதிய ஷாப் பக்கம் (Customer Shop Page with Filters)
-app.get('/shop', (req, res) => {
-  res.sendFile(__dirname + '/shop.html');
-});
-
-// 3. அட்மின் பேனல் (Admin Dashboard) - URL இனி /admin என்று இருக்கும்
-app.get('/admin', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
-
-// புதிய பொருளைச் சேர்ப்பதற்கான Route
+// புதிய பொருளைச் சேர்க்கும் போது படத்தையும் (image) சேர்த்து சேமித்தல்
 app.post('/add-product-dynamic', async (req, res) => {
   try {
     const newProduct = new Product({
       name: req.body.name,
       price: req.body.price,
       stock: req.body.stock,
-      category: req.body.category
+      category: req.body.category,
+      image: req.body.image // படத்தின் லிங்க்
     });
     await newProduct.save();
-    res.redirect('/admin'); // சேமித்ததும் அட்மின் பேனலுக்கே திரும்பும்
+    res.redirect('/admin'); 
   } catch (err) {
     res.send("பிழை: " + err.message);
   }
 });
 
-// டேட்டாபேஸிலிருந்து தகவல்களை எடுப்பது
 app.get('/products', async (req, res) => {
   try {
     const allProducts = await Product.find();

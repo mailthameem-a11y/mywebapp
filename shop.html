@@ -160,9 +160,7 @@
                 const badges = ['PREMIUM', 'BEST SELLER', 'NEW'];
                 const badge = badges[index % badges.length];
                 
-                let img = "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500"; 
-                if(product.category === 'Nuts') img = "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?q=80&w=500";
-                if(product.category === 'Anjeer' || product.category === 'Kismiss') img = "https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=500";
+               const img = product.image || "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500";
 
                 const card = document.createElement('div');
                 card.className = 'product-card';

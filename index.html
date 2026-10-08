@@ -3,114 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>நமது ஆன்லைன் ஸ்டோர் - அட்மின் பேனல்</title>
+    <title>அட்மின் பேனல் - Royal Nuts</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%); margin: 0; padding: 20px; min-height: 100vh;}
-        h1 { text-align: center; color: #1e293b; font-size: 2.5rem; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #64748b; margin-top: 0; margin-bottom: 40px; font-size: 1.2rem; }
-        .dashboard-container { display: flex; flex-wrap: wrap; gap: 30px; max-width: 1200px; margin: 0 auto; align-items: flex-start;}
-        .form-section { flex: 1; min-width: 300px; background-color: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .form-section h3 { margin-top: 0; color: #0f172a; font-size: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;}
-        .form-section label { display: block; margin: 15px 0 5px; color: #475569; font-weight: 600; font-size: 0.9rem;}
-        .form-section input, .form-section select { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;}
-        .form-section input:focus, .form-section select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);}
-        .submit-btn { background-color: #16a34a; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; font-weight: bold; margin-top: 25px;}
-        .submit-btn:hover { background-color: #15803d; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; padding: 20px;}
+        .dashboard-container { display: flex; gap: 30px; max-width: 1200px; margin: 0 auto; flex-wrap: wrap;}
+        .form-section { flex: 1; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-width: 300px;}
+        .form-section input, .form-section select { width: 100%; padding: 10px; margin: 10px 0 20px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box;}
+        .submit-btn { background: #16a34a; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold;}
         .products-section { flex: 2; min-width: 300px;}
-        .products-section h2 { color: #0f172a; margin-top: 0; margin-bottom: 20px;}
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .card { background-color: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .card h3 { color: #0f172a; margin: 0 0 5px 0; text-transform: capitalize; font-size: 1.3rem;}
-        .category-tag { background: #e2e8f0; color: #475569; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; display: inline-block; margin-bottom: 10px;}
-        .price { font-size: 26px; font-weight: 800; color: #0f172a; margin: 5px 0 10px 0; }
-        .stock-badge { display: inline-block; background-color: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 15px;}
-        .card-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 15px;}
-        .edit-btn, .delete-btn { flex: 1; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; color: white;}
-        .edit-btn { background-color: #eab308; }
-        .delete-btn { background-color: #ef4444; }
+        .card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; gap: 15px; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .card img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px;}
+        .card-info { flex: 1; }
+        .card-actions button { padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: bold;}
+        .del-btn { background: #ef4444; }
     </style>
 </head>
 <body>
-    <h1>🛒 நமது ஆன்லைன் ஸ்டோர்</h1>
-    <p class="subtitle">அட்மின் பேனல்</p>
-
+    <h1 style="text-align: center;">🛒 அட்மின் பேனல்</h1>
     <div class="dashboard-container">
+        <!-- Add Product Form -->
         <div class="form-section">
             <h3>புதிய பொருளைச் சேர்க்க</h3>
             <form action="/add-product-dynamic" method="POST">
                 <label>பொருளின் வகை (Category)</label>
-                <select name="category" required>
-                    <option value="Premium Dates">Premium Dates</option>
-                    <option value="Nuts">Nuts</option>
-                    <option value="Seeds">Seeds</option>
-                    <option value="Anjeer">Anjeer</option>
-                    <option value="Kismiss">Kismiss</option>
-                </select>
+                <input type="text" name="category" placeholder="எ.கா: Dates, Nuts" required>
 
                 <label>பொருளின் பெயர்</label>
-                <input type="text" name="name" required>
+                <input type="text" name="name" placeholder="எ.கா: Ajwa Dates 500g" required>
                 
                 <label>விலை (₹)</label>
                 <input type="number" name="price" required>
                 
                 <label>ஸ்டாக் அளவு</label>
                 <input type="number" name="stock" required>
+
+                <label>படத்தின் லிங்க் (Image URL)</label>
+                <input type="text" name="image" placeholder="https://... (படத்தின் காப்பி செய்யப்பட்ட லிங்க்)" required>
                 
                 <button type="submit" class="submit-btn">💾 டேட்டாபேஸில் சேமி</button>
             </form>
         </div>
 
+        <!-- Product List -->
         <div class="products-section">
-            <h2>பொருட்களின் பட்டியல்</h2>
-            <div class="products-grid" id="product-list">
-                <p>பொருட்கள் லோட் ஆகிறது...</p>
-            </div>
+            <h2>உள்ள பொருட்கள்</h2>
+            <div id="product-list">லோட் ஆகிறது...</div>
         </div>
     </div>
 
     <script>
-        fetch('/products')
-            .then(response => response.json())
-            .then(products => {
-                const productList = document.getElementById('product-list');
-                productList.innerHTML = ''; 
-
-                products.forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <h3>${product.name}</h3>
-                        <span class="category-tag">${product.category || 'பொதுவானவை'}</span>
-                        <p class="price">₹${product.price}</p>
-                        <span class="stock-badge">ஸ்டாக்: ${product.stock} உள்ளது</span>
-                        
-                        <div class="card-actions">
-                            <button class="edit-btn" onclick="editProduct('${product._id}', '${product.name}', '${product.price}', '${product.stock}')">✏ Edit</button>
-                            <button class="delete-btn" onclick="deleteProduct('${product._id}')">🗑️ Delete</button>
+        fetch('/products').then(res => res.json()).then(products => {
+            const list = document.getElementById('product-list');
+            list.innerHTML = '';
+            products.forEach(p => {
+                // பழைய பொருட்களுக்கு படம் இல்லையென்றால் ஒரு பொதுவான படம்
+                const imgSrc = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=200';
+                list.innerHTML += `
+                    <div class="card">
+                        <img src="${imgSrc}" alt="${p.name}">
+                        <div class="card-info">
+                            <h3 style="margin:0 0 5px;">${p.name}</h3>
+                            <p style="margin:0; color: #64748b;">₹${p.price} | ஸ்டாக்: ${p.stock} | ${p.category}</p>
                         </div>
-                    `;
-                    productList.appendChild(card);
-                });
-            })
-            .catch(error => console.error(error));
+                        <div class="card-actions">
+                            <button class="del-btn" onclick="deleteProduct('${p._id}')">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
 
         function deleteProduct(id) {
-            if(confirm("இந்தப் பொருளை நிச்சயமாக அழிக்க வேண்டுமா?")) {
+            if(confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
                 fetch('/delete-product/' + id).then(() => window.location.reload());
             }
-        }
-
-        function editProduct(id, name, oldPrice, oldStock) {
-            let newPrice = prompt(name + " - புதிய விலையை உள்ளிடவும்:", oldPrice);
-            if (!newPrice) return; 
-            let newStock = prompt(name + " - புதிய ஸ்டாக் அளவை உள்ளிடவும்:", oldStock);
-            if (!newStock) return;
-
-            fetch('/update-product/' + id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ price: newPrice, stock: newStock })
-            }).then(() => window.location.reload());
         }
     </script>
 </body>
