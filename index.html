@@ -15,36 +15,29 @@
         .card img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px;}
         .card-info { flex: 1; }
         .card-actions button { padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: bold;}
+        .edit-btn { background: #eab308; margin-right: 5px; color: black !important;}
         .del-btn { background: #ef4444; }
     </style>
 </head>
 <body>
     <h1 style="text-align: center;">🛒 அட்மின் பேனல்</h1>
     <div class="dashboard-container">
-        <!-- Add Product Form -->
         <div class="form-section">
             <h3>புதிய பொருளைச் சேர்க்க</h3>
             <form action="/add-product-dynamic" method="POST">
                 <label>பொருளின் வகை (Category)</label>
                 <input type="text" name="category" placeholder="எ.கா: Dates, Nuts" required>
-
                 <label>பொருளின் பெயர்</label>
                 <input type="text" name="name" placeholder="எ.கா: Ajwa Dates 500g" required>
-                
                 <label>விலை (₹)</label>
                 <input type="number" name="price" required>
-                
                 <label>ஸ்டாக் அளவு</label>
                 <input type="number" name="stock" required>
-
                 <label>படத்தின் லிங்க் (Image URL)</label>
-                <input type="text" name="image" placeholder="https://... (படத்தின் காப்பி செய்யப்பட்ட லிங்க்)" required>
-                
+                <input type="text" name="image" placeholder="https://... (படத்தின் லிங்க்)" required>
                 <button type="submit" class="submit-btn">💾 டேட்டாபேஸில் சேமி</button>
             </form>
         </div>
-
-        <!-- Product List -->
         <div class="products-section">
             <h2>உள்ள பொருட்கள்</h2>
             <div id="product-list">லோட் ஆகிறது...</div>
@@ -56,7 +49,6 @@
             const list = document.getElementById('product-list');
             list.innerHTML = '';
             products.forEach(p => {
-                // பழைய பொருட்களுக்கு படம் இல்லையென்றால் ஒரு பொதுவான படம்
                 const imgSrc = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=200';
                 list.innerHTML += `
                     <div class="card">
@@ -66,6 +58,7 @@
                             <p style="margin:0; color: #64748b;">₹${p.price} | ஸ்டாக்: ${p.stock} | ${p.category}</p>
                         </div>
                         <div class="card-actions">
+                            <button class="edit-btn" onclick="editProduct('${p._id}', '${p.name}', '${p.price}', '${p.stock}')">✏ Edit</button>
                             <button class="del-btn" onclick="deleteProduct('${p._id}')">Delete</button>
                         </div>
                     </div>
@@ -77,6 +70,20 @@
             if(confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
                 fetch('/delete-product/' + id).then(() => window.location.reload());
             }
+        }
+
+        // Edit Function Logic
+        function editProduct(id, name, oldPrice, oldStock) {
+            let newPrice = prompt(name + " - புதிய விலையை உள்ளிடவும்:", oldPrice);
+            if (!newPrice) return; 
+            let newStock = prompt(name + " - புதிய ஸ்டாக் அளவை உள்ளிடவும்:", oldStock);
+            if (!newStock) return;
+
+            fetch('/update-product/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ price: newPrice, stock: newStock })
+            }).then(() => window.location.reload());
         }
     </script>
 </body>
