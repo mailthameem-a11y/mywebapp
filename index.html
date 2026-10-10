@@ -25,7 +25,11 @@
         .bulk-btn:hover { background: #047857; }
 
         .products-section { flex: 2; min-width: 320px;}
-        .products-section h2 { margin-top: 0; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
+        .section-header h2 { margin: 0; }
+        .clean-btn { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem;}
+        .clean-btn:hover { background: #fecaca; }
+
         .card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 15px; display: flex; gap: 20px; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
         .card img { width: 85px; height: 85px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;}
         .card-info { flex: 1; }
@@ -54,7 +58,7 @@
     <div class="dashboard-container">
         
         <div class="left-panel">
-            <!-- 1. Google Sheet / CSV Bulk Upload Box -->
+            <!-- Google Sheet / CSV Upload -->
             <div class="form-section bulk-box">
                 <h3>📊 Google Sheet / CSV Upload</h3>
                 <p style="font-size: 0.85rem; color: #065f46; margin: 0 0 12px;">Google Sheet-ல் இருந்து டவுன்லோட் செய்த <strong>.csv</strong> ஃபைலைத் தேர்ந்தெடுக்கவும்:</p>
@@ -62,7 +66,7 @@
                 <button type="button" class="submit-btn bulk-btn" onclick="handleCSVUpload()">⚡ மொத்தமாக பதிவேற்று</button>
             </div>
 
-            <!-- 2. Single Product Add Form -->
+            <!-- Single Product Form -->
             <div class="form-section">
                 <h3>+ ஒரு பொருளை மட்டும் சேர்க்க</h3>
                 <form action="/add-product-dynamic" method="POST">
@@ -97,9 +101,12 @@
             </div>
         </div>
 
-        <!-- Product List -->
+        <!-- Products List -->
         <div class="products-section">
-            <h2>உள்ள பொருட்கள்</h2>
+            <div class="section-header">
+                <h2>உள்ள பொருட்கள்</h2>
+                <button class="clean-btn" onclick="cleanUndefined()">🧹 Clean 'undefined' Products</button>
+            </div>
             <div id="product-list">லோட் ஆகிறது...</div>
         </div>
     </div>
@@ -160,7 +167,7 @@
             });
         });
 
-        // CSV கோப்பை வாசித்து சர்வருக்கு அனுப்பும் லாஜிக்
+        // உங்கள் CSV ஃபைலை முழுமையாகப் புரிந்துகொள்ளும் ஸ்மார்ட் அப்லோடர்
         function handleCSVUpload() {
             const fileInput = document.getElementById('csvFileInput');
             const file = fileInput.files[0];
@@ -178,40 +185,77 @@
                     return;
                 }
 
-                const headers = rows[0].split(',').map(h => h.trim().toLowerCase());
+                // தலைப்புகளை சுத்தம் செய்து சிறிய எழுத்துக்களாக மாற்றுதல்
+                const rawHeaders = rows[0].split(',').map(h => h.trim());
+                const cleanHeaders = rawHeaders.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+                
                 const products = [];
 
                 for (let i = 1; i < rows.length; i++) {
                     const cols = rows[i].split(',').map(c => c.trim());
-                    if (cols.length < 3) continue;
+                    if (cols.length < 2) continue;
 
-                    let rowData = {};
-                    headers.forEach((h, idx) => {
-                        rowData[h] = cols[idx] || '';
+                    let row = {};
+                    cleanHeaders.forEach((h, idx) => {
+                        row[h] = cols[idx] !== undefined ? cols[idx] : '';
                     });
 
-                    let weights = [];
-                    if (rowData.weight1 && rowData.price1) weights.push({ weight: rowData.weight1, price: Number(rowData.price1) });
-                    if (rowData.weight2 && rowData.price2) weights.push({ weight: rowData.weight2, price: Number(rowData.price2) });
-                    if (rowData.weight3 && rowData.price3) weights.push({ weight: rowData.weight3, price: Number(rowData.price3) });
+                    // பெயரைக் கண்டறிதல் (Product Name அல்லது Name)
+                    const name = row['productname'] || row['name'] || '';
+                    if (!name) continue;
 
-                    const basePrice = weights.length > 0 ? weights[0].price : (Number(rowData.price) || 0);
+                    const category = row['category'] || 'Dry Fruits';
+                    const stock = Number(row['stock']) || 0;
+
+                    // படத்தின் லிங்க் இல்லையென்றால் வகைக்கு ஏற்ப தானாகவே பொருத்தமான படங்களை அமைத்தல்
+                    let image = row['imageurl'] || row['image'] || '';
+                    if (!image || image.toLowerCase() === 'nan') {
+                        const catLower = category.toLowerCase();
+                        if (catLower.includes('date')) {
+                            image = 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500';
+                        } else if (catLower.includes('nut')) {
+                            image = 'https://images.unsplash.com/photo-1508061253366-f7da158b6d46?q=80&w=500';
+                        } else if (catLower.includes('seed')) {
+                            image = 'https://images.unsplash.com/photo-1588615419958-380d38194a08?q=80&w=500';
+                        } else if (catLower.includes('grape') || catLower.includes('raisin')) {
+                            image = 'https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=500';
+                        } else {
+                            image = 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500';
+                        }
+                    }
+
+                    // எடைகள் & விலைகள் (Size 1/Weight 1, Price 1 போன்றவற்றை எடுத்தல்)
+                    let weights = [];
+                    const w1 = row['size1'] || row['weight1'];
+                    const p1 = Number(row['price1']);
+                    if (w1 && !isNaN(p1) && p1 > 0) weights.push({ weight: w1, price: p1 });
+
+                    const w2 = row['size2'] || row['weight2'];
+                    const p2 = Number(row['price2']);
+                    if (w2 && !isNaN(p2) && p2 > 0) weights.push({ weight: w2, price: p2 });
+
+                    const w3 = row['size3'] || row['weight3'];
+                    const p3 = Number(row['price3']);
+                    if (w3 && !isNaN(p3) && p3 > 0) weights.push({ weight: w3, price: p3 });
+
+                    const basePrice = weights.length > 0 ? weights[0].price : (Number(row['price']) || 0);
 
                     products.push({
-                        category: rowData.category,
-                        name: rowData.name,
-                        stock: Number(rowData.stock) || 0,
-                        image: rowData.image,
+                        category: category,
+                        name: name,
+                        stock: stock,
+                        image: image,
                         price: basePrice,
                         weights: weights
                     });
                 }
 
                 if (products.length === 0) {
-                    alert("பொருட்கள் சரியாக வாசிக்கப்படவில்லை. தலைப்புகளைச் சரிபார்க்கவும்.");
+                    alert("பொருட்கள் எதுவும் கண்டுபிடிக்கப்படவில்லை.");
                     return;
                 }
 
+                // சர்வருக்கு மொத்தமாக அனுப்புதல்
                 fetch('/bulk-add-products', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -220,16 +264,30 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert(`வெற்றி! ${data.count} பொருட்கள் ஒரே நேரத்தில் சேர்க்கப்பட்டன! 🎉`);
+                        alert(`வெற்றி! ${data.count} பொருட்கள் வெற்றிகரமாகச் சேர்க்கப்பட்டன! 🎉`);
                         window.location.reload();
                     } else {
                         alert("பிழை: " + data.error);
                     }
                 })
-                .catch(err => alert("பதிவேற்றத்தில் பிழை ஏற்பட்டது: " + err.message));
+                .catch(err => alert("பதிவேற்றத்தில் பிழை: " + err.message));
             };
 
             reader.readAsText(file);
+        }
+
+        // பழைய Undefined பொருட்களை ஒரே கிளிக்கில் நீக்கும் வசதி
+        function cleanUndefined() {
+            if (confirm("தவறாகப் பதிவான 'undefined' பொருட்களை மட்டும் மொத்தமாக நீக்க வேண்டுமா?")) {
+                fetch('/delete-undefined')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("அனைத்து 'undefined' பொருட்களும் நீக்கப்பட்டுவிட்டன!");
+                            window.location.reload();
+                        }
+                    });
+            }
         }
 
         function deleteProduct(id) {

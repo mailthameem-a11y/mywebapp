@@ -6,7 +6,6 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.urlencoded({ extended: true }));
-// அதிக அளவிலான Bulk Data-வை ஏற்க json limit 10mb என வைக்கப்பட்டுள்ளது
 app.use(express.json({ limit: '10mb' })); 
 
 mongoose.connect(process.env.MONGO_URI)
@@ -55,7 +54,7 @@ app.post('/add-product-dynamic', async (req, res) => {
   }
 });
 
-// CSV மூலமாக மொத்தமாகப் பல பொருட்களைச் சேர்க்க (Bulk Upload)
+// CSV மூலமாக மொத்தப் பொருட்களைச் சேர்க்க (Bulk Upload)
 app.post('/bulk-add-products', async (req, res) => {
   try {
     const productsList = req.body;
@@ -64,6 +63,18 @@ app.post('/bulk-add-products', async (req, res) => {
     }
     await Product.insertMany(productsList);
     res.json({ success: true, count: productsList.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// தவறாக உருவான Undefined பொருட்களை மட்டும் நீக்க
+app.get('/delete-undefined', async (req, res) => {
+  try {
+    await Product.deleteMany({
+      $or: [{ name: 'undefined' }, { name: null }, { name: '' }]
+    });
+    res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
