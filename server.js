@@ -6,7 +6,8 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); 
+// அதிக அளவிலான Bulk Data-வை ஏற்க json limit 10mb என வைக்கப்பட்டுள்ளது
+app.use(express.json({ limit: '10mb' })); 
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB வெற்றிகரமாக இணைக்கப்பட்டது! 🎉"))
@@ -26,7 +27,7 @@ app.get('/', (req, res) => res.sendFile(__dirname + '/store.html'));
 app.get('/shop', (req, res) => res.sendFile(__dirname + '/shop.html'));
 app.get('/admin', (req, res) => res.sendFile(__dirname + '/index.html'));
 
-// புதிய பொருளைச் சேர்க்கும் போது விலையை பாதுகாப்பாக எடுக்கும் லாஜிக்
+// தனித்தனியாக ஒரு பொருளைச் சேர்க்க
 app.post('/add-product-dynamic', async (req, res) => {
   try {
     let weightsArray = [];
@@ -34,7 +35,6 @@ app.post('/add-product-dynamic', async (req, res) => {
     if (req.body.weight2 && req.body.price2) weightsArray.push({ weight: req.body.weight2, price: Number(req.body.price2) });
     if (req.body.weight3 && req.body.price3) weightsArray.push({ weight: req.body.weight3, price: Number(req.body.price3) });
 
-    // price1 அல்லது பொதுவான price எதில் விலை இருந்தாலும் அதை எடுக்கும்
     const finalPrice = req.body.price 
       ? Number(req.body.price) 
       : (weightsArray.length > 0 ? weightsArray[0].price : 0);
@@ -52,6 +52,20 @@ app.post('/add-product-dynamic', async (req, res) => {
     res.redirect('/admin'); 
   } catch (err) {
     res.send("பிழை: " + err.message);
+  }
+});
+
+// CSV மூலமாக மொத்தமாகப் பல பொருட்களைச் சேர்க்க (Bulk Upload)
+app.post('/bulk-add-products', async (req, res) => {
+  try {
+    const productsList = req.body;
+    if (!Array.isArray(productsList) || productsList.length === 0) {
+      return res.status(400).json({ error: "பொருட்கள் எதுவும் கிடைக்கவில்லை" });
+    }
+    await Product.insertMany(productsList);
+    res.json({ success: true, count: productsList.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
