@@ -214,14 +214,29 @@
         }
 
         // --- 1. ORDERS LOGIC ---
+        // --- 1. ORDERS LOGIC (With Auto-Login Redirect) ---
         function loadOrders() {
             fetch('/api/orders')
-                .then(res => res.json())
+                .then(res => {
+                    // லாகின் செய்யவில்லை என்றால் தானாகவே லாகின் பக்கத்திற்குத் திருப்பிவிடும்
+                    if (res.status === 401) {
+                        window.location.href = '/admin/login';
+                        return null;
+                    }
+                    return res.json();
+                })
                 .then(orders => {
-                    loadedOrders = orders;
+                    if (!orders) return;
+                    
                     const list = document.getElementById('orders-list');
                     const pendingBadge = document.getElementById('pending-count');
-                    
+
+                    if (!Array.isArray(orders)) {
+                        list.innerHTML = `<div style="text-align: center; padding: 30px; color: #ef4444; background: white; border-radius: 12px;">ஆர்டர்களைப் பெறுவதில் பிழை ஏற்பட்டது. தயவுசெய்து மீண்டும் உள்நுழையவும்.</div>`;
+                        return;
+                    }
+
+                    loadedOrders = orders;
                     const pendingOrders = orders.filter(o => o.status === 'Pending').length;
                     pendingBadge.innerText = pendingOrders;
 
@@ -273,7 +288,10 @@
                         `;
                     });
                 })
-                .catch(err => console.error("Orders load error:", err));
+                .catch(err => {
+                    console.error("Orders load error:", err);
+                    document.getElementById('orders-list').innerHTML = `<div style="text-align: center; padding: 30px; color: #ef4444; background: white; border-radius: 12px;">ஆர்டர்களை ஏற்றுவதில் பிழை ஏற்பட்டது.</div>`;
+                });
         }
 
         // --- பார்சல் ரசீது பிரிண்ட் செய்யும் லாஜிக் ---
