@@ -3,351 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop | Royal Nuts</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Royal Nuts - பிரீமியம் உலர் பழங்கள் & நட்ஸ்</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #153a25; --accent: #d4af37; --text-dark: #111827; --text-light: #6b7280; --bg-main: #f9fafb; --border-color: #e5e7eb;}
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); margin: 0; padding: 0; color: var(--text-dark); overflow-x: hidden;}
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
-        
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background-color: white; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        .nav-links { display: flex; gap: 35px; }
-        .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 400; font-size: 0.95rem; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
-        
-        /* Cart Icon CSS */
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.1rem; color: var(--text-dark); display: flex; align-items: center; gap: 5px; font-weight: 500;}
-        .cart-count { background: var(--primary); color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 20px; position: absolute; top: -10px; right: -15px; }
+        :root {
+            --primary: #15803d;
+            --primary-hover: #166534;
+            --accent: #b45309;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --white: #ffffff;
+        }
 
-        .shop-container { display: grid; grid-template-columns: 260px 1fr; gap: 50px; padding: 60px 5%; max-width: 1400px; margin: 0 auto; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; }
 
-        .sidebar { position: sticky; top: 100px; height: fit-content; }
-        .sidebar h3 { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 20px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .filter-group { margin-bottom: 40px; }
-        .filter-group input[type="text"] { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 20px; font-family: 'Inter'; box-sizing: border-box; }
-        
-        .category-list { list-style: none; padding: 0; margin: 0; }
-        .category-list li { margin-bottom: 12px; }
-        .category-list button { background: none; border: none; text-align: left; padding: 0; color: var(--text-light); font-size: 0.95rem; cursor: pointer; font-family: 'Inter'; transition: color 0.2s; text-transform: capitalize;}
-        .category-list button:hover, .category-list button.active { color: var(--text-dark); font-weight: 600; }
+        /* Navbar */
+        nav { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .cart-trigger { position: relative; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 8px 16px; border-radius: 20px; font-weight: 600; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        .cart-count { background: var(--primary); color: white; border-radius: 50%; font-size: 0.75rem; padding: 2px 7px; font-weight: bold; }
 
-        .price-range { width: 100%; margin-top: 10px; }
-        .price-label { color: var(--text-light); font-size: 0.9rem; margin-top: 10px; display: block; }
-        .checkbox-label { display: flex; align-items: center; gap: 10px; color: var(--text-light); font-size: 0.95rem; cursor: pointer;}
-        
-        .shop-header { margin-bottom: 40px; }
-        .shop-header p { color: var(--text-light); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; font-weight: 500;}
-        .shop-header h2 { font-size: 3rem; margin: 0 0 15px 0; }
-        
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
-        .product-card { background: white; border: 1px solid var(--border-color); transition: transform 0.3s, box-shadow 0.3s; position: relative;}
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .badge { position: absolute; top: 15px; left: 15px; background: white; color: var(--text-dark); padding: 4px 10px; font-size: 0.7rem; font-weight: 600; border: 1px solid var(--border-color); z-index: 2;}
-        .product-img { width: 100%; height: 260px; object-fit: cover; border-bottom: 1px solid var(--border-color); }
-        .product-details { padding: 20px; }
-        .rating { font-size: 0.85rem; margin-bottom: 10px; font-weight: 600; }
-        .category-text { font-size: 0.7rem; color: var(--text-light); text-transform: uppercase; font-weight: 500; margin-bottom: 5px; display: block; }
-        .product-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin: 0 0 8px 0; }
-        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px;}
-        .price { font-size: 1.2rem; font-weight: 600; }
-        
-        /* Add to Cart Button CSS */
-        .add-to-cart { background: transparent; border: 1px solid var(--text-dark); color: var(--text-dark); padding: 8px 16px; font-weight: 500; cursor: pointer; transition: all 0.3s;}
-        .add-to-cart:hover:not(:disabled) { background: var(--text-dark); color: white; }
-        .add-to-cart:disabled { opacity: 0.5; cursor: not-allowed; }
+        /* Container */
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .page-title { text-align: center; margin-bottom: 25px; }
+        .page-title h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--text-dark); }
+        .page-title p { color: var(--text-muted); margin-top: 5px; }
 
-        /* Cart Sidebar CSS */
-        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
-        .cart-drawer { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: white; z-index: 1002; transition: right 0.4s ease; box-shadow: -5px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column;}
+        /* Product Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+        .card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
+        .category-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; color: var(--text-dark); }
+        
+        .weight-select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; margin-bottom: 15px; outline: none; background: #fdfdfd; }
+        
+        .card-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+        .price { font-size: 1.25rem; font-weight: 800; color: var(--primary); }
+        .add-btn { background: var(--primary); color: white; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .add-btn:hover { background: var(--primary-hover); }
+
+        /* Cart Drawer */
+        .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; backdrop-filter: blur(2px); }
+        .cart-drawer { position: fixed; right: -420px; top: 0; bottom: 0; width: 100%; max-width: 400px; background: white; z-index: 101; box-shadow: -4px 0 20px rgba(0,0,0,0.15); display: flex; flex-direction: column; transition: right 0.3s ease; }
         .cart-drawer.open { right: 0; }
-        .cart-header { padding: 25px; background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center; }
-        .cart-header h3 { margin: 0; font-size: 1.5rem; }
-        .close-cart { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-        .cart-items { flex: 1; overflow-y: auto; padding: 20px; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; margin-bottom: 15px; border-radius: 4px; border: 1px solid var(--border-color);}
-        .item-info h4 { margin: 0 0 5px; font-size: 1rem; }
-        .item-price { color: var(--text-light); font-weight: bold; }
-        .remove-btn { color: red; background: none; border: none; cursor: pointer; font-size: 0.8rem; text-decoration: underline; margin-top: 5px; padding: 0;}
-        .cart-footer { padding: 25px; border-top: 1px solid var(--border-color); }
-        .cart-total { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px;}
-        .checkout-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; font-size: 1.1rem; cursor: pointer; }
+        .cart-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .close-cart { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; }
+        .cart-item h4 { font-size: 0.95rem; font-weight: 600; }
+        .cart-item p { font-size: 0.85rem; color: var(--text-muted); }
+        .cart-item-qty { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+        .qty-btn { width: 24px; height: 24px; border: 1px solid var(--border); background: #f8fafc; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border); background: #f8fafc; }
+        .cart-total { display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; margin-bottom: 15px; }
+        .checkout-btn { width: 100%; background: #25d366; color: white; border: none; padding: 14px; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; }
+        .checkout-btn:hover { background: #1eb956; }
 
-        footer { background: var(--bg-main); padding: 60px 5%; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-light); font-size: 0.9rem;}
+        /* Checkout Modal */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        .modal { background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 440px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
+        .modal h3 { font-size: 1.3rem; margin-bottom: 15px; color: var(--text-dark); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .modal label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; margin-top: 10px; }
+        .modal input, .modal textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-top: 4px; font-family: inherit; font-size: 0.95rem; box-sizing: border-box; }
+        .modal-btns { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+        .modal-btns button { padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; }
+        .cancel-btn { background: #f1f5f9; color: var(--text-dark); }
+        .confirm-btn { background: #25d366; color: white; }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="/" class="logo">Royal Nuts</a>
-        <nav class="nav-links">
-            <a href="/">Home</a>
-            <a href="/shop">Shop</a>
-            <a href="#">About Us</a>
-            <a href="#">Contact</a>
-        </nav>
-        <div class="cart-icon" onclick="toggleCart()">
+    <nav>
+        <a href="/" class="logo">🌿 Royal Nuts</a>
+        <button class="cart-trigger" onclick="toggleCart(true)">
             🛒 Cart <span class="cart-count" id="cart-count">0</span>
+        </button>
+    </nav>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>எங்கள் பிரீமியம் பொருட்கள்</h1>
+            <p>100% இயற்கை உலர் பழங்கள் மற்றும் நட்ஸ் வகைகள்</p>
         </div>
-    </header>
 
-    <div class="shop-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="filter-group">
-                <h3>Filters</h3>
-                <input type="text" id="searchInput" placeholder="Search products..." onkeyup="filterProducts()">
-            </div>
-            <div class="filter-group">
-                <h3>Category</h3>
-                <ul class="category-list" id="categoryFilter">
-                    <li>Loading categories...</li>
-                </ul>
-            </div>
-            <div class="filter-group">
-                <h3>Max Price</h3>
-                <input type="range" id="priceRange" min="0" max="3000" value="3000" class="price-range" oninput="filterProducts()">
-                <span class="price-label" id="priceLabel">Up to ₹3,000</span>
-            </div>
-            <div class="filter-group">
-                <h3>Availability</h3>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="inStockCheck" onchange="filterProducts()"> In Stock Only
-                </label>
-            </div>
-        </aside>
-
-        <!-- Products -->
-        <div class="shop-content">
-            <div class="shop-header">
-                <p>THE COLLECTION</p>
-                <h2>Shop Premium Dry Fruits</h2>
-                <p style="color: var(--text-light);">Hand-graded badam, cashews and dates — sealed fresh and ready to ship.</p>
-            </div>
-            <div class="products-grid" id="customer-product-list">
-                <p style="padding: 20px;">Products loading...</p>
-            </div>
+        <div class="grid" id="product-grid">
+            <p style="text-align: center; grid-column: 1/-1;">பொருட்கள் லோட் ஆகிறது...</p>
         </div>
     </div>
 
-    <!-- Shopping Cart Sidebar -->
-    <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+    <!-- Cart Drawer -->
+    <div class="cart-overlay" id="cart-overlay" onclick="toggleCart(false)"></div>
     <div class="cart-drawer" id="cart-drawer">
         <div class="cart-header">
-            <h3>Your Cart</h3>
-            <button class="close-cart" onclick="toggleCart()">✕</button>
+            <h3>உங்கள் கூடை (Cart)</h3>
+            <button class="close-cart" onclick="toggleCart(false)">✕</button>
         </div>
-        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-items" id="cart-items">
+            <p style="color: var(--text-muted); text-align: center; margin-top: 40px;">கார்ட் காலியாக உள்ளது.</p>
+        </div>
         <div class="cart-footer">
             <div class="cart-total">
-                <span>Subtotal:</span>
-                <span id="cart-total-price">₹0</span>
+                <span>மொத்தத் தொகை:</span>
+                <span id="cart-total">₹0</span>
             </div>
-            <button class="checkout-btn" onclick="alert('Proceeding to Checkout!')">Proceed to Checkout</button>
+            <button class="checkout-btn" onclick="openCheckoutModal()">
+                💬 வாட்ஸ்அப் மூலம் ஆர்டர் செய்
+            </button>
         </div>
     </div>
 
-    <footer>
-        &copy; 2026 Royal Nuts. Premium Quality Dry Fruits.
-    </footer>
+    <!-- WhatsApp Checkout Customer Details Modal -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="modal">
+            <h3>📦 டெலிவரி விவரங்கள்</h3>
+            <label>வாடிக்கையாளர் பெயர்</label>
+            <input type="text" id="cust-name" placeholder="உங்கள் பெயர்" required>
+
+            <label>மொபைல் எண்</label>
+            <input type="tel" id="cust-phone" placeholder="எ.கா: 9876543210" required>
+
+            <label>முழு டெலிவரி முகவரி (Address with Pincode)</label>
+            <textarea id="cust-address" rows="3" placeholder="கதவு எண், தெரு, ஊர், பின்கோடு..." required></textarea>
+
+            <div class="modal-btns">
+                <button class="cancel-btn" onclick="closeCheckoutModal()">Cancel</button>
+                <button class="confirm-btn" onclick="sendWhatsAppOrder()">📲 Send WhatsApp Order</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        let allProducts = [];
-        let currentCategory = 'All';
-        
-        // Cart State
-        let cart = JSON.parse(localStorage.getItem('premiumCart')) || [];
+        // 🚨 குறிப்பு: உங்கள் உண்மையான WhatsApp எண்ணை இங்கே இடவும் (நாட்டுக் குறியீடு 91 உடன்)
+        const ADMIN_WHATSAPP_NUMBER = "918637400923"; 
 
+        let products = [];
+        let cart = JSON.parse(localStorage.getItem('royal_cart')) || [];
+
+        // தயாரிப்புகளை சர்வரிலிருந்து எடுத்தல்
         fetch('/products')
             .then(res => res.json())
             .then(data => {
-                allProducts = data;
-                renderCategories(allProducts);
-                renderProducts(allProducts);
-                updateCartCount();
-            })
-            .catch(err => console.error("Error", err));
-
-        function renderCategories(products) {
-            const categoryList = document.getElementById('categoryFilter');
-            const uniqueCategories = [...new Set(products.map(p => p.category).filter(c => c))];
-            let html = '<li><button class="active" onclick="setCategory(\'All\', this)">All</button></li>';
-            uniqueCategories.forEach(cat => {
-                html += '<li><button onclick="setCategory(\'' + cat + '\', this)">' + cat + '</button></li>';
+                products = data;
+                renderProducts();
+                updateCartUI();
             });
-            categoryList.innerHTML = html;
-        }
 
-        function renderProducts(products) {
-            const container = document.getElementById('customer-product-list');
-            container.innerHTML = '';
-            
-            if(products.length === 0) {
-                container.innerHTML = '<p>No products found matching your filters.</p>';
-                return;
-            }
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
 
-            products.forEach((product, index) => {
-                const badges = ['PREMIUM', 'BEST SELLER', 'NEW'];
-                const badge = badges[index % badges.length];
-                const img = product.image || "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500"; 
+            products.forEach(p => {
+                const img = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500';
                 
-                // Weight Variants Logic
                 let weightOptionsHtml = '';
-                let defaultPrice = product.price;
-                let defaultWeight = '';
+                let defaultPrice = p.price || 0;
 
-                if (product.weights && product.weights.length > 0) {
-                    defaultPrice = product.weights[0].price;
-                    defaultWeight = product.weights[0].weight;
-                    weightOptionsHtml = `<select class="weight-select" id="weight-${product._id}" onchange="updatePrice('${product._id}')" style="width:100%; padding:8px; margin-bottom:15px; border:1px solid #e5e7eb; border-radius:4px; font-family:'Inter';">`;
-                    product.weights.forEach((w, i) => {
+                if (p.weights && p.weights.length > 0) {
+                    defaultPrice = p.weights[0].price;
+                    weightOptionsHtml = `<select class="weight-select" id="weight-${p._id}" onchange="updateCardPrice('${p._id}')">`;
+                    p.weights.forEach(w => {
                         weightOptionsHtml += `<option value="${w.price}" data-weight="${w.weight}">${w.weight} - ₹${w.price}</option>`;
                     });
                     weightOptionsHtml += `</select>`;
                 }
 
-                const btnAttr = product.stock > 0 
-                    ? `onclick="addToCartWithWeight('${product._id}', '${product.name}')"` 
-                    : 'disabled';
-                const btnText = product.stock > 0 ? 'Add to Cart' : 'Out of Stock';
-
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <span class="badge">${badge}</span>
-                    <img src="${img}" class="product-img">
-                    <div class="product-details">
-                        <div class="rating">★ 4.8 <span style="color:#6b7280;font-weight:normal;">(124)</span></div>
-                        <span class="category-text">${product.category || 'Premium'}</span>
-                        <h3 class="product-title">${product.name}</h3>
-                        
-                        ${weightOptionsHtml}
-
-                        <div class="price-row">
-                            <span class="price" id="price-display-${product._id}">₹${defaultPrice}</span>
-                            <button class="add-to-cart" ${btnAttr}>${btnText}</button>
+                grid.innerHTML += `
+                    <div class="card">
+                        <img src="${img}" alt="${p.name}">
+                        <div class="card-body">
+                            <span class="category-tag">${p.category || 'Dry Fruits'}</span>
+                            <h3 class="card-title">${p.name}</h3>
+                            ${weightOptionsHtml}
+                            <div class="card-footer">
+                                <span class="price" id="price-display-${p._id}">₹${defaultPrice}</span>
+                                <button class="add-btn" onclick="addToCart('${p._id}', '${p.name}')">+ Add</button>
+                            </div>
                         </div>
                     </div>
                 `;
-                container.appendChild(card);
             });
         }
 
-        // எடையை மாற்றும்போது விலையை அப்டேட் செய்ய
-        function updatePrice(productId) {
-            const selectElement = document.getElementById(`weight-${productId}`);
-            const selectedPrice = selectElement.value;
-            document.getElementById(`price-display-${productId}`).innerText = `₹${selectedPrice}`;
-        }
-
-        // எடையுடன் கார்ட்டில் சேர்க்க
-        function addToCartWithWeight(id, name) {
-            const selectElement = document.getElementById(`weight-${id}`);
-            let finalPrice = 0;
-            let finalName = name;
-
-            if (selectElement) {
-                finalPrice = Number(selectElement.value);
-                const selectedWeight = selectElement.options[selectElement.selectedIndex].getAttribute('data-weight');
-                finalName = `${name} (${selectedWeight})`;
-            } else {
-                // பழைய பொருட்கள் (எடை இல்லாதவை)
-                const product = allProducts.find(p => p._id === id);
-                finalPrice = product.price;
-            }
-
-            addToCart(id + (selectElement ? selectElement.value : ''), finalName, finalPrice);
-        }
-        function setCategory(cat, btnElement) {
-            currentCategory = cat;
-            document.querySelectorAll('.category-list button').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-            filterProducts();
-        }
-
-        function filterProducts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const maxPrice = document.getElementById('priceRange').value;
-            const inStockOnly = document.getElementById('inStockCheck').checked;
-            
-            document.getElementById('priceLabel').innerText = 'Up to ₹' + maxPrice;
-
-            const filtered = allProducts.filter(p => {
-                const matchCategory = (currentCategory === 'All') || (p.category === currentCategory);
-                const matchSearch = p.name.toLowerCase().includes(searchTerm);
-                const matchPrice = p.price <= maxPrice;
-                const matchStock = inStockOnly ? (p.stock > 0) : true;
-                return matchCategory && matchSearch && matchPrice && matchStock;
-            });
-            renderProducts(filtered);
-        }
-
-        // Cart Functions
-        function toggleCart() {
-            const drawer = document.getElementById('cart-drawer');
-            const overlay = document.getElementById('cart-overlay');
-            if(drawer.classList.contains('open')) {
-                drawer.classList.remove('open');
-                overlay.style.display = 'none';
-            } else {
-                drawer.classList.add('open');
-                overlay.style.display = 'block';
-                renderCart();
+        function updateCardPrice(id) {
+            const select = document.getElementById(`weight-${id}`);
+            if (select) {
+                document.getElementById(`price-display-${id}`).innerText = `₹${select.value}`;
             }
         }
 
-        function addToCart(id, name, price) {
-            const existing = cart.find(item => item.id === id);
-            if(existing) {
+        function addToCart(id, name) {
+            const select = document.getElementById(`weight-${id}`);
+            let price = 0;
+            let weight = 'Standard';
+
+            if (select) {
+                price = Number(select.value);
+                weight = select.options[select.selectedIndex].getAttribute('data-weight');
+            } else {
+                const p = products.find(item => item._id === id);
+                price = p.price || 0;
+            }
+
+            const cartItemId = `${id}_${weight}`;
+            const existing = cart.find(item => item.cartItemId === cartItemId);
+
+            if (existing) {
                 existing.qty += 1;
             } else {
-                cart.push({ id, name, price, qty: 1 });
+                cart.push({
+                    cartItemId: cartItemId,
+                    id: id,
+                    name: name,
+                    weight: weight,
+                    price: price,
+                    qty: 1
+                });
             }
+
             saveCart();
-            alert(`${name} added to cart!`);
+            updateCartUI();
+            toggleCart(true);
         }
 
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
+        function updateQty(cartItemId, delta) {
+            const item = cart.find(i => i.cartItemId === cartItemId);
+            if (!item) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.cartItemId !== cartItemId);
+            }
             saveCart();
-            renderCart();
+            updateCartUI();
         }
 
         function saveCart() {
-            localStorage.setItem('premiumCart', JSON.stringify(cart));
-            updateCartCount();
+            localStorage.setItem('royal_cart', JSON.stringify(cart));
         }
 
-        function updateCartCount() {
-            const count = cart.reduce((sum, item) => sum + item.qty, 0);
-            document.getElementById('cart-count').innerText = count;
-        }
+        function updateCartUI() {
+            const countEl = document.getElementById('cart-count');
+            const itemsEl = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
 
-        function renderCart() {
-            const container = document.getElementById('cart-items');
-            const totalEl = document.getElementById('cart-total-price');
-            container.innerHTML = '';
-            let total = 0;
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            countEl.innerText = totalCount;
 
-            if(cart.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color: var(--text-light); margin-top: 20px;">Your cart is empty.</p>';
-            } else {
-                cart.forEach(item => {
-                    total += item.price * item.qty;
-                    container.innerHTML += `
-                        <div class="cart-item">
-                            <div class="item-info">
-                                <h4>${item.name}</h4>
-                                <span class="item-price">₹${item.price}</span> x ${item.qty}
-                                <div><button class="remove-btn" onclick="removeFromCart('${item.id}')">Remove</button></div>
-                            </div>
-                            <div style="font-weight: bold;">₹${item.price * item.qty}</div>
-                        </div>
-                    `;
-                });
+            if (cart.length === 0) {
+                itemsEl.innerHTML = `<p style="color: var(--text-muted); text-align: center; margin-top: 40px;">கார்ட் காலியாக உள்ளது.</p>`;
+                totalEl.innerText = '₹0';
+                return;
             }
+
+            let total = 0;
+            itemsEl.innerHTML = '';
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+
+                itemsEl.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <h4>${item.name}</h4>
+                            <p>${item.weight} • ₹${item.price}</p>
+                            <div class="cart-item-qty">
+                                <button class="qty-btn" onclick="updateQty('${item.cartItemId}', -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button class="qty-btn" onclick="updateQty('${item.cartItemId}', 1)">+</button>
+                            </div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary);">₹${subtotal}</div>
+                    </div>
+                `;
+            });
+
             totalEl.innerText = `₹${total}`;
+        }
+
+        function toggleCart(show) {
+            document.getElementById('cart-drawer').classList.toggle('open', show);
+            document.getElementById('cart-overlay').style.display = show ? 'block' : 'none';
+        }
+
+        // WhatsApp Checkout Modal Functions
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                alert("கார்ட்டில் எந்தப் பொருட்களும் இல்லை!");
+                return;
+            }
+            toggleCart(false);
+            document.getElementById('checkout-modal').style.display = 'flex';
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').style.display = 'none';
+        }
+
+        // வாட்ஸ்அப் மெசேஜை உருவாக்கி அனுப்பும் லாஜிக்
+        function sendWhatsAppOrder() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+
+            if (!name || !phone || !address) {
+                alert("தயவுசெய்து அனைத்து விவரங்களையும் நிரப்பவும்!");
+                return;
+            }
+
+            let total = 0;
+            let itemsText = "";
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                itemsText += `${index + 1}. *${item.name}* (${item.weight}) x ${item.qty} = ₹${subtotal}\n`;
+            });
+
+            const message = 
+`🛍️ *புதிய ஆர்டர் - Royal Nuts*
+--------------------------------
+👤 *வாடிக்கையாளர்:* ${name}
+📞 *எண்:* ${phone}
+📍 *முகவரி:* ${address}
+
+🛒 *ஆர்டர் செய்த பொருட்கள்:*
+${itemsText}
+--------------------------------
+💰 *மொத்தத் தொகை:* ₹${total}
+--------------------------------
+தயவுசெய்து இந்த ஆர்டரை உறுதி செய்து டெலிவரி விவரங்களைத் தெரிவிக்கவும்!`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodedMessage}`;
+
+            // வாட்ஸ்அப்பைத் திறத்தல்
+            window.open(whatsappUrl, '_blank');
+
+            // ஆர்டர் அனுப்பிய பின் கார்ட்டை காலி செய்தல்
+            cart = [];
+            saveCart();
+            updateCartUI();
+            closeCheckoutModal();
         }
     </script>
 </body>
