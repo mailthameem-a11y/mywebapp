@@ -23,7 +23,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* Orders Dashboard Styling */
+        /* Orders Dashboard */
         .orders-grid { display: flex; flex-direction: column; gap: 16px; }
         .order-card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
@@ -55,7 +55,7 @@
         .print-btn { background: #0f172a; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s;}
         .print-btn:hover { background: #334155; }
 
-        /* Products Section Styles */
+        /* Products Section */
         .dashboard-container { display: flex; gap: 30px; flex-wrap: wrap;}
         .left-panel { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px;}
         .form-section { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.06); }
@@ -107,15 +107,14 @@
     </div>
 
     <div class="container">
-        
-        <!-- 1. ORDERS TAB CONTENT -->
+        <!-- 1. ORDERS TAB -->
         <div class="tab-content active" id="orders-tab">
             <div class="orders-grid" id="orders-list">
                 <p style="text-align: center; color: #64748b; padding: 40px;">ஆர்டர்கள் லோட் ஆகிறது...</p>
             </div>
         </div>
 
-        <!-- 2. PRODUCTS TAB CONTENT -->
+        <!-- 2. PRODUCTS TAB -->
         <div class="tab-content" id="products-tab">
             <div class="dashboard-container">
                 <div class="left-panel">
@@ -214,25 +213,26 @@
         }
 
         // --- 1. ORDERS LOGIC ---
-        // --- 1. ORDERS LOGIC (With Auto-Login Redirect) ---
         function loadOrders() {
+            const list = document.getElementById('orders-list');
+            const pendingBadge = document.getElementById('pending-count');
+
             fetch('/api/orders')
-                .then(res => {
-                    // லாகின் செய்யவில்லை என்றால் தானாகவே லாகின் பக்கத்திற்குத் திருப்பிவிடும்
+                .then(async res => {
                     if (res.status === 401) {
                         window.location.href = '/admin/login';
                         return null;
+                    }
+                    if (!res.ok) {
+                        throw new Error(`சர்வர் பிழை: ${res.status}`);
                     }
                     return res.json();
                 })
                 .then(orders => {
                     if (!orders) return;
-                    
-                    const list = document.getElementById('orders-list');
-                    const pendingBadge = document.getElementById('pending-count');
 
                     if (!Array.isArray(orders)) {
-                        list.innerHTML = `<div style="text-align: center; padding: 30px; color: #ef4444; background: white; border-radius: 12px;">ஆர்டர்களைப் பெறுவதில் பிழை ஏற்பட்டது. தயவுசெய்து மீண்டும் உள்நுழையவும்.</div>`;
+                        list.innerHTML = `<div style="text-align: center; padding: 30px; color: #b91c1c; background: #fee2e2; border-radius: 12px; font-weight: 600;">ஆர்டர்களை வாசிப்பதில் சிக்கல் ஏற்பட்டுள்ளது.</div>`;
                         return;
                     }
 
@@ -241,7 +241,7 @@
                     pendingBadge.innerText = pendingOrders;
 
                     if (orders.length === 0) {
-                        list.innerHTML = `<div style="text-align: center; padding: 40px; color: #64748b; background: white; border-radius: 12px;">இன்னும் எந்த ஆர்டர்களும் வரவில்லை.</div>`;
+                        list.innerHTML = `<div style="text-align: center; padding: 40px; color: #64748b; background: white; border-radius: 12px;">இன்னும் எந்த புதிய ஆர்டர்களும் வரவில்லை.</div>`;
                         return;
                     }
 
@@ -289,12 +289,11 @@
                     });
                 })
                 .catch(err => {
-                    console.error("Orders load error:", err);
-                    document.getElementById('orders-list').innerHTML = `<div style="text-align: center; padding: 30px; color: #ef4444; background: white; border-radius: 12px;">ஆர்டர்களை ஏற்றுவதில் பிழை ஏற்பட்டது.</div>`;
+                    list.innerHTML = `<div style="text-align: center; padding: 30px; color: #b91c1c; background: #fee2e2; border-radius: 12px; font-weight: 600;">⚠️ ${err.message}</div>`;
                 });
         }
 
-        // --- பார்சல் ரசீது பிரிண்ட் செய்யும் லாஜிக் ---
+        // --- பார்சல் ரசீது பிரிண்ட் லாஜிக் ---
         function printInvoice(id) {
             const o = loadedOrders.find(item => item._id === id);
             if (!o) return;
@@ -327,5 +326,230 @@
                         .order-meta { text-align: right; }
                         .order-meta h3 { margin: 0; font-size: 17px; color: #0f172a; }
                         .order-meta p { margin: 3px 0 0; color: #64748b; font-size: 12px; }
-                        
-                        .address-box { margin: 20px 0; background: #f8faf
+                        .address-box { margin: 20px 0; background: #f8fafc; padding: 14px; border-radius: 8px; border: 1.5px dashed #cbd5e1; }
+                        .address-box h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; color: #475569; }
+                        .address-box p { margin: 0; font-size: 14px; line-height: 1.5; color: #0f172a; }
+                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        th, td { border: 1px solid #e2e8f0; padding: 9px 12px; font-size: 13px; }
+                        th { background: #f1f5f9; text-align: left; color: #334155; font-weight: 700; }
+                        .total-row td { font-size: 15px; font-weight: 800; background: #fafaf9; }
+                        .footer-note { text-align: center; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 15px; font-size: 12px; color: #64748b; }
+                    </style>
+                </head>
+                <body>
+                    <div class="slip-header">
+                        <div class="brand">
+                            <h1>🌿 Royal Nuts</h1>
+                            <p>Nature's Finest, Delivered Fresh<br>Eral, Thoothukudi District</p>
+                        </div>
+                        <div class="order-meta">
+                            <h3>PACKING SLIP</h3>
+                            <p><strong>Order ID:</strong> #${o._id.slice(-6).toUpperCase()}</p>
+                            <p><strong>Date:</strong> ${formattedDate}</p>
+                        </div>
+                    </div>
+
+                    <div class="address-box">
+                        <h4>📦 Deliver To:</h4>
+                        <p>
+                            <strong>${o.customerName}</strong><br>
+                            📞 Phone: ${o.phone}<br>
+                            📍 Address: ${o.address}
+                        </p>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 30px; text-align:center;">#</th>
+                                <th>Item Description</th>
+                                <th style="text-align:center; width: 50px;">Qty</th>
+                                <th style="text-align:right; width: 80px;">Price</th>
+                                <th style="text-align:right; width: 90px;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsRows}
+                            <tr class="total-row">
+                                <td colspan="4" style="text-align:right;">Grand Total:</td>
+                                <td style="text-align:right; color: #15803d;">₹${o.totalAmount}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="footer-note">
+                        <p>Thank you for choosing Royal Nuts! For queries, contact us on WhatsApp ❤️</p>
+                    </div>
+
+                    <script>
+                        window.onload = function() { window.print(); }
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function updateOrderStatus(id, newStatus) {
+            fetch(`/api/orders/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    loadOrders();
+                } else {
+                    alert("நிலையை மாற்றுவதில் பிழை!");
+                }
+            });
+        }
+
+        // --- 2. PRODUCTS LOGIC ---
+        function loadProducts() {
+            fetch('/products').then(res => res.json()).then(products => {
+                loadedProducts = products;
+                const list = document.getElementById('product-list');
+                list.innerHTML = '';
+                products.forEach(p => {
+                    const imgSrc = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=200';
+                    let priceText = '';
+                    if (p.weights && p.weights.length > 0) {
+                        priceText = p.weights.map(w => `${w.weight}: ₹${w.price}`).join(' | ');
+                    } else if (p.price) {
+                        priceText = `₹${p.price}`;
+                    } else {
+                        priceText = 'விலை குறிப்பிடப்படவில்லை';
+                    }
+
+                    list.innerHTML += `
+                        <div class="card">
+                            <img src="${imgSrc}" alt="${p.name}">
+                            <div class="card-info">
+                                <h3>${p.name}</h3>
+                                <p><strong>விலை:</strong> ${priceText} <br> <strong>ஸ்டாக்:</strong> ${p.stock} &nbsp;|&nbsp; <strong>வகை:</strong> ${p.category}</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="edit-btn" onclick="openEditModal('${p._id}')">✏️ Edit</button>
+                                <button class="del-btn" onclick="deleteProduct('${p._id}')">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function openEditModal(id) {
+            const p = loadedProducts.find(item => item._id === id);
+            if (!p) return;
+            document.getElementById('edit-id').value = p._id;
+            document.getElementById('edit-name').value = p.name || '';
+            document.getElementById('edit-category').value = p.category || '';
+            document.getElementById('edit-stock').value = p.stock || 0;
+            document.getElementById('edit-image').value = p.image || '';
+            const w = p.weights || [];
+            document.getElementById('edit-w1').value = w[0] ? w[0].weight : (p.price ? 'Standard' : '');
+            document.getElementById('edit-p1').value = w[0] ? w[0].price : (p.price || '');
+            document.getElementById('edit-w2').value = w[1] ? w[1].weight : '';
+            document.getElementById('edit-p2').value = w[1] ? w[1].price : '';
+            document.getElementById('edit-w3').value = w[2] ? w[2].weight : '';
+            document.getElementById('edit-p3').value = w[2] ? w[2].price : '';
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('editModal').style.display = 'none'; }
+
+        function saveEdit() {
+            const id = document.getElementById('edit-id').value;
+            let weights = [];
+            const w1 = document.getElementById('edit-w1').value.trim();
+            const p1 = document.getElementById('edit-p1').value.trim();
+            if (w1 && p1) weights.push({ weight: w1, price: Number(p1) });
+            const w2 = document.getElementById('edit-w2').value.trim();
+            const p2 = document.getElementById('edit-p2').value.trim();
+            if (w2 && p2) weights.push({ weight: w2, price: Number(p2) });
+            const w3 = document.getElementById('edit-w3').value.trim();
+            const p3 = document.getElementById('edit-p3').value.trim();
+            if (w3 && p3) weights.push({ weight: w3, price: Number(p3) });
+
+            fetch('/update-product/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: document.getElementById('edit-name').value,
+                    category: document.getElementById('edit-category').value,
+                    stock: Number(document.getElementById('edit-stock').value) || 0,
+                    image: document.getElementById('edit-image').value,
+                    price: weights.length > 0 ? weights[0].price : 0,
+                    weights: weights
+                })
+            }).then(() => { closeModal(); loadProducts(); });
+        }
+
+        function deleteProduct(id) {
+            if(confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
+                fetch('/delete-product/' + id).then(() => loadProducts());
+            }
+        }
+
+        function handleCSVUpload() {
+            const fileInput = document.getElementById('csvFileInput');
+            const file = fileInput.files[0];
+            if (!file) return alert("தயவுசெய்து ஒரு .csv ஃபைலைத் தேர்ந்தெடுக்கவும்!");
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const rows = e.target.result.split(/\r?\n/).filter(r => r.trim() !== '');
+                if (rows.length < 2) return alert("CSV ஃபைல் காலியாக உள்ளது!");
+
+                const cleanHeaders = rows[0].split(',').map(h => h.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
+                const products = [];
+
+                for (let i = 1; i < rows.length; i++) {
+                    const cols = rows[i].split(',').map(c => c.trim());
+                    if (cols.length < 2) continue;
+                    let row = {};
+                    cleanHeaders.forEach((h, idx) => { row[h] = cols[idx] !== undefined ? cols[idx] : ''; });
+
+                    const name = row['productname'] || row['name'] || '';
+                    if (!name) continue;
+                    let weights = [];
+                    if (row['size1'] && row['price1']) weights.push({ weight: row['size1'], price: Number(row['price1']) });
+                    if (row['size2'] && row['price2']) weights.push({ weight: row['size2'], price: Number(row['price2']) });
+                    if (row['size3'] && row['price3']) weights.push({ weight: row['size3'], price: Number(row['price3']) });
+
+                    products.push({
+                        category: row['category'] || 'Dry Fruits',
+                        name: name,
+                        stock: Number(row['stock']) || 0,
+                        image: row['imageurl'] || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500',
+                        price: weights.length > 0 ? weights[0].price : 0,
+                        weights: weights
+                    });
+                }
+
+                fetch('/bulk-add-products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(products)
+                }).then(res => res.json()).then(data => {
+                    alert(`வெற்றி! ${data.count} பொருட்கள் சேர்க்கப்பட்டன! 🎉`);
+                    loadProducts();
+                });
+            };
+            reader.readAsText(file);
+        }
+
+        function cleanUndefined() {
+            if (confirm("undefined பொருட்களை நீக்க வேண்டுமா?")) {
+                fetch('/delete-undefined').then(() => loadProducts());
+            }
+        }
+
+        // தொடக்கத்தில் தகவல்களை ஏற்றுதல்
+        loadOrders();
+        loadProducts();
+    </script>
+</body>
+</html>

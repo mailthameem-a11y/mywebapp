@@ -3,11 +3,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
-const PORT = 3000;
+// Render போர்ட் டைனமிக்காக எடுக்கும் வகையில் அமைக்கப்பட்டுள்ளது
+const PORT = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '10mb' }));
 
+// --- அட்மின் லாகின் அமைப்புகள் ---
 const ADMIN_USER = process.env.ADMIN_USERNAME || "admin";
 const ADMIN_PASS = process.env.ADMIN_PASSWORD || "royal2026";
 const AUTH_COOKIE_NAME = "royal_admin_token";
@@ -18,6 +20,7 @@ function isAuth(req) {
   return cookieHeader.includes(`${AUTH_COOKIE_NAME}=${AUTH_COOKIE_VAL}`);
 }
 
+// MongoDB இணைப்பு
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB வெற்றிகரமாக இணைக்கப்பட்டது! 🎉"))
   .catch((err) => console.log("MongoDB இணைப்பில் பிழை:", err));
@@ -33,7 +36,7 @@ const productSchema = new mongoose.Schema({
 });
 const Product = mongoose.model('Product', productSchema);
 
-// 2. புதிய ஆர்டர்கள் Schema
+// 2. ஆர்டர்கள் Schema
 const orderSchema = new mongoose.Schema({
   customerName: String,
   phone: String,
@@ -50,11 +53,11 @@ const orderSchema = new mongoose.Schema({
 });
 const Order = mongoose.model('Order', orderSchema);
 
-// பக்கங்கள்
+// --- பக்கங்கள் (Pages) ---
 app.get('/', (req, res) => res.sendFile(__dirname + '/store.html'));
 app.get('/shop', (req, res) => res.sendFile(__dirname + '/shop.html'));
 
-// அட்மின் லாகின் & பாதுகாப்பு
+// அட்மின் லாகின் & வெளியேறுதல்
 app.get('/admin/login', (req, res) => {
   if (isAuth(req)) return res.redirect('/admin');
   res.sendFile(__dirname + '/login.html');
@@ -74,13 +77,14 @@ app.get('/admin/logout', (req, res) => {
   res.redirect('/admin/login');
 });
 
+// பாதுகாக்கப்பட்ட அட்மின் பக்கம்
 app.get('/admin', (req, res) => {
   if (!isAuth(req)) return res.redirect('/admin/login');
   res.sendFile(__dirname + '/index.html');
 });
 
 // --- ஆர்டர் API வசதிகள் ---
-// வாடிக்கையாளர் செக்அவுட்டின் போது புதிய ஆர்டரைச் சேமிக்க
+// வாடிக்கையாளர் செக்அவுட்டின் போது புதிய ஆர்டரைச் சேமிக்க (பொதுவானது)
 app.post('/api/orders', async (req, res) => {
   try {
     const newOrder = new Order(req.body);
@@ -93,7 +97,7 @@ app.post('/api/orders', async (req, res) => {
 
 // அட்மினில் ஆர்டர்களைப் பார்க்க (பாதுகாக்கப்பட்டது)
 app.get('/api/orders', async (req, res) => {
-  if (!isAuth(req)) return res.status(401).json({ error: "அனுமதி இல்லை" });
+  if (!isAuth(req)) return res.status(401).json({ error: "அனுமதி இல்லை. உள்நுழையவும்." });
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
@@ -102,7 +106,7 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
-// ஆர்டரின் நிலையை (Status) மாற்ற (Pending -> Dispatched -> Delivered)
+// ஆர்டர் நிலையை மாற்ற (Pending -> Dispatched -> Delivered)
 app.put('/api/orders/:id/status', async (req, res) => {
   if (!isAuth(req)) return res.status(401).json({ error: "அனுமதி இல்லை" });
   try {
