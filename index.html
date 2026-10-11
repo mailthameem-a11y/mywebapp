@@ -4,50 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>அட்மின் பேனல் - Royal Nuts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; padding: 20px; margin: 0;}
-        h1 { text-align: center; color: #0f172a; margin-bottom: 25px;}
-        .dashboard-container { display: flex; gap: 30px; max-width: 1200px; margin: 0 auto; flex-wrap: wrap;}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f4f8; padding: 20px; color: #0f172a;}
         
+        .header-bar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 20px; }
+        .header-bar h1 { font-size: 1.8rem; }
+        .logout-btn { background: #fee2e2; color: #b91c1c; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; border: 1px solid #f87171; font-size: 0.9rem;}
+        
+        /* Tab Navigation */
+        .tab-bar { max-width: 1200px; margin: 0 auto 25px; display: flex; gap: 10px; border-bottom: 2px solid #cbd5e1; padding-bottom: 2px;}
+        .tab-btn { background: none; border: none; padding: 10px 22px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; color: #64748b; border-bottom: 3px solid transparent; margin-bottom: -4px;}
+        .tab-btn.active { color: #16a34a; border-color: #16a34a; }
+        .badge { background: #ef4444; color: white; border-radius: 12px; padding: 2px 8px; font-size: 0.75rem; margin-left: 6px;}
+
+        .container { max-width: 1200px; margin: 0 auto; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Orders Dashboard Styling */
+        .orders-grid { display: flex; flex-direction: column; gap: 16px; }
+        .order-card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .order-id { font-weight: 800; color: #0f172a; font-size: 1.05rem; }
+        .order-date { color: #64748b; font-size: 0.85rem; }
+        
+        .order-body { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 20px; align-items: center; }
+        @media(max-width: 768px) { .order-body { grid-template-columns: 1fr; gap: 14px; } }
+        
+        .customer-info p { margin-bottom: 4px; font-size: 0.9rem; color: #334155; }
+        .customer-info strong { color: #0f172a; }
+        .customer-info a { color: #16a34a; text-decoration: none; font-weight: 600; }
+        
+        .order-items-list { background: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; max-height: 120px; overflow-y: auto;}
+        .order-items-list div { padding: 3px 0; border-bottom: 1px dashed #e2e8f0; display: flex; justify-content: space-between;}
+        .order-items-list div:last-child { border: none; }
+
+        .order-status-box { text-align: right; }
+        @media(max-width: 768px) { .order-status-box { text-align: left; } }
+        .order-total { font-size: 1.3rem; font-weight: 800; color: #16a34a; margin-bottom: 8px;}
+        .status-select { padding: 8px 12px; border-radius: 8px; font-weight: 700; font-family: inherit; font-size: 0.85rem; border: 1.5px solid #cbd5e1; outline: none; cursor: pointer;}
+        .status-Pending { background: #fef3c7; color: #92400e; border-color: #f59e0b; }
+        .status-Dispatched { background: #e0f2fe; color: #0369a1; border-color: #0284c7; }
+        .status-Delivered { background: #dcfce7; color: #15803d; border-color: #22c55e; }
+        .status-Cancelled { background: #fee2e2; color: #b91c1c; border-color: #ef4444; }
+
+        /* Products Section Styles (Preserved) */
+        .dashboard-container { display: flex; gap: 30px; flex-wrap: wrap;}
         .left-panel { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px;}
         .form-section { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.06); }
         .form-section h3 { margin-top: 0; color: #16a34a; border-bottom: 2px solid #f0f4f8; padding-bottom: 10px;}
         .form-section input { width: 100%; padding: 10px; margin: 6px 0 14px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box;}
-        
         .weight-row { display: flex; gap: 10px; margin-bottom: 10px;}
         .weight-row input { margin: 0;}
         .submit-btn { background: #16a34a; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; }
-        .submit-btn:hover { background: #15803d; }
-        
         .bulk-box { background: #ecfdf5; border: 1px dashed #059669; }
         .bulk-box h3 { color: #059669; }
         .bulk-btn { background: #059669; }
-        .bulk-btn:hover { background: #047857; }
-
         .products-section { flex: 2; min-width: 320px;}
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
-        .section-header h2 { margin: 0; }
         .clean-btn { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem;}
-        .clean-btn:hover { background: #fecaca; }
-
         .card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 15px; display: flex; gap: 20px; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
         .card img { width: 85px; height: 85px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;}
         .card-info { flex: 1; }
         .card-info h3 { margin: 0 0 6px; color: #0f172a;}
         .card-info p { margin: 0; color: #475569; font-size: 0.95rem; line-height: 1.5;}
-        
         .card-actions { display: flex; gap: 8px; }
         .card-actions button { padding: 9px 13px; border: none; border-radius: 8px; cursor: pointer; color: white; font-weight: bold;}
         .edit-btn { background: #eab308; color: #1e293b !important; }
         .del-btn { background: #ef4444; }
 
-        /* Edit Popup Modal */
+        /* Modal */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(2px);}
         .modal { background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative;}
-        .modal h3 { margin-top: 0; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;}
+        .modal h3 { margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;}
         .modal label { font-weight: 600; color: #475569; font-size: 0.85rem;}
         .modal input { width: 100%; padding: 10px; margin: 4px 0 14px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box;}
-        .modal .weight-row input { margin-bottom: 8px; }
         .close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.4rem; cursor: pointer; border: none; background: none;}
         .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;}
         .modal-actions button { padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;}
@@ -56,99 +89,99 @@
     </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 25px; padding: 0 10px;">
-        <h1 style="margin: 0;">🛒 அட்மின் பேனல்</h1>
-        <a href="/admin/logout" style="background: #fee2e2; color: #b91c1c; text-decoration: none; padding: 9px 16px; border-radius: 8px; font-weight: 700; border: 1px solid #f87171; font-size: 0.9rem;">🚪 வெளியேறு (Logout)</a>
+
+    <div class="header-bar">
+        <h1>🛒 அட்மின் பேனல் - Royal Nuts</h1>
+        <a href="/admin/logout" class="logout-btn">🚪 வெளியேறு (Logout)</a>
     </div>
-    <div class="dashboard-container">
+
+    <!-- Tabs Navigation -->
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('orders')">📦 ஆர்டர்கள் (Orders) <span class="badge" id="pending-count">0</span></button>
+        <button class="tab-btn" onclick="switchTab('products')">🏷️ பொருட்கள் (Products)</button>
+    </div>
+
+    <div class="container">
         
-        <div class="left-panel">
-            <!-- CSV Bulk Upload -->
-            <div class="form-section bulk-box">
-                <h3>📊 Google Sheet / CSV Upload</h3>
-                <p style="font-size: 0.85rem; color: #065f46; margin: 0 0 12px;">Google Sheet-ல் இருந்து டவுன்லோட் செய்த <strong>.csv</strong> ஃபைலைத் தேர்ந்தெடுக்கவும்:</p>
-                <input type="file" id="csvFileInput" accept=".csv" style="background: white;">
-                <button type="button" class="submit-btn bulk-btn" onclick="handleCSVUpload()">⚡ மொத்தமாக பதிவேற்று</button>
-            </div>
-
-            <!-- Single Product Form -->
-            <div class="form-section">
-                <h3>+ ஒரு பொருளை மட்டும் சேர்க்க</h3>
-                <form action="/add-product-dynamic" method="POST">
-                    <label>வகை (Category)</label>
-                    <input type="text" name="category" placeholder="எ.கா: Nuts, Dates" required>
-                    
-                    <label>பெயர் (Product Name)</label>
-                    <input type="text" name="name" placeholder="எ.கா: Badam" required>
-                    
-                    <label>ஸ்டாக் (Stock)</label>
-                    <input type="number" name="stock" placeholder="எ.கா: 50" required>
-                    
-                    <label>படத்தின் லிங்க் (Image URL)</label>
-                    <input type="text" name="image" placeholder="https://..." required>
-
-                    <h4 style="margin: 10px 0; color: #334155; font-size: 0.95rem;">எடைகள் & விலைகள்</h4>
-                    <div class="weight-row">
-                        <input type="text" name="weight1" placeholder="250g" required>
-                        <input type="number" name="price1" placeholder="₹" required>
-                    </div>
-                    <div class="weight-row">
-                        <input type="text" name="weight2" placeholder="500g">
-                        <input type="number" name="price2" placeholder="₹">
-                    </div>
-                    <div class="weight-row">
-                        <input type="text" name="weight3" placeholder="1kg">
-                        <input type="number" name="price3" placeholder="₹">
-                    </div>
-
-                    <button type="submit" class="submit-btn">💾 டேட்டாபேஸில் சேமி</button>
-                </form>
+        <!-- 1. ORDERS TAB CONTENT -->
+        <div class="tab-content active" id="orders-tab">
+            <div class="orders-grid" id="orders-list">
+                <p style="text-align: center; color: #64748b; padding: 40px;">ஆர்டர்கள் லோட் ஆகிறது...</p>
             </div>
         </div>
 
-        <!-- Products List -->
-        <div class="products-section">
-            <div class="section-header">
-                <h2>உள்ள பொருட்கள்</h2>
-                <button class="clean-btn" onclick="cleanUndefined()">🧹 Clean 'undefined' Products</button>
+        <!-- 2. PRODUCTS TAB CONTENT -->
+        <div class="tab-content" id="products-tab">
+            <div class="dashboard-container">
+                <div class="left-panel">
+                    <div class="form-section bulk-box">
+                        <h3>📊 Google Sheet / CSV Upload</h3>
+                        <p style="font-size: 0.85rem; color: #065f46; margin: 0 0 12px;">.csv ஃபைலைத் தேர்ந்தெடுக்கவும்:</p>
+                        <input type="file" id="csvFileInput" accept=".csv" style="background: white;">
+                        <button type="button" class="submit-btn bulk-btn" onclick="handleCSVUpload()">⚡ மொத்தமாக பதிவேற்று</button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>+ ஒரு பொருளை மட்டும் சேர்க்க</h3>
+                        <form action="/add-product-dynamic" method="POST">
+                            <label>வகை (Category)</label>
+                            <input type="text" name="category" placeholder="எ.கா: Nuts, Dates" required>
+                            <label>பெயர் (Product Name)</label>
+                            <input type="text" name="name" placeholder="எ.கா: Badam" required>
+                            <label>ஸ்டாக் (Stock)</label>
+                            <input type="number" name="stock" placeholder="எ.கா: 50" required>
+                            <label>படத்தின் லிங்க் (Image URL)</label>
+                            <input type="text" name="image" placeholder="https://..." required>
+
+                            <h4 style="margin: 10px 0; color: #334155; font-size: 0.95rem;">எடைகள் & விலைகள்</h4>
+                            <div class="weight-row">
+                                <input type="text" name="weight1" placeholder="250g" required>
+                                <input type="number" name="price1" placeholder="₹" required>
+                            </div>
+                            <div class="weight-row">
+                                <input type="text" name="weight2" placeholder="500g">
+                                <input type="number" name="price2" placeholder="₹">
+                            </div>
+                            <div class="weight-row">
+                                <input type="text" name="weight3" placeholder="1kg">
+                                <input type="number" name="price3" placeholder="₹">
+                            </div>
+                            <button type="submit" class="submit-btn">💾 டேட்டாபேஸில் சேமி</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="products-section">
+                    <div class="section-header">
+                        <h2>உள்ள பொருட்கள்</h2>
+                        <button class="clean-btn" onclick="cleanUndefined()">🧹 Clean 'undefined'</button>
+                    </div>
+                    <div id="product-list">லோட் ஆகிறது...</div>
+                </div>
             </div>
-            <div id="product-list">லோட் ஆகிறது...</div>
         </div>
     </div>
 
-    <!-- Edit Modal with Variants Support -->
+    <!-- Edit Product Modal -->
     <div class="modal-overlay" id="editModal">
         <div class="modal">
             <button class="close-modal" onclick="closeModal()">✕</button>
             <h3>பொருளை மாற்று (Edit Product)</h3>
             <input type="hidden" id="edit-id">
-            
-            <label>வகை (Category)</label>
-            <input type="text" id="edit-category">
-            
-            <label>பெயர் (Product Name)</label>
-            <input type="text" id="edit-name">
-            
-            <label>ஸ்டாக் (Stock)</label>
-            <input type="number" id="edit-stock">
-            
-            <label>படத்தின் லிங்க் (Image URL)</label>
-            <input type="text" id="edit-image">
-
-            <h4 style="margin: 10px 0 6px; color: #334155; font-size: 0.9rem;">எடைகள் & விலைகள் (Variants)</h4>
+            <label>வகை</label><input type="text" id="edit-category">
+            <label>பெயர்</label><input type="text" id="edit-name">
+            <label>ஸ்டாக்</label><input type="number" id="edit-stock">
+            <label>படத்தின் லிங்க்</label><input type="text" id="edit-image">
+            <h4 style="margin: 10px 0 6px; font-size: 0.9rem;">எடைகள் & விலைகள்</h4>
             <div class="weight-row">
-                <input type="text" id="edit-w1" placeholder="எடை 1 (எ.கா: 250g)">
-                <input type="number" id="edit-p1" placeholder="விலை ₹">
+                <input type="text" id="edit-w1" placeholder="250g"><input type="number" id="edit-p1" placeholder="₹">
             </div>
             <div class="weight-row">
-                <input type="text" id="edit-w2" placeholder="எடை 2 (எ.கா: 500g)">
-                <input type="number" id="edit-p2" placeholder="விலை ₹">
+                <input type="text" id="edit-w2" placeholder="500g"><input type="number" id="edit-p2" placeholder="₹">
             </div>
             <div class="weight-row">
-                <input type="text" id="edit-w3" placeholder="எடை 3 (எ.கா: 1kg)">
-                <input type="number" id="edit-p3" placeholder="விலை ₹">
+                <input type="text" id="edit-w3" placeholder="1kg"><input type="number" id="edit-p3" placeholder="₹">
             </div>
-
             <div class="modal-actions">
                 <button class="cancel-btn" onclick="closeModal()">Cancel</button>
                 <button class="save-btn" onclick="saveEdit()">💾 சேமி</button>
@@ -159,231 +192,242 @@
     <script>
         let loadedProducts = [];
 
-        fetch('/products').then(res => res.json()).then(products => {
-            loadedProducts = products;
-            const list = document.getElementById('product-list');
-            list.innerHTML = '';
-            products.forEach(p => {
-                const imgSrc = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=200';
+        // Tab Switching Logic
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            if (tab === 'orders') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('orders-tab').classList.add('active');
+                loadOrders();
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('products-tab').classList.add('active');
+                loadProducts();
+            }
+        }
 
-                let priceText = '';
-                if (p.weights && p.weights.length > 0) {
-                    priceText = p.weights.map(w => `${w.weight}: ₹${w.price}`).join(' | ');
-                } else if (p.price) {
-                    priceText = `₹${p.price}`;
+        // --- 1. ORDERS LOGIC ---
+        function loadOrders() {
+            fetch('/api/orders')
+                .then(res => res.json())
+                .then(orders => {
+                    const list = document.getElementById('orders-list');
+                    const pendingBadge = document.getElementById('pending-count');
+                    
+                    const pendingOrders = orders.filter(o => o.status === 'Pending').length;
+                    pendingBadge.innerText = pendingOrders;
+
+                    if (orders.length === 0) {
+                        list.innerHTML = `<div style="text-align: center; padding: 40px; color: #64748b; background: white; border-radius: 12px;">இன்னும் எந்த ஆர்டர்களும் வரவில்லை.</div>`;
+                        return;
+                    }
+
+                    list.innerHTML = '';
+                    orders.forEach(o => {
+                        const date = new Date(o.createdAt).toLocaleString('ta-IN', { dateStyle: 'medium', timeStyle: 'short' });
+                        let itemsHtml = '';
+                        (o.items || []).forEach(it => {
+                            itemsHtml += `<div><span>${it.name} (${it.weight}) x ${it.qty}</span> <strong>₹${it.price * it.qty}</strong></div>`;
+                        });
+
+                        list.innerHTML += `
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <div>
+                                        <span class="order-id">#${o._id.slice(-6).toUpperCase()}</span>
+                                        <span class="order-date"> • ${date}</span>
+                                    </div>
+                                    <span style="font-size: 0.85rem; font-weight: 700; color: #64748b;">நிலை: ${o.status}</span>
+                                </div>
+                                <div class="order-body">
+                                    <div class="customer-info">
+                                        <p>👤 <strong>${o.customerName}</strong></p>
+                                        <p>📞 <a href="tel:${o.phone}">${o.phone}</a> | <a href="https://wa.me/91${o.phone.replace(/[^0-9]/g, '')}" target="_blank">WhatsApp 💬</a></p>
+                                        <p>📍 ${o.address}</p>
+                                    </div>
+                                    <div class="order-items-list">
+                                        ${itemsHtml}
+                                    </div>
+                                    <div class="order-status-box">
+                                        <div class="order-total">₹${o.totalAmount}</div>
+                                        <select class="status-select status-${o.status}" onchange="updateOrderStatus('${o._id}', this.value)">
+                                            <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
+                                            <option value="Dispatched" ${o.status === 'Dispatched' ? 'selected' : ''}>🚚 Dispatched</option>
+                                            <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>✅ Delivered</option>
+                                            <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(err => console.error("Orders load error:", err));
+        }
+
+        function updateOrderStatus(id, newStatus) {
+            fetch(`/api/orders/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    loadOrders();
                 } else {
-                    priceText = 'விலை குறிப்பிடப்படவில்லை';
+                    alert("நிலையை மாற்றுவதில் பிழை!");
                 }
-
-                list.innerHTML += `
-                    <div class="card">
-                        <img src="${imgSrc}" alt="${p.name}">
-                        <div class="card-info">
-                            <h3>${p.name}</h3>
-                            <p><strong>விலை:</strong> ${priceText} <br> <strong>ஸ்டாக்:</strong> ${p.stock} &nbsp;|&nbsp; <strong>வகை:</strong> ${p.category}</p>
-                        </div>
-                        <div class="card-actions">
-                            <button class="edit-btn" onclick="openEditModal('${p._id}')">✏️ Edit</button>
-                            <button class="del-btn" onclick="deleteProduct('${p._id}')">🗑️ Delete</button>
-                        </div>
-                    </div>
-                `;
             });
-        });
+        }
 
-        // Edit Modal திறக்கும் போது ஏற்கனவே உள்ள எடைகளை நிரப்புதல்
+        // --- 2. PRODUCTS LOGIC ---
+        function loadProducts() {
+            fetch('/products').then(res => res.json()).then(products => {
+                loadedProducts = products;
+                const list = document.getElementById('product-list');
+                list.innerHTML = '';
+                products.forEach(p => {
+                    const imgSrc = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=200';
+                    let priceText = '';
+                    if (p.weights && p.weights.length > 0) {
+                        priceText = p.weights.map(w => `${w.weight}: ₹${w.price}`).join(' | ');
+                    } else if (p.price) {
+                        priceText = `₹${p.price}`;
+                    } else {
+                        priceText = 'விலை குறிப்பிடப்படவில்லை';
+                    }
+
+                    list.innerHTML += `
+                        <div class="card">
+                            <img src="${imgSrc}" alt="${p.name}">
+                            <div class="card-info">
+                                <h3>${p.name}</h3>
+                                <p><strong>விலை:</strong> ${priceText} <br> <strong>ஸ்டாக்:</strong> ${p.stock} &nbsp;|&nbsp; <strong>வகை:</strong> ${p.category}</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="edit-btn" onclick="openEditModal('${p._id}')">✏️ Edit</button>
+                                <button class="del-btn" onclick="deleteProduct('${p._id}')">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        // Modal and CSV helpers
         function openEditModal(id) {
             const p = loadedProducts.find(item => item._id === id);
             if (!p) return;
-
             document.getElementById('edit-id').value = p._id;
             document.getElementById('edit-name').value = p.name || '';
             document.getElementById('edit-category').value = p.category || '';
             document.getElementById('edit-stock').value = p.stock || 0;
             document.getElementById('edit-image').value = p.image || '';
-
             const w = p.weights || [];
             document.getElementById('edit-w1').value = w[0] ? w[0].weight : (p.price ? 'Standard' : '');
             document.getElementById('edit-p1').value = w[0] ? w[0].price : (p.price || '');
-
             document.getElementById('edit-w2').value = w[1] ? w[1].weight : '';
             document.getElementById('edit-p2').value = w[1] ? w[1].price : '';
-
             document.getElementById('edit-w3').value = w[2] ? w[2].weight : '';
             document.getElementById('edit-p3').value = w[2] ? w[2].price : '';
-
             document.getElementById('editModal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
+        function closeModal() { document.getElementById('editModal').style.display = 'none'; }
 
-        // மாற்றியமைக்கப்பட்ட எடைகள் & விலைகளை சர்வருக்கு சேமித்தல்
         function saveEdit() {
             const id = document.getElementById('edit-id').value;
-
             let weights = [];
             const w1 = document.getElementById('edit-w1').value.trim();
             const p1 = document.getElementById('edit-p1').value.trim();
             if (w1 && p1) weights.push({ weight: w1, price: Number(p1) });
-
             const w2 = document.getElementById('edit-w2').value.trim();
             const p2 = document.getElementById('edit-p2').value.trim();
             if (w2 && p2) weights.push({ weight: w2, price: Number(p2) });
-
             const w3 = document.getElementById('edit-w3').value.trim();
             const p3 = document.getElementById('edit-p3').value.trim();
             if (w3 && p3) weights.push({ weight: w3, price: Number(p3) });
 
-            const basePrice = weights.length > 0 ? weights[0].price : 0;
-
-            const payload = {
-                name: document.getElementById('edit-name').value,
-                category: document.getElementById('edit-category').value,
-                stock: Number(document.getElementById('edit-stock').value) || 0,
-                image: document.getElementById('edit-image').value,
-                price: basePrice,
-                weights: weights
-            };
-
             fetch('/update-product/' + id, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                } else {
-                    alert("பிழை: " + (data.error || 'தோல்வி'));
-                }
-            })
-            .catch(err => alert("பிழை: " + err.message));
+                body: JSON.stringify({
+                    name: document.getElementById('edit-name').value,
+                    category: document.getElementById('edit-category').value,
+                    stock: Number(document.getElementById('edit-stock').value) || 0,
+                    image: document.getElementById('edit-image').value,
+                    price: weights.length > 0 ? weights[0].price : 0,
+                    weights: weights
+                })
+            }).then(() => { closeModal(); loadProducts(); });
+        }
+
+        function deleteProduct(id) {
+            if(confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
+                fetch('/delete-product/' + id).then(() => loadProducts());
+            }
         }
 
         function handleCSVUpload() {
             const fileInput = document.getElementById('csvFileInput');
             const file = fileInput.files[0];
-            if (!file) {
-                alert("தயவுசெய்து ஒரு .csv ஃபைலைத் தேர்ந்தெடுக்கவும்!");
-                return;
-            }
+            if (!file) return alert("தயவுசெய்து ஒரு .csv ஃபைலைத் தேர்ந்தெடுக்கவும்!");
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const text = e.target.result;
-                const rows = text.split(/\r?\n/).filter(r => r.trim() !== '');
-                if (rows.length < 2) {
-                    alert("CSV ஃபைலில் தகவல்கள் எதுவும் இல்லை!");
-                    return;
-                }
+                const rows = e.target.result.split(/\r?\n/).filter(r => r.trim() !== '');
+                if (rows.length < 2) return alert("CSV ஃபைல் காலியாக உள்ளது!");
 
-                const rawHeaders = rows[0].split(',').map(h => h.trim());
-                const cleanHeaders = rawHeaders.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
-                
+                const cleanHeaders = rows[0].split(',').map(h => h.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
                 const products = [];
 
                 for (let i = 1; i < rows.length; i++) {
                     const cols = rows[i].split(',').map(c => c.trim());
                     if (cols.length < 2) continue;
-
                     let row = {};
-                    cleanHeaders.forEach((h, idx) => {
-                        row[h] = cols[idx] !== undefined ? cols[idx] : '';
-                    });
+                    cleanHeaders.forEach((h, idx) => { row[h] = cols[idx] !== undefined ? cols[idx] : ''; });
 
                     const name = row['productname'] || row['name'] || '';
                     if (!name) continue;
-
-                    const category = row['category'] || 'Dry Fruits';
-                    const stock = Number(row['stock']) || 0;
-
-                    let image = row['imageurl'] || row['image'] || '';
-                    if (!image || image.toLowerCase() === 'nan') {
-                        const catLower = category.toLowerCase();
-                        if (catLower.includes('date')) {
-                            image = 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500';
-                        } else if (catLower.includes('nut')) {
-                            image = 'https://images.unsplash.com/photo-1508061253366-f7da158b6d46?q=80&w=500';
-                        } else if (catLower.includes('seed')) {
-                            image = 'https://images.unsplash.com/photo-1588615419958-380d38194a08?q=80&w=500';
-                        } else if (catLower.includes('grape') || catLower.includes('raisin')) {
-                            image = 'https://images.unsplash.com/photo-1629576449557-011261d7168c?q=80&w=500';
-                        } else {
-                            image = 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500';
-                        }
-                    }
-
                     let weights = [];
-                    const w1 = row['size1'] || row['weight1'];
-                    const p1 = Number(row['price1']);
-                    if (w1 && !isNaN(p1) && p1 > 0) weights.push({ weight: w1, price: p1 });
-
-                    const w2 = row['size2'] || row['weight2'];
-                    const p2 = Number(row['price2']);
-                    if (w2 && !isNaN(p2) && p2 > 0) weights.push({ weight: w2, price: p2 });
-
-                    const w3 = row['size3'] || row['weight3'];
-                    const p3 = Number(row['price3']);
-                    if (w3 && !isNaN(p3) && p3 > 0) weights.push({ weight: w3, price: p3 });
-
-                    const basePrice = weights.length > 0 ? weights[0].price : (Number(row['price']) || 0);
+                    if (row['size1'] && row['price1']) weights.push({ weight: row['size1'], price: Number(row['price1']) });
+                    if (row['size2'] && row['price2']) weights.push({ weight: row['size2'], price: Number(row['price2']) });
+                    if (row['size3'] && row['price3']) weights.push({ weight: row['size3'], price: Number(row['price3']) });
 
                     products.push({
-                        category: category,
+                        category: row['category'] || 'Dry Fruits',
                         name: name,
-                        stock: stock,
-                        image: image,
-                        price: basePrice,
+                        stock: Number(row['stock']) || 0,
+                        image: row['imageurl'] || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500',
+                        price: weights.length > 0 ? weights[0].price : 0,
                         weights: weights
                     });
-                }
-
-                if (products.length === 0) {
-                    alert("பொருட்கள் எதுவும் கண்டுபிடிக்கப்படவில்லை.");
-                    return;
                 }
 
                 fetch('/bulk-add-products', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(products)
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(`வெற்றி! ${data.count} பொருட்கள் வெற்றிகரமாகச் சேர்க்கப்பட்டன! 🎉`);
-                        window.location.reload();
-                    } else {
-                        alert("பிழை: " + data.error);
-                    }
-                })
-                .catch(err => alert("பதிவேற்றத்தில் பிழை: " + err.message));
+                }).then(res => res.json()).then(data => {
+                    alert(`வெற்றி! ${data.count} பொருட்கள் சேர்க்கப்பட்டன! 🎉`);
+                    loadProducts();
+                });
             };
-
             reader.readAsText(file);
         }
 
         function cleanUndefined() {
-            if (confirm("தவறாகப் பதிவான 'undefined' பொருட்களை மட்டும் மொத்தமாக நீக்க வேண்டுமா?")) {
-                fetch('/delete-undefined')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert("அனைத்து 'undefined' பொருட்களும் நீக்கப்பட்டுவிட்டன!");
-                            window.location.reload();
-                        }
-                    });
+            if (confirm("undefined பொருட்களை நீக்க வேண்டுமா?")) {
+                fetch('/delete-undefined').then(() => loadProducts());
             }
         }
 
-        function deleteProduct(id) {
-            if(confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
-                fetch('/delete-product/' + id).then(() => window.location.reload());
-            }
-        }
+        // பக்கத்தை ஏற்றும்போது ஆர்டர்களை முதலில் லோட் செய்தல்
+        loadOrders();
+        loadProducts();
     </script>
 </body>
 </html>

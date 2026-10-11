@@ -408,8 +408,7 @@
         function closeCheckoutModal() {
             document.getElementById('checkout-modal').style.display = 'none';
         }
-
-        function sendWhatsAppOrder() {
+function sendWhatsAppOrder() {
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
             const address = document.getElementById('cust-address').value.trim();
@@ -421,12 +420,35 @@
 
             let total = 0;
             let itemsText = "";
+            let orderItems = [];
+
             cart.forEach((item, index) => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
                 itemsText += `${index + 1}. *${item.name}* (${item.weight}) x ${item.qty} = ₹${subtotal}\n`;
+                
+                orderItems.push({
+                    name: item.name,
+                    weight: item.weight,
+                    price: item.price,
+                    qty: item.qty
+                });
             });
 
+            // 1. ஆர்டரை MongoDB டேட்டாபேஸில் சேமித்தல்
+            fetch('/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    customerName: name,
+                    phone: phone,
+                    address: address,
+                    items: orderItems,
+                    totalAmount: total
+                })
+            }).catch(err => console.error("ஆர்டர் சேமிப்பில் பிழை:", err));
+
+            // 2. வாட்ஸ்அப் மெசேஜ் உருவாக்குதல்
             const message = 
 `🛍️ *புதிய ஆர்டர் - Royal Nuts*
 --------------------------------
