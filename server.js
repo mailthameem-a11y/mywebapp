@@ -54,7 +54,7 @@ app.post('/add-product-dynamic', async (req, res) => {
   }
 });
 
-// CSV மூலமாக மொத்தப் பொருட்களைச் சேர்க்க (Bulk Upload)
+// CSV Bulk Upload
 app.post('/bulk-add-products', async (req, res) => {
   try {
     const productsList = req.body;
@@ -68,7 +68,7 @@ app.post('/bulk-add-products', async (req, res) => {
   }
 });
 
-// தவறாக உருவான Undefined பொருட்களை மட்டும் நீக்க
+// தவறான undefined பொருட்களை நீக்க
 app.get('/delete-undefined', async (req, res) => {
   try {
     await Product.deleteMany({
@@ -98,15 +98,22 @@ app.get('/delete-product/:id', async (req, res) => {
   }
 });
 
+// பல எடைகள் & விலைகளை ஆதரிக்கும் புதிய Update Route
 app.put('/update-product/:id', async (req, res) => {
   try {
-    await Product.findByIdAndUpdate(req.params.id, {
+    const updateData = {
       name: req.body.name,
       category: req.body.category,
       price: Number(req.body.price),
       stock: Number(req.body.stock),
       image: req.body.image
-    });
+    };
+
+    if (Array.isArray(req.body.weights)) {
+      updateData.weights = req.body.weights;
+    }
+
+    await Product.findByIdAndUpdate(req.params.id, updateData);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -42,12 +42,14 @@
         .del-btn { background: #ef4444; }
 
         /* Edit Popup Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;}
-        .modal { background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 480px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative;}
-        .modal h3 { margin-top: 0; }
-        .modal input { width: 100%; padding: 10px; margin: 6px 0 14px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box;}
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(2px);}
+        .modal { background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative;}
+        .modal h3 { margin-top: 0; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;}
+        .modal label { font-weight: 600; color: #475569; font-size: 0.85rem;}
+        .modal input { width: 100%; padding: 10px; margin: 4px 0 14px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box;}
+        .modal .weight-row input { margin-bottom: 8px; }
         .close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.4rem; cursor: pointer; border: none; background: none;}
-        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;}
         .modal-actions button { padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;}
         .cancel-btn { background: #f1f5f9; color: #475569; }
         .save-btn { background: #2563eb; color: white; }
@@ -58,7 +60,7 @@
     <div class="dashboard-container">
         
         <div class="left-panel">
-            <!-- Google Sheet / CSV Upload -->
+            <!-- CSV Bulk Upload -->
             <div class="form-section bulk-box">
                 <h3>📊 Google Sheet / CSV Upload</h3>
                 <p style="font-size: 0.85rem; color: #065f46; margin: 0 0 12px;">Google Sheet-ல் இருந்து டவுன்லோட் செய்த <strong>.csv</strong> ஃபைலைத் தேர்ந்தெடுக்கவும்:</p>
@@ -111,22 +113,39 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
+    <!-- Edit Modal with Variants Support -->
     <div class="modal-overlay" id="editModal">
         <div class="modal">
             <button class="close-modal" onclick="closeModal()">✕</button>
-            <h3>பொருளை மாற்று (Edit)</h3>
+            <h3>பொருளை மாற்று (Edit Product)</h3>
             <input type="hidden" id="edit-id">
-            <label>வகை</label>
+            
+            <label>வகை (Category)</label>
             <input type="text" id="edit-category">
-            <label>பெயர்</label>
+            
+            <label>பெயர் (Product Name)</label>
             <input type="text" id="edit-name">
-            <label>விலை (₹)</label>
-            <input type="number" id="edit-price">
-            <label>ஸ்டாக்</label>
+            
+            <label>ஸ்டாக் (Stock)</label>
             <input type="number" id="edit-stock">
-            <label>படத்தின் லிங்க்</label>
+            
+            <label>படத்தின் லிங்க் (Image URL)</label>
             <input type="text" id="edit-image">
+
+            <h4 style="margin: 10px 0 6px; color: #334155; font-size: 0.9rem;">எடைகள் & விலைகள் (Variants)</h4>
+            <div class="weight-row">
+                <input type="text" id="edit-w1" placeholder="எடை 1 (எ.கா: 250g)">
+                <input type="number" id="edit-p1" placeholder="விலை ₹">
+            </div>
+            <div class="weight-row">
+                <input type="text" id="edit-w2" placeholder="எடை 2 (எ.கா: 500g)">
+                <input type="number" id="edit-p2" placeholder="விலை ₹">
+            </div>
+            <div class="weight-row">
+                <input type="text" id="edit-w3" placeholder="எடை 3 (எ.கா: 1kg)">
+                <input type="number" id="edit-p3" placeholder="விலை ₹">
+            </div>
+
             <div class="modal-actions">
                 <button class="cancel-btn" onclick="closeModal()">Cancel</button>
                 <button class="save-btn" onclick="saveEdit()">💾 சேமி</button>
@@ -135,12 +154,14 @@
     </div>
 
     <script>
+        let loadedProducts = [];
+
         fetch('/products').then(res => res.json()).then(products => {
+            loadedProducts = products;
             const list = document.getElementById('product-list');
             list.innerHTML = '';
             products.forEach(p => {
                 const imgSrc = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=200';
-                const encodedImg = encodeURIComponent(imgSrc);
 
                 let priceText = '';
                 if (p.weights && p.weights.length > 0) {
@@ -159,7 +180,7 @@
                             <p><strong>விலை:</strong> ${priceText} <br> <strong>ஸ்டாக்:</strong> ${p.stock} &nbsp;|&nbsp; <strong>வகை:</strong> ${p.category}</p>
                         </div>
                         <div class="card-actions">
-                            <button class="edit-btn" onclick="openEditModal('${p._id}', '${p.name}', '${p.category || ''}', '${p.price || 0}', '${p.stock || 0}', '${encodedImg}')">✏️ Edit</button>
+                            <button class="edit-btn" onclick="openEditModal('${p._id}')">✏️ Edit</button>
                             <button class="del-btn" onclick="deleteProduct('${p._id}')">🗑️ Delete</button>
                         </div>
                     </div>
@@ -167,7 +188,78 @@
             });
         });
 
-        // உங்கள் CSV ஃபைலை முழுமையாகப் புரிந்துகொள்ளும் ஸ்மார்ட் அப்லோடர்
+        // Edit Modal திறக்கும் போது ஏற்கனவே உள்ள எடைகளை நிரப்புதல்
+        function openEditModal(id) {
+            const p = loadedProducts.find(item => item._id === id);
+            if (!p) return;
+
+            document.getElementById('edit-id').value = p._id;
+            document.getElementById('edit-name').value = p.name || '';
+            document.getElementById('edit-category').value = p.category || '';
+            document.getElementById('edit-stock').value = p.stock || 0;
+            document.getElementById('edit-image').value = p.image || '';
+
+            const w = p.weights || [];
+            document.getElementById('edit-w1').value = w[0] ? w[0].weight : (p.price ? 'Standard' : '');
+            document.getElementById('edit-p1').value = w[0] ? w[0].price : (p.price || '');
+
+            document.getElementById('edit-w2').value = w[1] ? w[1].weight : '';
+            document.getElementById('edit-p2').value = w[1] ? w[1].price : '';
+
+            document.getElementById('edit-w3').value = w[2] ? w[2].weight : '';
+            document.getElementById('edit-p3').value = w[2] ? w[2].price : '';
+
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // மாற்றியமைக்கப்பட்ட எடைகள் & விலைகளை சர்வருக்கு சேமித்தல்
+        function saveEdit() {
+            const id = document.getElementById('edit-id').value;
+
+            let weights = [];
+            const w1 = document.getElementById('edit-w1').value.trim();
+            const p1 = document.getElementById('edit-p1').value.trim();
+            if (w1 && p1) weights.push({ weight: w1, price: Number(p1) });
+
+            const w2 = document.getElementById('edit-w2').value.trim();
+            const p2 = document.getElementById('edit-p2').value.trim();
+            if (w2 && p2) weights.push({ weight: w2, price: Number(p2) });
+
+            const w3 = document.getElementById('edit-w3').value.trim();
+            const p3 = document.getElementById('edit-p3').value.trim();
+            if (w3 && p3) weights.push({ weight: w3, price: Number(p3) });
+
+            const basePrice = weights.length > 0 ? weights[0].price : 0;
+
+            const payload = {
+                name: document.getElementById('edit-name').value,
+                category: document.getElementById('edit-category').value,
+                stock: Number(document.getElementById('edit-stock').value) || 0,
+                image: document.getElementById('edit-image').value,
+                price: basePrice,
+                weights: weights
+            };
+
+            fetch('/update-product/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert("பிழை: " + (data.error || 'தோல்வி'));
+                }
+            })
+            .catch(err => alert("பிழை: " + err.message));
+        }
+
         function handleCSVUpload() {
             const fileInput = document.getElementById('csvFileInput');
             const file = fileInput.files[0];
@@ -185,7 +277,6 @@
                     return;
                 }
 
-                // தலைப்புகளை சுத்தம் செய்து சிறிய எழுத்துக்களாக மாற்றுதல்
                 const rawHeaders = rows[0].split(',').map(h => h.trim());
                 const cleanHeaders = rawHeaders.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
                 
@@ -200,14 +291,12 @@
                         row[h] = cols[idx] !== undefined ? cols[idx] : '';
                     });
 
-                    // பெயரைக் கண்டறிதல் (Product Name அல்லது Name)
                     const name = row['productname'] || row['name'] || '';
                     if (!name) continue;
 
                     const category = row['category'] || 'Dry Fruits';
                     const stock = Number(row['stock']) || 0;
 
-                    // படத்தின் லிங்க் இல்லையென்றால் வகைக்கு ஏற்ப தானாகவே பொருத்தமான படங்களை அமைத்தல்
                     let image = row['imageurl'] || row['image'] || '';
                     if (!image || image.toLowerCase() === 'nan') {
                         const catLower = category.toLowerCase();
@@ -224,7 +313,6 @@
                         }
                     }
 
-                    // எடைகள் & விலைகள் (Size 1/Weight 1, Price 1 போன்றவற்றை எடுத்தல்)
                     let weights = [];
                     const w1 = row['size1'] || row['weight1'];
                     const p1 = Number(row['price1']);
@@ -255,7 +343,6 @@
                     return;
                 }
 
-                // சர்வருக்கு மொத்தமாக அனுப்புதல்
                 fetch('/bulk-add-products', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -276,7 +363,6 @@
             reader.readAsText(file);
         }
 
-        // பழைய Undefined பொருட்களை ஒரே கிளிக்கில் நீக்கும் வசதி
         function cleanUndefined() {
             if (confirm("தவறாகப் பதிவான 'undefined' பொருட்களை மட்டும் மொத்தமாக நீக்க வேண்டுமா?")) {
                 fetch('/delete-undefined')
@@ -294,35 +380,6 @@
             if(confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
                 fetch('/delete-product/' + id).then(() => window.location.reload());
             }
-        }
-
-        function openEditModal(id, name, category, price, stock, encodedImage) {
-            document.getElementById('edit-id').value = id;
-            document.getElementById('edit-name').value = name;
-            document.getElementById('edit-category').value = category;
-            document.getElementById('edit-price').value = price;
-            document.getElementById('edit-stock').value = stock;
-            document.getElementById('edit-image').value = decodeURIComponent(encodedImage);
-            document.getElementById('editModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
-
-        function saveEdit() {
-            const id = document.getElementById('edit-id').value;
-            fetch('/update-product/' + id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: document.getElementById('edit-name').value,
-                    category: document.getElementById('edit-category').value,
-                    price: Number(document.getElementById('edit-price').value),
-                    stock: Number(document.getElementById('edit-stock').value),
-                    image: document.getElementById('edit-image').value
-                })
-            }).then(() => window.location.reload());
         }
     </script>
 </body>
