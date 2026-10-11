@@ -21,16 +21,32 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; }
 
         /* Navbar */
-        nav { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; }
+        nav { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; padding: 14px 5%; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
         .cart-trigger { position: relative; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 8px 16px; border-radius: 20px; font-weight: 600; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
         .cart-count { background: var(--primary); color: white; border-radius: 50%; font-size: 0.75rem; padding: 2px 7px; font-weight: bold; }
 
         /* Container */
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .page-title { text-align: center; margin-bottom: 25px; }
+        .container { max-width: 1200px; margin: 25px auto; padding: 0 20px; }
+        .page-title { text-align: center; margin-bottom: 20px; }
         .page-title h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--text-dark); }
-        .page-title p { color: var(--text-muted); margin-top: 5px; }
+        .page-title p { color: var(--text-muted); margin-top: 5px; font-size: 0.95rem; }
+
+        /* Search & Filter Section */
+        .filter-section { max-width: 800px; margin: 0 auto 30px; display: flex; flex-direction: column; gap: 16px; }
+        
+        .search-wrapper { position: relative; width: 100%; }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.1rem; }
+        .search-input { width: 100%; padding: 13px 42px 13px 44px; border: 1.5px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 0.95rem; background: var(--white); outline: none; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12); }
+        .clear-search { display: none; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: #f1f5f9; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 0.75rem; color: #64748b; cursor: pointer; }
+
+        .category-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; -ms-overflow-style: none; justify-content: center; flex-wrap: wrap; }
+        .category-pills::-webkit-scrollbar { display: none; }
+        
+        .pill-btn { background: var(--white); border: 1px solid var(--border); color: var(--text-muted); padding: 7px 16px; border-radius: 20px; font-size: 0.88rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+        .pill-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .pill-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); box-shadow: 0 2px 8px rgba(21, 128, 61, 0.25); }
 
         /* Product Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
@@ -47,6 +63,9 @@
         .price { font-size: 1.25rem; font-weight: 800; color: var(--primary); }
         .add-btn { background: var(--primary); color: white; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .add-btn:hover { background: var(--primary-hover); }
+
+        .empty-state { text-align: center; grid-column: 1/-1; padding: 50px 20px; color: var(--text-muted); }
+        .empty-state span { font-size: 2.5rem; display: block; margin-bottom: 10px; }
 
         /* Cart Drawer */
         .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; backdrop-filter: blur(2px); }
@@ -75,6 +94,12 @@
         .modal-btns button { padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; }
         .cancel-btn { background: #f1f5f9; color: var(--text-dark); }
         .confirm-btn { background: #25d366; color: white; }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 600px) {
+            .category-pills { justify-content: flex-start; }
+            .page-title h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -92,6 +117,19 @@
             <p>100% இயற்கை உலர் பழங்கள் மற்றும் நட்ஸ் வகைகள்</p>
         </div>
 
+        <!-- 🔍 Search & Category Filter Section -->
+        <div class="filter-section">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="search-input" placeholder="தயாரிப்புகளைத் தேடுங்கள் (எ.கா: Badam, Dates, Honey...)" oninput="handleSearch()">
+                <button class="clear-search" id="clear-search" onclick="clearSearch()">✕</button>
+            </div>
+            <div class="category-pills" id="category-pills">
+                <!-- வகைப் பட்டன்கள் தானாக இங்கே உருவாக்கப்படும் -->
+            </div>
+        </div>
+
+        <!-- Products Grid -->
         <div class="grid" id="product-grid">
             <p style="text-align: center; grid-column: 1/-1;">பொருட்கள் லோட் ஆகிறது...</p>
         </div>
@@ -139,26 +177,93 @@
     </div>
 
     <script>
-        // 🚨 குறிப்பு: உங்கள் உண்மையான WhatsApp எண்ணை இங்கே இடவும் (நாட்டுக் குறியீடு 91 உடன்)
-        const ADMIN_WHATSAPP_NUMBER = "918637400923"; 
+        // 🚨 உங்கள் வாட்ஸ்அப் எண் (91 உடன்)
+        const ADMIN_WHATSAPP_NUMBER = "919876543210"; 
 
         let products = [];
         let cart = JSON.parse(localStorage.getItem('royal_cart')) || [];
+        let currentCategory = 'All';
+        let searchQuery = '';
 
         // தயாரிப்புகளை சர்வரிலிருந்து எடுத்தல்
         fetch('/products')
             .then(res => res.json())
             .then(data => {
                 products = data;
-                renderProducts();
+                setupCategoryPills();
+                filterAndRender();
                 updateCartUI();
             });
 
-        function renderProducts() {
+        // டேட்டாபேஸில் உள்ள வகைகளை எடுத்து ஃபில்டர் பட்டன்களை உருவாக்குதல்
+        function setupCategoryPills() {
+            const container = document.getElementById('category-pills');
+            
+            // தனித்துவமான வகைகளைப் பிரித்தெடுத்தல்
+            const categories = ['All', ...new Set(products.map(p => p.category ? p.category.trim() : 'Other').filter(Boolean))];
+            
+            container.innerHTML = '';
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `pill-btn ${cat === 'All' ? 'active' : ''}`;
+                btn.innerText = cat === 'All' ? 'அனைத்தும் (All)' : cat;
+                btn.onclick = () => selectCategory(cat, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterAndRender();
+        }
+
+        function handleSearch() {
+            const input = document.getElementById('search-input');
+            searchQuery = input.value.trim().toLowerCase();
+            document.getElementById('clear-search').style.display = searchQuery ? 'block' : 'none';
+            filterAndRender();
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            searchQuery = '';
+            document.getElementById('clear-search').style.display = 'none';
+            filterAndRender();
+        }
+
+        // தேடல் மற்றும் வகை ஃபில்டரைச் செயல்படுத்துதல்
+        function filterAndRender() {
+            const filtered = products.filter(p => {
+                const pCategory = p.category ? p.category.trim().toLowerCase() : '';
+                const pName = p.name ? p.name.toLowerCase() : '';
+
+                const matchesCategory = currentCategory === 'All' || pCategory === currentCategory.toLowerCase();
+                const matchesSearch = !searchQuery || pName.includes(searchQuery) || pCategory.includes(searchQuery);
+
+                return matchesCategory && matchesSearch;
+            });
+
+            renderProducts(filtered);
+        }
+
+        function renderProducts(items) {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
 
-            products.forEach(p => {
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <span>🔍</span>
+                        <h3>பொருட்கள் எதுவும் கிடைக்கவில்லை</h3>
+                        <p>தயவுசெய்து வேறு பெயர் அல்லது வகையைத் தேடிப் பாருங்கள்.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            items.forEach(p => {
                 const img = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500';
                 
                 let weightOptionsHtml = '';
@@ -291,7 +396,6 @@
             document.getElementById('cart-overlay').style.display = show ? 'block' : 'none';
         }
 
-        // WhatsApp Checkout Modal Functions
         function openCheckoutModal() {
             if (cart.length === 0) {
                 alert("கார்ட்டில் எந்தப் பொருட்களும் இல்லை!");
@@ -305,7 +409,6 @@
             document.getElementById('checkout-modal').style.display = 'none';
         }
 
-        // வாட்ஸ்அப் மெசேஜை உருவாக்கி அனுப்பும் லாஜிக்
         function sendWhatsAppOrder() {
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
@@ -341,10 +444,8 @@ ${itemsText}
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
-            // வாட்ஸ்அப்பைத் திறத்தல்
             window.open(whatsappUrl, '_blank');
 
-            // ஆர்டர் அனுப்பிய பின் கார்ட்டை காலி செய்தல்
             cart = [];
             saveCart();
             updateCartUI();
