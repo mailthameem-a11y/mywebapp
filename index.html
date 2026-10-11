@@ -30,8 +30,8 @@
         .order-id { font-weight: 800; color: #0f172a; font-size: 1.05rem; }
         .order-date { color: #64748b; font-size: 0.85rem; }
         
-        .order-body { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 20px; align-items: center; }
-        @media(max-width: 768px) { .order-body { grid-template-columns: 1fr; gap: 14px; } }
+        .order-body { display: grid; grid-template-columns: 1fr 1.5fr 1.2fr; gap: 20px; align-items: center; }
+        @media(max-width: 820px) { .order-body { grid-template-columns: 1fr; gap: 14px; } }
         
         .customer-info p { margin-bottom: 4px; font-size: 0.9rem; color: #334155; }
         .customer-info strong { color: #0f172a; }
@@ -41,16 +41,21 @@
         .order-items-list div { padding: 3px 0; border-bottom: 1px dashed #e2e8f0; display: flex; justify-content: space-between;}
         .order-items-list div:last-child { border: none; }
 
-        .order-status-box { text-align: right; }
-        @media(max-width: 768px) { .order-status-box { text-align: left; } }
-        .order-total { font-size: 1.3rem; font-weight: 800; color: #16a34a; margin-bottom: 8px;}
-        .status-select { padding: 8px 12px; border-radius: 8px; font-weight: 700; font-family: inherit; font-size: 0.85rem; border: 1.5px solid #cbd5e1; outline: none; cursor: pointer;}
+        .order-status-box { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+        @media(max-width: 820px) { .order-status-box { align-items: flex-start; } }
+        .order-total { font-size: 1.3rem; font-weight: 800; color: #16a34a; }
+        
+        .action-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .status-select { padding: 8px 10px; border-radius: 8px; font-weight: 700; font-family: inherit; font-size: 0.85rem; border: 1.5px solid #cbd5e1; outline: none; cursor: pointer;}
         .status-Pending { background: #fef3c7; color: #92400e; border-color: #f59e0b; }
         .status-Dispatched { background: #e0f2fe; color: #0369a1; border-color: #0284c7; }
         .status-Delivered { background: #dcfce7; color: #15803d; border-color: #22c55e; }
         .status-Cancelled { background: #fee2e2; color: #b91c1c; border-color: #ef4444; }
 
-        /* Products Section Styles (Preserved) */
+        .print-btn { background: #0f172a; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s;}
+        .print-btn:hover { background: #334155; }
+
+        /* Products Section Styles */
         .dashboard-container { display: flex; gap: 30px; flex-wrap: wrap;}
         .left-panel { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px;}
         .form-section { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.06); }
@@ -191,8 +196,8 @@
 
     <script>
         let loadedProducts = [];
+        let loadedOrders = [];
 
-        // Tab Switching Logic
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -213,6 +218,7 @@
             fetch('/api/orders')
                 .then(res => res.json())
                 .then(orders => {
+                    loadedOrders = orders;
                     const list = document.getElementById('orders-list');
                     const pendingBadge = document.getElementById('pending-count');
                     
@@ -252,12 +258,15 @@
                                     </div>
                                     <div class="order-status-box">
                                         <div class="order-total">₹${o.totalAmount}</div>
-                                        <select class="status-select status-${o.status}" onchange="updateOrderStatus('${o._id}', this.value)">
-                                            <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
-                                            <option value="Dispatched" ${o.status === 'Dispatched' ? 'selected' : ''}>🚚 Dispatched</option>
-                                            <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>✅ Delivered</option>
-                                            <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
-                                        </select>
+                                        <div class="action-row">
+                                            <button class="print-btn" onclick="printInvoice('${o._id}')">🖨️ Print Slip</button>
+                                            <select class="status-select status-${o.status}" onchange="updateOrderStatus('${o._id}', this.value)">
+                                                <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
+                                                <option value="Dispatched" ${o.status === 'Dispatched' ? 'selected' : ''}>🚚 Dispatched</option>
+                                                <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>✅ Delivered</option>
+                                                <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -267,167 +276,38 @@
                 .catch(err => console.error("Orders load error:", err));
         }
 
-        function updateOrderStatus(id, newStatus) {
-            fetch(`/api/orders/${id}/status`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: newStatus })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data.success) {
-                    loadOrders();
-                } else {
-                    alert("நிலையை மாற்றுவதில் பிழை!");
-                }
+        // --- பார்சல் ரசீது பிரிண்ட் செய்யும் லாஜிக் ---
+        function printInvoice(id) {
+            const o = loadedOrders.find(item => item._id === id);
+            if (!o) return;
+
+            const printWindow = window.open('', '_blank', 'width=750,height=750');
+            const itemsRows = (o.items || []).map((it, idx) => `
+                <tr>
+                    <td style="text-align:center;">${idx + 1}</td>
+                    <td><strong>${it.name}</strong> (${it.weight})</td>
+                    <td style="text-align:center;">${it.qty}</td>
+                    <td style="text-align:right;">₹${it.price}</td>
+                    <td style="text-align:right; font-weight:600;">₹${it.price * it.qty}</td>
+                </tr>
+            `).join('');
+
+            const formattedDate = new Date(o.createdAt).toLocaleDateString('ta-IN', {
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
             });
-        }
 
-        // --- 2. PRODUCTS LOGIC ---
-        function loadProducts() {
-            fetch('/products').then(res => res.json()).then(products => {
-                loadedProducts = products;
-                const list = document.getElementById('product-list');
-                list.innerHTML = '';
-                products.forEach(p => {
-                    const imgSrc = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=200';
-                    let priceText = '';
-                    if (p.weights && p.weights.length > 0) {
-                        priceText = p.weights.map(w => `${w.weight}: ₹${w.price}`).join(' | ');
-                    } else if (p.price) {
-                        priceText = `₹${p.price}`;
-                    } else {
-                        priceText = 'விலை குறிப்பிடப்படவில்லை';
-                    }
-
-                    list.innerHTML += `
-                        <div class="card">
-                            <img src="${imgSrc}" alt="${p.name}">
-                            <div class="card-info">
-                                <h3>${p.name}</h3>
-                                <p><strong>விலை:</strong> ${priceText} <br> <strong>ஸ்டாக்:</strong> ${p.stock} &nbsp;|&nbsp; <strong>வகை:</strong> ${p.category}</p>
-                            </div>
-                            <div class="card-actions">
-                                <button class="edit-btn" onclick="openEditModal('${p._id}')">✏️ Edit</button>
-                                <button class="del-btn" onclick="deleteProduct('${p._id}')">🗑️ Delete</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            });
-        }
-
-        // Modal and CSV helpers
-        function openEditModal(id) {
-            const p = loadedProducts.find(item => item._id === id);
-            if (!p) return;
-            document.getElementById('edit-id').value = p._id;
-            document.getElementById('edit-name').value = p.name || '';
-            document.getElementById('edit-category').value = p.category || '';
-            document.getElementById('edit-stock').value = p.stock || 0;
-            document.getElementById('edit-image').value = p.image || '';
-            const w = p.weights || [];
-            document.getElementById('edit-w1').value = w[0] ? w[0].weight : (p.price ? 'Standard' : '');
-            document.getElementById('edit-p1').value = w[0] ? w[0].price : (p.price || '');
-            document.getElementById('edit-w2').value = w[1] ? w[1].weight : '';
-            document.getElementById('edit-p2').value = w[1] ? w[1].price : '';
-            document.getElementById('edit-w3').value = w[2] ? w[2].weight : '';
-            document.getElementById('edit-p3').value = w[2] ? w[2].price : '';
-            document.getElementById('editModal').style.display = 'flex';
-        }
-
-        function closeModal() { document.getElementById('editModal').style.display = 'none'; }
-
-        function saveEdit() {
-            const id = document.getElementById('edit-id').value;
-            let weights = [];
-            const w1 = document.getElementById('edit-w1').value.trim();
-            const p1 = document.getElementById('edit-p1').value.trim();
-            if (w1 && p1) weights.push({ weight: w1, price: Number(p1) });
-            const w2 = document.getElementById('edit-w2').value.trim();
-            const p2 = document.getElementById('edit-p2').value.trim();
-            if (w2 && p2) weights.push({ weight: w2, price: Number(p2) });
-            const w3 = document.getElementById('edit-w3').value.trim();
-            const p3 = document.getElementById('edit-p3').value.trim();
-            if (w3 && p3) weights.push({ weight: w3, price: Number(p3) });
-
-            fetch('/update-product/' + id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: document.getElementById('edit-name').value,
-                    category: document.getElementById('edit-category').value,
-                    stock: Number(document.getElementById('edit-stock').value) || 0,
-                    image: document.getElementById('edit-image').value,
-                    price: weights.length > 0 ? weights[0].price : 0,
-                    weights: weights
-                })
-            }).then(() => { closeModal(); loadProducts(); });
-        }
-
-        function deleteProduct(id) {
-            if(confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
-                fetch('/delete-product/' + id).then(() => loadProducts());
-            }
-        }
-
-        function handleCSVUpload() {
-            const fileInput = document.getElementById('csvFileInput');
-            const file = fileInput.files[0];
-            if (!file) return alert("தயவுசெய்து ஒரு .csv ஃபைலைத் தேர்ந்தெடுக்கவும்!");
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const rows = e.target.result.split(/\r?\n/).filter(r => r.trim() !== '');
-                if (rows.length < 2) return alert("CSV ஃபைல் காலியாக உள்ளது!");
-
-                const cleanHeaders = rows[0].split(',').map(h => h.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
-                const products = [];
-
-                for (let i = 1; i < rows.length; i++) {
-                    const cols = rows[i].split(',').map(c => c.trim());
-                    if (cols.length < 2) continue;
-                    let row = {};
-                    cleanHeaders.forEach((h, idx) => { row[h] = cols[idx] !== undefined ? cols[idx] : ''; });
-
-                    const name = row['productname'] || row['name'] || '';
-                    if (!name) continue;
-                    let weights = [];
-                    if (row['size1'] && row['price1']) weights.push({ weight: row['size1'], price: Number(row['price1']) });
-                    if (row['size2'] && row['price2']) weights.push({ weight: row['size2'], price: Number(row['price2']) });
-                    if (row['size3'] && row['price3']) weights.push({ weight: row['size3'], price: Number(row['price3']) });
-
-                    products.push({
-                        category: row['category'] || 'Dry Fruits',
-                        name: name,
-                        stock: Number(row['stock']) || 0,
-                        image: row['imageurl'] || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500',
-                        price: weights.length > 0 ? weights[0].price : 0,
-                        weights: weights
-                    });
-                }
-
-                fetch('/bulk-add-products', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(products)
-                }).then(res => res.json()).then(data => {
-                    alert(`வெற்றி! ${data.count} பொருட்கள் சேர்க்கப்பட்டன! 🎉`);
-                    loadProducts();
-                });
-            };
-            reader.readAsText(file);
-        }
-
-        function cleanUndefined() {
-            if (confirm("undefined பொருட்களை நீக்க வேண்டுமா?")) {
-                fetch('/delete-undefined').then(() => loadProducts());
-            }
-        }
-
-        // பக்கத்தை ஏற்றும்போது ஆர்டர்களை முதலில் லோட் செய்தல்
-        loadOrders();
-        loadProducts();
-    </script>
-</body>
-</html>
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Packing Slip - #${o._id.slice(-6).toUpperCase()}</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 25px; color: #1e293b; max-width: 650px; margin: 0 auto; }
+                        .slip-header { border-bottom: 2px solid #15803d; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-start; }
+                        .brand h1 { margin: 0; color: #15803d; font-size: 24px; font-weight: 800; }
+                        .brand p { margin: 4px 0 0; color: #64748b; font-size: 13px; }
+                        .order-meta { text-align: right; }
+                        .order-meta h3 { margin: 0; font-size: 17px; color: #0f172a; }
+                        .order-meta p { margin: 3px 0 0; color: #64748b; font-size: 12px; }
+                        
+                        .address-box { margin: 20px 0; background: #f8faf
