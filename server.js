@@ -12,6 +12,9 @@ app.set('trust proxy', 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '10mb' }));
 
+// சொந்தப் படங்களுக்கு (எ.கா: images/hero.jpg)
+app.use('/images', express.static(__dirname + '/images', { maxAge: '7d' }));
+
 // --- அட்மின் லாகின் அமைப்புகள் ---
 // கடவுச்சொல்லை கோடில் எழுதக் கூடாது. Render > Environment-ல் இவற்றை அமைக்கவும்.
 const ADMIN_USER = process.env.ADMIN_USERNAME;

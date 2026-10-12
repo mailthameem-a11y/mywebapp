@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f4f8; padding: 20px; color: #0f172a;}
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f6efe4; padding: 20px; color: #0f172a;}
 
         .header-bar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 20px; }
         .header-bar h1 { font-size: 1.8rem; }
@@ -16,7 +16,7 @@
         /* Tab Navigation */
         .tab-bar { max-width: 1200px; margin: 0 auto 25px; display: flex; gap: 10px; border-bottom: 2px solid #cbd5e1; padding-bottom: 2px;}
         .tab-btn { background: none; border: none; padding: 10px 22px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; color: #64748b; border-bottom: 3px solid transparent; margin-bottom: -4px;}
-        .tab-btn.active { color: #16a34a; border-color: #16a34a; }
+        .tab-btn.active { color: #8a5a2b; border-color: #8a5a2b; }
         .badge { background: #ef4444; color: white; border-radius: 12px; padding: 2px 8px; font-size: 0.75rem; margin-left: 6px;}
 
         .container { max-width: 1200px; margin: 0 auto; }
@@ -35,7 +35,7 @@
 
         .customer-info p { margin-bottom: 4px; font-size: 0.9rem; color: #334155; }
         .customer-info strong { color: #0f172a; }
-        .customer-info a { color: #16a34a; text-decoration: none; font-weight: 600; }
+        .customer-info a { color: #8a5a2b; text-decoration: none; font-weight: 600; }
 
         .order-items-list { background: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; max-height: 120px; overflow-y: auto;}
         .order-items-list div { padding: 3px 0; border-bottom: 1px dashed #e2e8f0; display: flex; justify-content: space-between;}
@@ -43,7 +43,7 @@
 
         .order-status-box { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
         @media(max-width: 820px) { .order-status-box { align-items: flex-start; } }
-        .order-total { font-size: 1.3rem; font-weight: 800; color: #16a34a; }
+        .order-total { font-size: 1.3rem; font-weight: 800; color: #8a5a2b; }
 
         .action-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
         .status-select { padding: 8px 10px; border-radius: 8px; font-weight: 700; font-family: inherit; font-size: 0.85rem; border: 1.5px solid #cbd5e1; outline: none; cursor: pointer;}
@@ -59,14 +59,14 @@
         .dashboard-container { display: flex; gap: 30px; flex-wrap: wrap;}
         .left-panel { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px;}
         .form-section { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.06); }
-        .form-section h3 { margin-top: 0; color: #16a34a; border-bottom: 2px solid #f0f4f8; padding-bottom: 10px;}
+        .form-section h3 { margin-top: 0; color: #8a5a2b; border-bottom: 2px solid #f6efe4; padding-bottom: 10px;}
         .form-section input { width: 100%; padding: 10px; margin: 6px 0 14px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box;}
         .weight-row { display: flex; gap: 10px; margin-bottom: 10px;}
         .weight-row input { margin: 0;}
-        .submit-btn { background: #16a34a; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; }
-        .bulk-box { background: #ecfdf5; border: 1px dashed #059669; }
-        .bulk-box h3 { color: #059669; }
-        .bulk-btn { background: #059669; }
+        .submit-btn { background: #8a5a2b; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; }
+        .bulk-box { background: #fbefd9; border: 1px dashed #a8741a; }
+        .bulk-box h3 { color: #a8741a; }
+        .bulk-btn { background: #a8741a; }
         .products-section { flex: 2; min-width: 320px;}
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
         .clean-btn { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem;}
@@ -120,7 +120,7 @@
                 <div class="left-panel">
                     <div class="form-section bulk-box">
                         <h3>📊 Google Sheet / CSV Upload</h3>
-                        <p style="font-size: 0.85rem; color: #065f46; margin: 0 0 12px;">.csv ஃபைலைத் தேர்ந்தெடுக்கவும்:</p>
+                        <p style="font-size: 0.85rem; color: #6b4423; margin: 0 0 12px;">.csv ஃபைலைத் தேர்ந்தெடுக்கவும்:</p>
                         <input type="file" id="csvFileInput" accept=".csv" style="background: white;">
                         <button type="button" class="submit-btn bulk-btn" onclick="handleCSVUpload()">⚡ மொத்தமாக பதிவேற்று</button>
                     </div>

@@ -13,14 +13,14 @@
 
     <style>
         :root {
-            --primary: #15803d;
-            --primary-dark: #14532d;
-            --accent-gold: #c59b27;
+            --primary: #8a5a2b;
+            --primary-dark: #5c3a1d;
+            --accent-gold: #d4a437;
             --text-dark: #1c1917;
             --text-muted: #57534e;
-            --bg-cream: #faf7f2;
+            --bg-cream: #fbf6ee;
             --bg-light: #f5f0e8;
-            --footer-bg: #23150e;
+            --footer-bg: #1f120b;
             --white: #ffffff;
             --transition: all 0.3s ease;
         }
@@ -131,8 +131,13 @@
             justify-content: center;
             text-align: center;
             padding: 80px 20px;
-            background: linear-gradient(rgba(18, 12, 8, 0.58), rgba(18, 12, 8, 0.65)),
-                        url('https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=1600') center/cover no-repeat;
+            background-color: #2b1810;
+            background-image:
+                linear-gradient(105deg, rgba(31, 18, 11, 0.72) 0%, rgba(31, 18, 11, 0.52) 55%, rgba(31, 18, 11, 0.32) 100%),
+                url('/images/hero.jpg'),
+                url('https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=1600');
+            background-size: cover;
+            background-position: center;
             color: var(--white);
         }
 
@@ -180,7 +185,7 @@
         .btn-primary {
             background: var(--primary);
             color: var(--white);
-            box-shadow: 0 4px 14px rgba(21, 128, 61, 0.4);
+            box-shadow: 0 4px 14px rgba(138, 90, 43, 0.4);
         }
 
         .btn-primary:hover {
@@ -239,7 +244,7 @@
 
         /* 4. Philosophy / Belief Section */
         .philosophy-section {
-            background-color: var(--bg-cream);
+            background: linear-gradient(135deg, #2b1810 0%, #1f120b 100%);
             padding: 85px 20px;
             text-align: center;
         }
@@ -253,7 +258,7 @@
             font-family: 'Playfair Display', serif;
             font-size: clamp(1.9rem, 4vw, 3rem);
             font-weight: 700;
-            color: #381e10;
+            color: #fff8ec;
             line-height: 1.25;
             margin-bottom: 22px;
         }
@@ -261,10 +266,117 @@
         .philosophy-text {
             font-size: clamp(1rem, 2vw, 1.2rem);
             line-height: 1.7;
-            color: #5d483b;
+            color: #e5d3bd;
             max-width: 660px;
             margin: 0 auto 30px;
         }
+
+        /* Hero eyebrow */
+        .hero-eyebrow {
+            display: inline-block;
+            padding: 6px 14px;
+            border: 1px solid rgba(212, 164, 55, 0.6);
+            color: #f3d98b;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.18);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            line-height: 64px;
+            border-radius: 50%;
+            background: #fbefd9;
+        }
+
+        .philosophy-section .btn-primary {
+            background: var(--accent-gold);
+            color: #2b1810;
+            box-shadow: 0 4px 14px rgba(212, 164, 55, 0.35);
+        }
+
+        .philosophy-section .btn-primary:hover {
+            background: #e3b84f;
+        }
+
+        /* Categories & Featured products */
+        .section { padding: 70px 20px; }
+        .section.alt { background: var(--bg-cream); }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
+        .section-head { text-align: center; margin-bottom: 36px; }
+        .section-eyebrow {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #9a6a14;
+            margin-bottom: 8px;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+            color: #2b1810;
+        }
+        .section-sub { color: var(--text-muted); margin-top: 8px; font-size: 0.98rem; }
+
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+        }
+        .cat-card {
+            position: relative;
+            display: block;
+            height: 260px;
+            border-radius: 18px;
+            overflow: hidden;
+            text-decoration: none;
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(43, 24, 16, 0.12);
+        }
+        .cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .cat-card:hover img { transform: scale(1.06); }
+        .cat-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(31, 18, 11, 0.85), rgba(31, 18, 11, 0.05) 60%);
+        }
+        .cat-info { position: absolute; left: 18px; right: 18px; bottom: 16px; z-index: 1; }
+        .cat-info h3 { font-family: 'Playfair Display', serif; font-size: 1.35rem; }
+        .cat-info span { font-size: 0.85rem; color: #f1dfc3; }
+
+        .prod-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 24px;
+        }
+        .prod-card {
+            background: #fff;
+            border: 1px solid #eadfce;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .prod-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(43, 24, 16, 0.1); }
+        .prod-card img { width: 100%; height: 210px; object-fit: cover; }
+        .prod-body { padding: 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+        .prod-cat { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #9a6a14; }
+        .prod-name { font-size: 1.05rem; font-weight: 700; color: #2b1810; }
+        .prod-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; }
+        .prod-price { font-weight: 800; color: var(--primary); font-size: 1.15rem; }
+        .prod-cta { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
+        .section-link { text-align: center; margin-top: 32px; }
 
         /* 4b. Shipping / Returns / FAQ */
         .info-section {
@@ -497,6 +609,14 @@
                 padding: 50px 18px;
             }
 
+            .section {
+                padding: 50px 18px;
+            }
+
+            .cat-card {
+                height: 220px;
+            }
+
             .footer-container {
                 grid-template-columns: 1fr; /* மொபைலில் அனைத்து ஃபூட்டர் பகுதிகளும் ஒன்றன் கீழ் ஒன்றாக அமையும் */
                 gap: 30px;
@@ -535,6 +655,7 @@
     <!-- 2. Hero Section -->
     <section class="hero">
         <div class="hero-content">
+            <span class="hero-eyebrow">Nature's Finest, Delivered Fresh</span>
             <h1 class="hero-title">Premium Dry Fruits, Naturally Delicious.</h1>
             <p class="hero-desc">
                 Discover carefully selected almonds, cashews and premium dates, packed with quality and delivered to your doorstep.
@@ -569,6 +690,30 @@
                 <h3 class="feature-title">Direct Delivery</h3>
                 <p class="feature-desc">Fast dispatch and doorstep delivery across Tamil Nadu.</p>
             </div>
+        </div>
+    </section>
+
+    <!-- 3b. Shop by Category (தானாக டேட்டாபேஸிலிருந்து நிரம்பும்) -->
+    <section class="section" id="categories" hidden>
+        <div class="section-inner">
+            <div class="section-head">
+                <span class="section-eyebrow">Our Collections</span>
+                <h2 class="section-title">Shop by Category</h2>
+                <p class="section-sub">Carefully sourced and graded, packed fresh for you.</p>
+            </div>
+            <div class="cat-grid" id="cat-grid"></div>
+        </div>
+    </section>
+
+    <!-- 3c. Featured Products (தானாக டேட்டாபேஸிலிருந்து நிரம்பும்) -->
+    <section class="section alt" id="featured" hidden>
+        <div class="section-inner">
+            <div class="section-head">
+                <span class="section-eyebrow">Handpicked</span>
+                <h2 class="section-title">Featured Products</h2>
+            </div>
+            <div class="prod-grid" id="prod-grid"></div>
+            <div class="section-link"><a href="/shop" class="btn btn-primary">View all products</a></div>
         </div>
     </section>
 
@@ -677,6 +822,67 @@
                 toggleBtn.textContent = '☰';
             });
         });
+
+        // ---- டேட்டாபேஸிலிருந்து வகைகள் & சிறப்புப் பொருட்களை ஏற்றுதல் ----
+        const FALLBACK_IMG = 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=600';
+
+        function esc(v) {
+            return String(v ?? '').replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        function priceText(p) {
+            const prices = (p.weights || []).map(w => Number(w.price)).filter(n => n > 0);
+            if (prices.length) return 'From ₹' + Math.min(...prices);
+            return p.price ? '₹' + p.price : '';
+        }
+
+        fetch('/products')
+            .then(r => r.ok ? r.json() : [])
+            .then(list => {
+                if (!Array.isArray(list)) return;
+                list = list.filter(p => p && p.name);
+                if (list.length === 0) return;
+
+                // வகைகள்
+                const groups = new Map();
+                list.forEach(p => {
+                    const c = (p.category || '').trim();
+                    if (!c) return;
+                    if (!groups.has(c)) groups.set(c, { count: 0, img: '' });
+                    const g = groups.get(c);
+                    g.count++;
+                    if (!g.img && p.image) g.img = p.image;
+                });
+                const catHtml = [...groups.entries()].slice(0, 6).map(([c, g]) => `
+                    <a class="cat-card" href="/shop?category=${encodeURIComponent(c)}">
+                        <img src="${esc(g.img || FALLBACK_IMG)}" alt="${esc(c)}" loading="lazy">
+                        <div class="cat-info"><h3>${esc(c)}</h3><span>${g.count} ${g.count === 1 ? 'product' : 'products'} →</span></div>
+                    </a>`).join('');
+                if (catHtml) {
+                    document.getElementById('cat-grid').innerHTML = catHtml;
+                    document.getElementById('categories').hidden = false;
+                }
+
+                // சிறப்புப் பொருட்கள் (முதல் 6)
+                const withImg = list.filter(p => p.image);
+                const featured = (withImg.length >= 3 ? withImg : list).slice(0, 6);
+                document.getElementById('prod-grid').innerHTML = featured.map(p => `
+                    <a class="prod-card" href="/shop?category=${encodeURIComponent((p.category || '').trim())}">
+                        <img src="${esc(p.image || FALLBACK_IMG)}" alt="${esc(p.name)}" loading="lazy">
+                        <div class="prod-body">
+                            <span class="prod-cat">${esc(p.category || 'Dry Fruits')}</span>
+                            <span class="prod-name">${esc(p.name)}</span>
+                            <div class="prod-foot">
+                                <span class="prod-price">${esc(priceText(p))}</span>
+                                <span class="prod-cta">Order →</span>
+                            </div>
+                        </div>
+                    </a>`).join('');
+                document.getElementById('featured').hidden = false;
+            })
+            .catch(() => { /* பிழை வந்தால் இந்தப் பகுதிகள் மறைந்தே இருக்கும் */ });
     </script>
 </body>
 </html>
