@@ -8,11 +8,11 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f4f8; padding: 20px; color: #0f172a;}
-        
+
         .header-bar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 20px; }
         .header-bar h1 { font-size: 1.8rem; }
         .logout-btn { background: #fee2e2; color: #b91c1c; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; border: 1px solid #f87171; font-size: 0.9rem;}
-        
+
         /* Tab Navigation */
         .tab-bar { max-width: 1200px; margin: 0 auto 25px; display: flex; gap: 10px; border-bottom: 2px solid #cbd5e1; padding-bottom: 2px;}
         .tab-btn { background: none; border: none; padding: 10px 22px; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; color: #64748b; border-bottom: 3px solid transparent; margin-bottom: -4px;}
@@ -29,14 +29,14 @@
         .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .order-id { font-weight: 800; color: #0f172a; font-size: 1.05rem; }
         .order-date { color: #64748b; font-size: 0.85rem; }
-        
+
         .order-body { display: grid; grid-template-columns: 1fr 1.5fr 1.2fr; gap: 20px; align-items: center; }
         @media(max-width: 820px) { .order-body { grid-template-columns: 1fr; gap: 14px; } }
-        
+
         .customer-info p { margin-bottom: 4px; font-size: 0.9rem; color: #334155; }
         .customer-info strong { color: #0f172a; }
         .customer-info a { color: #16a34a; text-decoration: none; font-weight: 600; }
-        
+
         .order-items-list { background: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; max-height: 120px; overflow-y: auto;}
         .order-items-list div { padding: 3px 0; border-bottom: 1px dashed #e2e8f0; display: flex; justify-content: space-between;}
         .order-items-list div:last-child { border: none; }
@@ -44,7 +44,7 @@
         .order-status-box { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
         @media(max-width: 820px) { .order-status-box { align-items: flex-start; } }
         .order-total { font-size: 1.3rem; font-weight: 800; color: #16a34a; }
-        
+
         .action-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
         .status-select { padding: 8px 10px; border-radius: 8px; font-weight: 700; font-family: inherit; font-size: 0.85rem; border: 1.5px solid #cbd5e1; outline: none; cursor: pointer;}
         .status-Pending { background: #fef3c7; color: #92400e; border-color: #f59e0b; }
@@ -197,10 +197,19 @@
         let loadedProducts = [];
         let loadedOrders = [];
 
+        // 🔒 வாடிக்கையாளர் உள்ளிட்ட பெயர், முகவரி போன்றவற்றில் உள்ள HTML/ஸ்கிரிப்ட் குறியீடுகளைச் செயலிழக்கச் செய்யும்
+        function esc(value) {
+            return String(value ?? '').replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        const STATUSES = ['Pending', 'Dispatched', 'Delivered', 'Cancelled'];
+
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
+
             if (tab === 'orders') {
                 document.querySelectorAll('.tab-btn')[0].classList.add('active');
                 document.getElementById('orders-tab').classList.add('active');
@@ -245,51 +254,52 @@
                         return;
                     }
 
-                    list.innerHTML = '';
-                    orders.forEach(o => {
+                    list.innerHTML = orders.map(o => {
                         const date = new Date(o.createdAt).toLocaleString('ta-IN', { dateStyle: 'medium', timeStyle: 'short' });
-                        let itemsHtml = '';
-                        (o.items || []).forEach(it => {
-                            itemsHtml += `<div><span>${it.name} (${it.weight}) x ${it.qty}</span> <strong>₹${it.price * it.qty}</strong></div>`;
-                        });
+                        const status = STATUSES.includes(o.status) ? o.status : 'Pending';
+                        const phoneDigits = String(o.phone || '').replace(/\D/g, '').slice(-10);
 
-                        list.innerHTML += `
+                        const itemsHtml = (o.items || []).map(it =>
+                            `<div><span>${esc(it.name)} (${esc(it.weight)}) x ${esc(it.qty)}</span> <strong>₹${esc(it.price * it.qty)}</strong></div>`
+                        ).join('');
+
+                        return `
                             <div class="order-card">
                                 <div class="order-header">
                                     <div>
-                                        <span class="order-id">#${o._id.slice(-6).toUpperCase()}</span>
-                                        <span class="order-date"> • ${date}</span>
+                                        <span class="order-id">#${esc(o._id.slice(-6).toUpperCase())}</span>
+                                        <span class="order-date"> • ${esc(date)}</span>
                                     </div>
-                                    <span style="font-size: 0.85rem; font-weight: 700; color: #64748b;">நிலை: ${o.status}</span>
+                                    <span style="font-size: 0.85rem; font-weight: 700; color: #64748b;">நிலை: ${esc(status)}</span>
                                 </div>
                                 <div class="order-body">
                                     <div class="customer-info">
-                                        <p>👤 <strong>${o.customerName}</strong></p>
-                                        <p>📞 <a href="tel:${o.phone}">${o.phone}</a> | <a href="https://wa.me/91${o.phone.replace(/[^0-9]/g, '')}" target="_blank">WhatsApp 💬</a></p>
-                                        <p>📍 ${o.address}</p>
+                                        <p>👤 <strong>${esc(o.customerName)}</strong></p>
+                                        <p>📞 <a href="tel:${esc(phoneDigits)}">${esc(o.phone)}</a> | <a href="https://wa.me/91${esc(phoneDigits)}" target="_blank" rel="noopener">WhatsApp 💬</a></p>
+                                        <p>📍 ${esc(o.address)}</p>
                                     </div>
                                     <div class="order-items-list">
                                         ${itemsHtml}
                                     </div>
                                     <div class="order-status-box">
-                                        <div class="order-total">₹${o.totalAmount}</div>
+                                        <div class="order-total">₹${esc(o.totalAmount)}</div>
                                         <div class="action-row">
-                                            <button class="print-btn" onclick="printInvoice('${o._id}')">🖨️ Print Slip</button>
-                                            <select class="status-select status-${o.status}" onchange="updateOrderStatus('${o._id}', this.value)">
-                                                <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
-                                                <option value="Dispatched" ${o.status === 'Dispatched' ? 'selected' : ''}>🚚 Dispatched</option>
-                                                <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>✅ Delivered</option>
-                                                <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
+                                            <button class="print-btn" onclick="printInvoice('${esc(o._id)}')">🖨️ Print Slip</button>
+                                            <select class="status-select status-${status}" onchange="updateOrderStatus('${esc(o._id)}', this.value)">
+                                                <option value="Pending" ${status === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
+                                                <option value="Dispatched" ${status === 'Dispatched' ? 'selected' : ''}>🚚 Dispatched</option>
+                                                <option value="Delivered" ${status === 'Delivered' ? 'selected' : ''}>✅ Delivered</option>
+                                                <option value="Cancelled" ${status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         `;
-                    });
+                    }).join('');
                 })
                 .catch(err => {
-                    list.innerHTML = `<div style="text-align: center; padding: 30px; color: #b91c1c; background: #fee2e2; border-radius: 12px; font-weight: 600;">⚠️ ${err.message}</div>`;
+                    list.innerHTML = `<div style="text-align: center; padding: 30px; color: #b91c1c; background: #fee2e2; border-radius: 12px; font-weight: 600;">⚠️ ${esc(err.message)}</div>`;
                 });
         }
 
@@ -299,25 +309,31 @@
             if (!o) return;
 
             const printWindow = window.open('', '_blank', 'width=750,height=750');
+            if (!printWindow) {
+                alert("Pop-up தடுக்கப்பட்டுள்ளது. தயவுசெய்து Pop-up அனுமதியுங்கள்.");
+                return;
+            }
+
+            const orderNo = esc(o._id.slice(-6).toUpperCase());
             const itemsRows = (o.items || []).map((it, idx) => `
                 <tr>
                     <td style="text-align:center;">${idx + 1}</td>
-                    <td><strong>${it.name}</strong> (${it.weight})</td>
-                    <td style="text-align:center;">${it.qty}</td>
-                    <td style="text-align:right;">₹${it.price}</td>
-                    <td style="text-align:right; font-weight:600;">₹${it.price * it.qty}</td>
+                    <td><strong>${esc(it.name)}</strong> (${esc(it.weight)})</td>
+                    <td style="text-align:center;">${esc(it.qty)}</td>
+                    <td style="text-align:right;">₹${esc(it.price)}</td>
+                    <td style="text-align:right; font-weight:600;">₹${esc(it.price * it.qty)}</td>
                 </tr>
             `).join('');
 
-            const formattedDate = new Date(o.createdAt).toLocaleDateString('ta-IN', {
+            const formattedDate = esc(new Date(o.createdAt).toLocaleDateString('ta-IN', {
                 year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-            });
+            }));
 
             printWindow.document.write(`
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>Packing Slip - #${o._id.slice(-6).toUpperCase()}</title>
+                    <title>Packing Slip - #${orderNo}</title>
                     <style>
                         body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 25px; color: #1e293b; max-width: 650px; margin: 0 auto; }
                         .slip-header { border-bottom: 2px solid #15803d; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-start; }
@@ -344,7 +360,7 @@
                         </div>
                         <div class="order-meta">
                             <h3>PACKING SLIP</h3>
-                            <p><strong>Order ID:</strong> #${o._id.slice(-6).toUpperCase()}</p>
+                            <p><strong>Order ID:</strong> #${orderNo}</p>
                             <p><strong>Date:</strong> ${formattedDate}</p>
                         </div>
                     </div>
@@ -352,9 +368,9 @@
                     <div class="address-box">
                         <h4>📦 Deliver To:</h4>
                         <p>
-                            <strong>${o.customerName}</strong><br>
-                            📞 Phone: ${o.phone}<br>
-                            📍 Address: ${o.address}
+                            <strong>${esc(o.customerName)}</strong><br>
+                            📞 Phone: ${esc(o.phone)}<br>
+                            📍 Address: ${esc(o.address)}
                         </p>
                     </div>
 
@@ -372,7 +388,7 @@
                             ${itemsRows}
                             <tr class="total-row">
                                 <td colspan="4" style="text-align:right;">Grand Total:</td>
-                                <td style="text-align:right; color: #15803d;">₹${o.totalAmount}</td>
+                                <td style="text-align:right; color: #15803d;">₹${esc(o.totalAmount)}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -398,45 +414,46 @@
             })
             .then(res => res.json())
             .then(data => {
-                if(data.success) {
+                if (data.success) {
                     loadOrders();
                 } else {
                     alert("நிலையை மாற்றுவதில் பிழை!");
                 }
-            });
+            })
+            .catch(() => alert("நிலையை மாற்றுவதில் பிழை!"));
         }
 
         // --- 2. PRODUCTS LOGIC ---
         function loadProducts() {
             fetch('/products').then(res => res.json()).then(products => {
+                if (!Array.isArray(products)) return;
                 loadedProducts = products;
                 const list = document.getElementById('product-list');
-                list.innerHTML = '';
-                products.forEach(p => {
+                list.innerHTML = products.map(p => {
                     const imgSrc = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=200';
                     let priceText = '';
                     if (p.weights && p.weights.length > 0) {
-                        priceText = p.weights.map(w => `${w.weight}: ₹${w.price}`).join(' | ');
+                        priceText = p.weights.map(w => `${esc(w.weight)}: ₹${esc(w.price)}`).join(' | ');
                     } else if (p.price) {
-                        priceText = `₹${p.price}`;
+                        priceText = `₹${esc(p.price)}`;
                     } else {
                         priceText = 'விலை குறிப்பிடப்படவில்லை';
                     }
 
-                    list.innerHTML += `
+                    return `
                         <div class="card">
-                            <img src="${imgSrc}" alt="${p.name}">
+                            <img src="${esc(imgSrc)}" alt="${esc(p.name)}">
                             <div class="card-info">
-                                <h3>${p.name}</h3>
-                                <p><strong>விலை:</strong> ${priceText} <br> <strong>ஸ்டாக்:</strong> ${p.stock} &nbsp;|&nbsp; <strong>வகை:</strong> ${p.category}</p>
+                                <h3>${esc(p.name)}</h3>
+                                <p><strong>விலை:</strong> ${priceText} <br> <strong>ஸ்டாக்:</strong> ${esc(p.stock)} &nbsp;|&nbsp; <strong>வகை:</strong> ${esc(p.category)}</p>
                             </div>
                             <div class="card-actions">
-                                <button class="edit-btn" onclick="openEditModal('${p._id}')">✏️ Edit</button>
-                                <button class="del-btn" onclick="deleteProduct('${p._id}')">🗑️ Delete</button>
+                                <button class="edit-btn" onclick="openEditModal('${esc(p._id)}')">✏️ Edit</button>
+                                <button class="del-btn" onclick="deleteProduct('${esc(p._id)}')">🗑️ Delete</button>
                             </div>
                         </div>
                     `;
-                });
+                }).join('');
             });
         }
 
@@ -484,12 +501,20 @@
                     price: weights.length > 0 ? weights[0].price : 0,
                     weights: weights
                 })
-            }).then(() => { closeModal(); loadProducts(); });
+            }).then(res => {
+                if (!res.ok) {
+                    alert("சேமிப்பதில் பிழை! மீண்டும் உள்நுழைந்து முயற்சிக்கவும்.");
+                    return;
+                }
+                closeModal();
+                loadProducts();
+            }).catch(() => alert("சேமிப்பதில் பிழை!"));
         }
 
         function deleteProduct(id) {
-            if(confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
-                fetch('/delete-product/' + id).then(() => loadProducts());
+            if (confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) {
+                fetch('/delete-product/' + id, { method: 'DELETE' })
+                    .then(() => loadProducts());
             }
         }
 
@@ -534,16 +559,21 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(products)
                 }).then(res => res.json()).then(data => {
-                    alert(`வெற்றி! ${data.count} பொருட்கள் சேர்க்கப்பட்டன! 🎉`);
-                    loadProducts();
-                });
+                    if (data.success) {
+                        alert(`வெற்றி! ${data.count} பொருட்கள் சேர்க்கப்பட்டன! 🎉`);
+                        loadProducts();
+                    } else {
+                        alert("பதிவேற்றத்தில் பிழை: " + (data.error || "தெரியாத பிழை"));
+                    }
+                }).catch(() => alert("பதிவேற்றத்தில் பிழை!"));
             };
             reader.readAsText(file);
         }
 
         function cleanUndefined() {
             if (confirm("undefined பொருட்களை நீக்க வேண்டுமா?")) {
-                fetch('/delete-undefined').then(() => loadProducts());
+                fetch('/delete-undefined', { method: 'DELETE' })
+                    .then(() => loadProducts());
             }
         }
 

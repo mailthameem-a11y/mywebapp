@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Nuts - Nature's Finest, Delivered Fresh</title>
-    
+    <title>Royal Nuts - Premium Almonds, Cashews & Dates | Tamil Nadu</title>
+    <meta name="description" content="Royal Nuts - premium almonds, cashews, dates and dry fruits, packed fresh and delivered across Tamil Nadu. Order easily on WhatsApp.">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -130,7 +131,7 @@
             justify-content: center;
             text-align: center;
             padding: 80px 20px;
-            background: linear-gradient(rgba(18, 12, 8, 0.58), rgba(18, 12, 8, 0.65)), 
+            background: linear-gradient(rgba(18, 12, 8, 0.58), rgba(18, 12, 8, 0.65)),
                         url('https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=1600') center/cover no-repeat;
             color: var(--white);
         }
@@ -265,6 +266,71 @@
             margin: 0 auto 30px;
         }
 
+        /* 4b. Shipping / Returns / FAQ */
+        .info-section {
+            background: var(--white);
+            padding: 70px 20px;
+        }
+
+        .info-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .info-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            color: #381e10;
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .info-card {
+            background: var(--bg-cream);
+            border: 1px solid #efe6d8;
+            border-radius: 14px;
+            padding: 24px;
+            scroll-margin-top: 90px;
+        }
+
+        .info-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+
+        .info-card p {
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: var(--text-muted);
+        }
+
+        .info-card details {
+            border-top: 1px solid #e8dccb;
+            padding: 10px 0;
+        }
+
+        .info-card details:first-of-type {
+            border-top: none;
+        }
+
+        .info-card summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .info-card details p {
+            margin-top: 8px;
+        }
+
         /* 5. Footer */
         footer {
             background-color: var(--footer-bg);
@@ -333,41 +399,20 @@
             margin-bottom: 14px;
         }
 
-        .newsletter-form {
-            display: flex;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .newsletter-form input {
-            flex: 1;
-            padding: 12px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-            font-family: inherit;
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        .newsletter-form input::placeholder {
-            color: #a89486;
-        }
-
-        .newsletter-form button {
-            background: var(--primary);
-            color: white;
-            border: none;
+        .wa-offers-btn {
+            display: inline-block;
+            background: #25d366;
+            color: #ffffff;
+            text-decoration: none;
             padding: 12px 18px;
             border-radius: 8px;
             font-weight: 700;
-            cursor: pointer;
+            font-size: 0.92rem;
             transition: var(--transition);
         }
 
-        .newsletter-form button:hover {
-            background: var(--primary-dark);
+        .wa-offers-btn:hover {
+            background: #1eb956;
         }
 
         .copyright-bar {
@@ -448,17 +493,18 @@
                 padding: 60px 18px;
             }
 
+            .info-section {
+                padding: 50px 18px;
+            }
+
             .footer-container {
                 grid-template-columns: 1fr; /* மொபைலில் அனைத்து ஃபூட்டர் பகுதிகளும் ஒன்றன் கீழ் ஒன்றாக அமையும் */
                 gap: 30px;
             }
 
-            .newsletter-form {
-                flex-direction: column;
-            }
-
-            .newsletter-form button {
-                width: 100%;
+            .wa-offers-btn {
+                display: block;
+                text-align: center;
             }
         }
     </style>
@@ -479,7 +525,7 @@
             <ul class="nav-menu" id="navMenu">
                 <li><a href="/">Home</a></li>
                 <li><a href="/shop">Shop</a></li>
-                <li><a href="#about">About Us</a></li>
+                <li><a href="#philosophy">About Us</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="/shop" class="nav-cta">🛒 Order Now</a></li>
             </ul>
@@ -537,6 +583,39 @@
         </div>
     </section>
 
+    <!-- 4b. Shipping / Returns / FAQ -->
+    <!-- ⚠️ கீழுள்ள வாசகங்களை உங்கள் உண்மையான விதிமுறைகளுக்கு ஏற்ப மாற்றவும் (கட்டணம், நாட்கள், திருப்பி அனுப்பும் காலம் போன்றவை) -->
+    <section class="info-section">
+        <div class="info-container">
+            <h2 class="info-heading">Shipping, Returns & FAQ</h2>
+            <div class="info-grid">
+                <div class="info-card" id="shipping">
+                    <h3>🚚 Shipping</h3>
+                    <p>We deliver across Tamil Nadu. After you place your order, we confirm it on WhatsApp and share the delivery charge and expected delivery time for your pincode.</p>
+                </div>
+                <div class="info-card" id="returns">
+                    <h3>↩️ Returns</h3>
+                    <p>If your pack arrives damaged or is not what you ordered, message us on WhatsApp with a photo as soon as you receive it and we will help resolve it.</p>
+                </div>
+                <div class="info-card" id="faq">
+                    <h3>❓ FAQ</h3>
+                    <details>
+                        <summary>How do I place an order?</summary>
+                        <p>Open the Shop, add items to your cart, enter your delivery details and tap "Send WhatsApp Order". We will confirm it on WhatsApp.</p>
+                    </details>
+                    <details>
+                        <summary>Can I choose the pack size?</summary>
+                        <p>Yes. Most products come in more than one weight. Pick the size you like on the product card before adding it to the cart.</p>
+                    </details>
+                    <details>
+                        <summary>How do I contact you?</summary>
+                        <p>Tap "Contact Us" in the footer to chat with us directly on WhatsApp.</p>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 5. Footer -->
     <footer id="contact">
         <div class="footer-container">
@@ -552,7 +631,7 @@
                 <ul>
                     <li><a href="/shop">Shop</a></li>
                     <li><a href="#philosophy">About Us</a></li>
-                    <li><a href="/shop">FAQ</a></li>
+                    <li><a href="#faq">FAQ</a></li>
                 </ul>
             </div>
 
@@ -560,25 +639,24 @@
             <div class="footer-col">
                 <h4>SUPPORT</h4>
                 <ul>
-                    <li><a href="https://wa.me/919876543210" target="_blank">Contact Us</a></li>
-                    <li><a href="/shop">Shipping</a></li>
-                    <li><a href="/shop">Returns</a></li>
+                    <li><a href="https://wa.me/918637400923" target="_blank" rel="noopener">Contact Us</a></li>
+                    <li><a href="#shipping">Shipping</a></li>
+                    <li><a href="#returns">Returns</a></li>
                 </ul>
             </div>
 
-            <!-- Newsletter -->
+            <!-- Offers on WhatsApp -->
             <div class="footer-col">
-                <h4>NEWSLETTER</h4>
-                <p class="newsletter-desc">Get updates on seasonal arrivals and exclusive festive offers.</p>
-                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('நன்றி! எங்கள் சலுகை விவரங்கள் விரைவில் உங்களுக்கு வரும்.');">
-                    <input type="email" placeholder="Your email..." required>
-                    <button type="submit">Join</button>
-                </form>
+                <h4>OFFERS</h4>
+                <p class="newsletter-desc">Get updates on seasonal arrivals and exclusive festive offers on WhatsApp.</p>
+                <a class="wa-offers-btn" target="_blank" rel="noopener"
+                   href="https://wa.me/918637400923?text=%E0%AE%B5%E0%AE%A3%E0%AE%95%E0%AF%8D%E0%AE%95%E0%AE%AE%E0%AF%8D!%20Royal%20Nuts%20%E0%AE%9A%E0%AE%B2%E0%AF%81%E0%AE%95%E0%AF%88%20%E0%AE%B5%E0%AE%BF%E0%AE%B5%E0%AE%B0%E0%AE%99%E0%AF%8D%E0%AE%95%E0%AE%B3%E0%AF%88%20WhatsApp-%E0%AE%B2%E0%AF%8D%20%E0%AE%AA%E0%AF%86%E0%AE%B1%20%E0%AE%B5%E0%AE%BF%E0%AE%B0%E0%AF%81%E0%AE%AA%E0%AF%8D%E0%AE%AA%E0%AE%AE%E0%AF%8D.">💬 Get offers on WhatsApp</a>
             </div>
         </div>
 
         <div class="copyright-bar">
             © 2026 Royal Nuts. All rights reserved.
+            <!-- FSSAI உரிம எண் இருந்தால் இங்கே சேர்க்கவும்: FSSAI Lic. No: XXXXXXXXXXXXXX -->
         </div>
     </footer>
 

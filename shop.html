@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Royal Nuts - பிரீமியம் உலர் பழங்கள் & நட்ஸ்</title>
+    <meta name="description" content="Royal Nuts - பாதாம், முந்திரி, பேரீச்சை உள்ளிட்ட பிரீமியம் உலர் பழங்கள் மற்றும் நட்ஸ். WhatsApp மூலம் எளிதாக ஆர்டர் செய்யுங்கள்.">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -34,7 +35,7 @@
 
         /* Search & Filter Section */
         .filter-section { max-width: 800px; margin: 0 auto 30px; display: flex; flex-direction: column; gap: 16px; }
-        
+
         .search-wrapper { position: relative; width: 100%; }
         .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.1rem; }
         .search-input { width: 100%; padding: 13px 42px 13px 44px; border: 1.5px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 0.95rem; background: var(--white); outline: none; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
@@ -43,7 +44,7 @@
 
         .category-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; -ms-overflow-style: none; justify-content: center; flex-wrap: wrap; }
         .category-pills::-webkit-scrollbar { display: none; }
-        
+
         .pill-btn { background: var(--white); border: 1px solid var(--border); color: var(--text-muted); padding: 7px 16px; border-radius: 20px; font-size: 0.88rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .pill-btn:hover { border-color: var(--primary); color: var(--primary); }
         .pill-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); box-shadow: 0 2px 8px rgba(21, 128, 61, 0.25); }
@@ -56,9 +57,9 @@
         .card-body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
         .category-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
         .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; color: var(--text-dark); }
-        
+
         .weight-select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; margin-bottom: 15px; outline: none; background: #fdfdfd; }
-        
+
         .card-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
         .price { font-size: 1.25rem; font-weight: 800; color: var(--primary); }
         .add-btn { background: var(--primary); color: white; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
@@ -66,6 +67,7 @@
 
         .empty-state { text-align: center; grid-column: 1/-1; padding: 50px 20px; color: var(--text-muted); }
         .empty-state span { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+        .retry-btn { margin-top: 12px; background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: inherit; }
 
         /* Cart Drawer */
         .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; backdrop-filter: blur(2px); }
@@ -131,7 +133,7 @@
 
         <!-- Products Grid -->
         <div class="grid" id="product-grid">
-            <p style="text-align: center; grid-column: 1/-1;">பொருட்கள் லோட் ஆகிறது...</p>
+            <p style="text-align: center; grid-column: 1/-1;">பொருட்கள் லோட் ஆகிறது... (முதல் முறை சில வினாடிகள் ஆகலாம்)</p>
         </div>
     </div>
 
@@ -164,44 +166,90 @@
             <input type="text" id="cust-name" placeholder="உங்கள் பெயர்" required>
 
             <label>மொபைல் எண்</label>
-            <input type="tel" id="cust-phone" placeholder="எ.கா: 9876543210" required>
+            <input type="tel" id="cust-phone" placeholder="எ.கா: 9876543210" inputmode="numeric" required>
 
             <label>முழு டெலிவரி முகவரி (Address with Pincode)</label>
             <textarea id="cust-address" rows="3" placeholder="கதவு எண், தெரு, ஊர், பின்கோடு..." required></textarea>
 
             <div class="modal-btns">
-                <button class="cancel-btn" onclick="closeCheckoutModal()">Cancel</button>
-                <button class="confirm-btn" onclick="sendWhatsAppOrder()">📲 Send WhatsApp Order</button>
+                <button class="cancel-btn" onclick="closeCheckoutModal()">ரத்து செய் (Cancel)</button>
+                <button class="confirm-btn" onclick="sendWhatsAppOrder()">📲 வாட்ஸ்அப்பில் அனுப்பு</button>
             </div>
         </div>
     </div>
 
     <script>
         // 🚨 உங்கள் வாட்ஸ்அப் எண் (91 உடன்)
-        const ADMIN_WHATSAPP_NUMBER = "918637400923"; 
+        const ADMIN_WHATSAPP_NUMBER = "918637400923";
 
         let products = [];
-        let cart = JSON.parse(localStorage.getItem('royal_cart')) || [];
+        let cart = [];
+        try {
+            cart = JSON.parse(localStorage.getItem('royal_cart')) || [];
+            if (!Array.isArray(cart)) cart = [];
+        } catch (e) {
+            cart = [];
+        }
         let currentCategory = 'All';
         let searchQuery = '';
 
+        // பாதுகாப்பாக HTML-ல் காட்ட (பெயர், வகை போன்றவற்றில் உள்ள சிறப்பு எழுத்துகளை மாற்றும்)
+        function esc(value) {
+            return String(value ?? '').replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
         // தயாரிப்புகளை சர்வரிலிருந்து எடுத்தல்
         fetch('/products')
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('server error');
+                return res.json();
+            })
             .then(data => {
+                if (!Array.isArray(data)) throw new Error('bad data');
                 products = data;
+                syncCartWithProducts();
                 setupCategoryPills();
                 filterAndRender();
                 updateCartUI();
+            })
+            .catch(() => {
+                document.getElementById('product-grid').innerHTML = `
+                    <div class="empty-state">
+                        <span>⚠️</span>
+                        <h3>பொருட்களை ஏற்ற முடியவில்லை</h3>
+                        <p>இணைய இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.</p>
+                        <button class="retry-btn" onclick="location.reload()">🔄 மீண்டும் முயற்சி</button>
+                    </div>
+                `;
             });
+
+        // கார்ட்டில் உள்ள பழைய/நீக்கப்பட்ட பொருட்களை சரிசெய்தல், விலைகளைப் புதுப்பித்தல்
+        function syncCartWithProducts() {
+            cart = cart.filter(item => {
+                const p = products.find(x => x._id === item.id);
+                if (!p) return false;
+                if (p.weights && p.weights.length > 0) {
+                    const w = p.weights.find(x => x.weight === item.weight);
+                    if (!w) return false;
+                    item.price = w.price;
+                } else {
+                    item.price = p.price || 0;
+                }
+                item.name = p.name;
+                return true;
+            });
+            saveCart();
+        }
 
         // டேட்டாபேஸில் உள்ள வகைகளை எடுத்து ஃபில்டர் பட்டன்களை உருவாக்குதல்
         function setupCategoryPills() {
             const container = document.getElementById('category-pills');
-            
+
             // தனித்துவமான வகைகளைப் பிரித்தெடுத்தல்
             const categories = ['All', ...new Set(products.map(p => p.category ? p.category.trim() : 'Other').filter(Boolean))];
-            
+
             container.innerHTML = '';
             categories.forEach(cat => {
                 const btn = document.createElement('button');
@@ -250,7 +298,6 @@
 
         function renderProducts(items) {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
 
             if (items.length === 0) {
                 grid.innerHTML = `
@@ -263,36 +310,37 @@
                 return;
             }
 
-            items.forEach(p => {
+            grid.innerHTML = items.map(p => {
                 const img = p.image || 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=500';
-                
+                const id = esc(p._id);
+
                 let weightOptionsHtml = '';
                 let defaultPrice = p.price || 0;
 
                 if (p.weights && p.weights.length > 0) {
                     defaultPrice = p.weights[0].price;
-                    weightOptionsHtml = `<select class="weight-select" id="weight-${p._id}" onchange="updateCardPrice('${p._id}')">`;
+                    weightOptionsHtml = `<select class="weight-select" id="weight-${id}" onchange="updateCardPrice('${id}')">`;
                     p.weights.forEach(w => {
-                        weightOptionsHtml += `<option value="${w.price}" data-weight="${w.weight}">${w.weight} - ₹${w.price}</option>`;
+                        weightOptionsHtml += `<option value="${esc(w.price)}" data-weight="${esc(w.weight)}">${esc(w.weight)} - ₹${esc(w.price)}</option>`;
                     });
                     weightOptionsHtml += `</select>`;
                 }
 
-                grid.innerHTML += `
+                return `
                     <div class="card">
-                        <img src="${img}" alt="${p.name}">
+                        <img src="${esc(img)}" alt="${esc(p.name)}" loading="lazy">
                         <div class="card-body">
-                            <span class="category-tag">${p.category || 'Dry Fruits'}</span>
-                            <h3 class="card-title">${p.name}</h3>
+                            <span class="category-tag">${esc(p.category || 'Dry Fruits')}</span>
+                            <h3 class="card-title">${esc(p.name)}</h3>
                             ${weightOptionsHtml}
                             <div class="card-footer">
-                                <span class="price" id="price-display-${p._id}">₹${defaultPrice}</span>
-                                <button class="add-btn" onclick="addToCart('${p._id}', '${p.name}')">+ Add</button>
+                                <span class="price" id="price-display-${id}">₹${esc(defaultPrice)}</span>
+                                <button class="add-btn" onclick="addToCart('${id}')">+ Add</button>
                             </div>
                         </div>
                     </div>
                 `;
-            });
+            }).join('');
         }
 
         function updateCardPrice(id) {
@@ -302,7 +350,10 @@
             }
         }
 
-        function addToCart(id, name) {
+        function addToCart(id) {
+            const p = products.find(item => item._id === id);
+            if (!p) return;
+
             const select = document.getElementById(`weight-${id}`);
             let price = 0;
             let weight = 'Standard';
@@ -311,7 +362,6 @@
                 price = Number(select.value);
                 weight = select.options[select.selectedIndex].getAttribute('data-weight');
             } else {
-                const p = products.find(item => item._id === id);
                 price = p.price || 0;
             }
 
@@ -324,7 +374,7 @@
                 cart.push({
                     cartItemId: cartItemId,
                     id: id,
-                    name: name,
+                    name: p.name,
                     weight: weight,
                     price: price,
                     qty: 1
@@ -336,20 +386,23 @@
             toggleCart(true);
         }
 
-        function updateQty(cartItemId, delta) {
-            const item = cart.find(i => i.cartItemId === cartItemId);
+        // index = cart அணியில் பொருளின் இடம்
+        function updateQty(index, delta) {
+            const item = cart[index];
             if (!item) return;
 
             item.qty += delta;
             if (item.qty <= 0) {
-                cart = cart.filter(i => i.cartItemId !== cartItemId);
+                cart.splice(index, 1);
             }
             saveCart();
             updateCartUI();
         }
 
         function saveCart() {
-            localStorage.setItem('royal_cart', JSON.stringify(cart));
+            try {
+                localStorage.setItem('royal_cart', JSON.stringify(cart));
+            } catch (e) { /* private mode போன்ற நேரங்களில் புறக்கணிக்கவும் */ }
         }
 
         function updateCartUI() {
@@ -367,26 +420,25 @@
             }
 
             let total = 0;
-            itemsEl.innerHTML = '';
-            cart.forEach(item => {
+            itemsEl.innerHTML = cart.map((item, index) => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
 
-                itemsEl.innerHTML += `
+                return `
                     <div class="cart-item">
                         <div>
-                            <h4>${item.name}</h4>
-                            <p>${item.weight} • ₹${item.price}</p>
+                            <h4>${esc(item.name)}</h4>
+                            <p>${esc(item.weight)} • ₹${esc(item.price)}</p>
                             <div class="cart-item-qty">
-                                <button class="qty-btn" onclick="updateQty('${item.cartItemId}', -1)">-</button>
+                                <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
                                 <span>${item.qty}</span>
-                                <button class="qty-btn" onclick="updateQty('${item.cartItemId}', 1)">+</button>
+                                <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
                             </div>
                         </div>
                         <div style="font-weight: 700; color: var(--primary);">₹${subtotal}</div>
                     </div>
                 `;
-            });
+            }).join('');
 
             totalEl.innerText = `₹${total}`;
         }
@@ -408,13 +460,26 @@
         function closeCheckoutModal() {
             document.getElementById('checkout-modal').style.display = 'none';
         }
-function sendWhatsAppOrder() {
+
+        function sendWhatsAppOrder() {
             const name = document.getElementById('cust-name').value.trim();
-            const phone = document.getElementById('cust-phone').value.trim();
+            const rawPhone = document.getElementById('cust-phone').value.trim();
             const address = document.getElementById('cust-address').value.trim();
 
-            if (!name || !phone || !address) {
+            if (!name || !rawPhone || !address) {
                 alert("தயவுசெய்து அனைத்து விவரங்களையும் நிரப்பவும்!");
+                return;
+            }
+
+            // +91 அல்லது இடைவெளி இருந்தாலும் கடைசி 10 இலக்கங்களை எடுத்துக்கொள்ளும்
+            const phone = rawPhone.replace(/\D/g, '').slice(-10);
+            if (phone.length !== 10) {
+                alert("தயவுசெய்து சரியான 10 இலக்க மொபைல் எண்ணை உள்ளிடவும்!");
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert("கார்ட்டில் எந்தப் பொருட்களும் இல்லை!");
                 return;
             }
 
@@ -426,7 +491,7 @@ function sendWhatsAppOrder() {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
                 itemsText += `${index + 1}. *${item.name}* (${item.weight}) x ${item.qty} = ₹${subtotal}\n`;
-                
+
                 orderItems.push({
                     name: item.name,
                     weight: item.weight,
@@ -435,21 +500,21 @@ function sendWhatsAppOrder() {
                 });
             });
 
-            // 1. ஆர்டரை MongoDB டேட்டாபேஸில் சேமித்தல்
+            // 1. ஆர்டரை MongoDB டேட்டாபேஸில் சேமித்தல் (சர்வர் விலையை மீண்டும் சரிபார்க்கும்)
             fetch('/api/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                keepalive: true,
                 body: JSON.stringify({
                     customerName: name,
                     phone: phone,
                     address: address,
-                    items: orderItems,
-                    totalAmount: total
+                    items: orderItems
                 })
             }).catch(err => console.error("ஆர்டர் சேமிப்பில் பிழை:", err));
 
             // 2. வாட்ஸ்அப் மெசேஜ் உருவாக்குதல்
-            const message = 
+            const message =
 `🛍️ *புதிய ஆர்டர் - Royal Nuts*
 --------------------------------
 👤 *வாடிக்கையாளர்:* ${name}

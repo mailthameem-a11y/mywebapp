@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Admin Login - Royal Nuts</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -32,7 +33,7 @@
         }
         h2 { color: #0f172a; font-size: 1.5rem; margin-bottom: 6px; }
         p { color: #64748b; font-size: 0.9rem; margin-bottom: 25px; }
-        
+
         .form-group { text-align: left; margin-bottom: 18px; }
         label { display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 6px; }
         input {
@@ -45,7 +46,7 @@
             transition: 0.2s;
         }
         input:focus { border-color: #15803d; box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15); }
-        
+
         .error-msg {
             background: #fee2e2;
             color: #b91c1c;
@@ -55,7 +56,7 @@
             margin-bottom: 16px;
             display: none;
         }
-        
+
         button {
             width: 100%;
             background: #15803d;
@@ -70,6 +71,7 @@
             margin-top: 5px;
         }
         button:hover { background: #166534; }
+        button:disabled { opacity: 0.7; cursor: not-allowed; }
         .back-link { display: inline-block; margin-top: 18px; font-size: 0.85rem; color: #64748b; text-decoration: none; }
         .back-link:hover { color: #0f172a; }
     </style>
@@ -86,11 +88,11 @@
         <form onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label>பயனர் பெயர் (Username)</label>
-                <input type="text" id="username" placeholder="admin" required>
+                <input type="text" id="username" placeholder="பயனர் பெயர்" autocomplete="username" required>
             </div>
             <div class="form-group">
                 <label>கடவுச்சொல் (Password)</label>
-                <input type="password" id="password" placeholder="••••••••" required>
+                <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
             </div>
             <button type="submit" id="loginBtn">உள்நுழை (Login)</button>
         </form>
@@ -107,23 +109,30 @@
             btn.disabled = true;
             errorMsg.style.display = 'none';
 
-            const res = await fetch('/admin/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: document.getElementById('username').value.trim(),
-                    password: document.getElementById('password').value.trim()
-                })
-            });
+            try {
+                const res = await fetch('/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('username').value.trim(),
+                        password: document.getElementById('password').value
+                    })
+                });
 
-            const data = await res.json();
-            if (data.success) {
-                window.location.href = '/admin';
-            } else {
-                errorMsg.style.display = 'block';
-                btn.innerText = 'உள்நுழை (Login)';
-                btn.disabled = false;
+                const data = await res.json();
+                if (data.success) {
+                    window.location.href = '/admin';
+                    return;
+                }
+                // சர்வர் அனுப்பும் செய்தியை (எ.கா: அதிக முயற்சிகள்) காட்டும்
+                errorMsg.innerText = data.message || 'பயனர் பெயர் அல்லது கடவுச்சொல் தவறானது!';
+            } catch (err) {
+                errorMsg.innerText = 'சர்வருடன் இணைக்க முடியவில்லை. சில வினாடிகள் கழித்து மீண்டும் முயற்சிக்கவும்.';
             }
+
+            errorMsg.style.display = 'block';
+            btn.innerText = 'உள்நுழை (Login)';
+            btn.disabled = false;
         }
     </script>
 </body>
