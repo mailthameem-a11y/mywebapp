@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Royal Nuts - பிரீமியம் உலர் பழங்கள் & நட்ஸ்</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🥜%3C/text%3E%3C/svg%3E">
     <meta name="description" content="Royal Nuts - பாதாம், முந்திரி, பேரீச்சை உள்ளிட்ட பிரீமியம் உலர் பழங்கள் மற்றும் நட்ஸ். WhatsApp மூலம் எளிதாக ஆர்டர் செய்யுங்கள்.">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     <style>
@@ -52,7 +53,7 @@
         /* Product Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
         .card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
+        @media (hover: hover) { .card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); } }
         .card img { width: 100%; height: 200px; object-fit: cover; }
         .card-body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
         .category-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
@@ -97,6 +98,31 @@
         .cancel-btn { background: #f3ebdd; color: var(--text-dark); }
         .confirm-btn { background: #25d366; color: white; }
 
+        /* Compact product cards */
+        .grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+        .card { border-radius: 14px; }
+        .card img { height: auto; aspect-ratio: 4 / 3; }
+        .card-body { padding: 12px; }
+        .category-tag { font-size: 0.66rem; margin-bottom: 4px; }
+        .card-title { font-size: 0.95rem; margin-bottom: 8px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .weight-select { padding: 6px 8px; font-size: 0.8rem; margin-bottom: 10px; }
+        .price { font-size: 1.05rem; }
+        .add-btn { padding: 7px 13px; font-size: 0.85rem; }
+        .add-btn.added { background: #25a244; }
+
+        /* மிதக்கும் கூடைப் பட்டி (பொருள் சேர்த்தவுடன் கூடை திறக்காது; இந்தப் பட்டி மட்டும் தோன்றும்) */
+        .cart-bar { display: none; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60; background: var(--primary); color: #fff; border-radius: 14px; padding: 13px 18px; justify-content: space-between; align-items: center; font-weight: 700; font-size: 0.95rem; box-shadow: 0 8px 24px rgba(43, 24, 16, 0.3); cursor: pointer; max-width: 640px; margin: 0 auto; }
+        body.has-cart-bar { padding-bottom: 84px; }
+
+        @media (max-width: 600px) {
+            .container { padding: 0 12px; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .card-body { padding: 10px; }
+            .card-title { font-size: 0.9rem; }
+            .price { font-size: 1rem; }
+            .add-btn { padding: 7px 10px; }
+        }
+
         /* Mobile specific adjustments */
         @media (max-width: 600px) {
             .category-pills { justify-content: flex-start; }
@@ -135,6 +161,12 @@
         <div class="grid" id="product-grid">
             <p style="text-align: center; grid-column: 1/-1;">பொருட்கள் லோட் ஆகிறது... (முதல் முறை சில வினாடிகள் ஆகலாம்)</p>
         </div>
+    </div>
+
+    <!-- Floating cart bar -->
+    <div class="cart-bar" id="cart-bar" onclick="toggleCart(true)">
+        <span id="cart-bar-text"></span>
+        <span>கூடையைப் பார்க்க →</span>
     </div>
 
     <!-- Cart Drawer -->
@@ -340,7 +372,7 @@
                             ${weightOptionsHtml}
                             <div class="card-footer">
                                 <span class="price" id="price-display-${id}">₹${esc(defaultPrice)}</span>
-                                <button class="add-btn" onclick="addToCart('${id}')">+ Add</button>
+                                <button class="add-btn" onclick="addToCart('${id}', this)">+ Add</button>
                             </div>
                         </div>
                     </div>
@@ -355,7 +387,7 @@
             }
         }
 
-        function addToCart(id) {
+        function addToCart(id, btn) {
             const p = products.find(item => item._id === id);
             if (!p) return;
 
@@ -388,7 +420,16 @@
 
             saveCart();
             updateCartUI();
-            toggleCart(true);
+
+            // கூடை தானாகத் திறக்காது; பொத்தானில் சிறிய உறுதிப்படுத்தல் மட்டும்
+            if (btn) {
+                btn.textContent = '✓ Added';
+                btn.classList.add('added');
+                setTimeout(() => {
+                    btn.textContent = '+ Add';
+                    btn.classList.remove('added');
+                }, 900);
+            }
         }
 
         // index = cart அணியில் பொருளின் இடம்
@@ -410,6 +451,18 @@
             } catch (e) { /* private mode போன்ற நேரங்களில் புறக்கணிக்கவும் */ }
         }
 
+        function updateCartBar(count, total) {
+            const bar = document.getElementById('cart-bar');
+            if (count > 0) {
+                document.getElementById('cart-bar-text').innerText = `🛒 ${count} பொருட்கள் • ₹${total}`;
+                bar.style.display = 'flex';
+                document.body.classList.add('has-cart-bar');
+            } else {
+                bar.style.display = 'none';
+                document.body.classList.remove('has-cart-bar');
+            }
+        }
+
         function updateCartUI() {
             const countEl = document.getElementById('cart-count');
             const itemsEl = document.getElementById('cart-items');
@@ -421,6 +474,7 @@
             if (cart.length === 0) {
                 itemsEl.innerHTML = `<p style="color: var(--text-muted); text-align: center; margin-top: 40px;">கார்ட் காலியாக உள்ளது.</p>`;
                 totalEl.innerText = '₹0';
+                updateCartBar(0, 0);
                 return;
             }
 
@@ -446,6 +500,7 @@
             }).join('');
 
             totalEl.innerText = `₹${total}`;
+            updateCartBar(totalCount, total);
         }
 
         function toggleCart(show) {

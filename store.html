@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Royal Nuts - Premium Almonds, Cashews & Dates | Tamil Nadu</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🥜%3C/text%3E%3C/svg%3E">
     <meta name="description" content="Royal Nuts - premium almonds, cashews, dates and dry fruits, packed fresh and delivered across Tamil Nadu. Order easily on WhatsApp.">
 
     <!-- Google Fonts -->
@@ -327,7 +328,7 @@
 
         .cat-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 22px;
         }
         .cat-card {
@@ -352,31 +353,6 @@
         .cat-info h3 { font-family: 'Playfair Display', serif; font-size: 1.35rem; }
         .cat-info span { font-size: 0.85rem; color: #f1dfc3; }
 
-        .prod-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 24px;
-        }
-        .prod-card {
-            background: #fff;
-            border: 1px solid #eadfce;
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.25s, box-shadow 0.25s;
-        }
-        .prod-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(43, 24, 16, 0.1); }
-        .prod-card img { width: 100%; height: 210px; object-fit: cover; }
-        .prod-body { padding: 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-        .prod-cat { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #9a6a14; }
-        .prod-name { font-size: 1.05rem; font-weight: 700; color: #2b1810; }
-        .prod-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; }
-        .prod-price { font-weight: 800; color: var(--primary); font-size: 1.15rem; }
-        .prod-cta { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
-        .section-link { text-align: center; margin-top: 32px; }
 
         /* 4b. Shipping / Returns / FAQ */
         .info-section {
@@ -613,8 +589,28 @@
                 padding: 50px 18px;
             }
 
+            .cat-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
             .cat-card {
-                height: 220px;
+                height: 170px;
+                border-radius: 14px;
+            }
+
+            .cat-info {
+                left: 12px;
+                right: 12px;
+                bottom: 12px;
+            }
+
+            .cat-info h3 {
+                font-size: 1.05rem;
+            }
+
+            .cat-info span {
+                font-size: 0.75rem;
             }
 
             .footer-container {
@@ -694,7 +690,7 @@
     </section>
 
     <!-- 3b. Shop by Category (தானாக டேட்டாபேஸிலிருந்து நிரம்பும்) -->
-    <section class="section" id="categories" hidden>
+    <section class="section alt" id="categories" hidden>
         <div class="section-inner">
             <div class="section-head">
                 <span class="section-eyebrow">Our Collections</span>
@@ -702,18 +698,6 @@
                 <p class="section-sub">Carefully sourced and graded, packed fresh for you.</p>
             </div>
             <div class="cat-grid" id="cat-grid"></div>
-        </div>
-    </section>
-
-    <!-- 3c. Featured Products (தானாக டேட்டாபேஸிலிருந்து நிரம்பும்) -->
-    <section class="section alt" id="featured" hidden>
-        <div class="section-inner">
-            <div class="section-head">
-                <span class="section-eyebrow">Handpicked</span>
-                <h2 class="section-title">Featured Products</h2>
-            </div>
-            <div class="prod-grid" id="prod-grid"></div>
-            <div class="section-link"><a href="/shop" class="btn btn-primary">View all products</a></div>
         </div>
     </section>
 
@@ -823,7 +807,7 @@
             });
         });
 
-        // ---- டேட்டாபேஸிலிருந்து வகைகள் & சிறப்புப் பொருட்களை ஏற்றுதல் ----
+        // ---- டேட்டாபேஸிலிருந்து வகைகளை ஏற்றுதல் ----
         const FALLBACK_IMG = 'https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?q=80&w=600';
 
         function esc(v) {
@@ -832,20 +816,12 @@
             }[c]));
         }
 
-        function priceText(p) {
-            const prices = (p.weights || []).map(w => Number(w.price)).filter(n => n > 0);
-            if (prices.length) return 'From ₹' + Math.min(...prices);
-            return p.price ? '₹' + p.price : '';
-        }
-
         fetch('/products')
             .then(r => r.ok ? r.json() : [])
             .then(list => {
                 if (!Array.isArray(list)) return;
                 list = list.filter(p => p && p.name);
-                if (list.length === 0) return;
 
-                // வகைகள்
                 const groups = new Map();
                 list.forEach(p => {
                     const c = (p.category || '').trim();
@@ -855,34 +831,19 @@
                     g.count++;
                     if (!g.img && p.image) g.img = p.image;
                 });
+
                 const catHtml = [...groups.entries()].slice(0, 6).map(([c, g]) => `
                     <a class="cat-card" href="/shop?category=${encodeURIComponent(c)}">
                         <img src="${esc(g.img || FALLBACK_IMG)}" alt="${esc(c)}" loading="lazy">
                         <div class="cat-info"><h3>${esc(c)}</h3><span>${g.count} ${g.count === 1 ? 'product' : 'products'} →</span></div>
                     </a>`).join('');
+
                 if (catHtml) {
                     document.getElementById('cat-grid').innerHTML = catHtml;
                     document.getElementById('categories').hidden = false;
                 }
-
-                // சிறப்புப் பொருட்கள் (முதல் 6)
-                const withImg = list.filter(p => p.image);
-                const featured = (withImg.length >= 3 ? withImg : list).slice(0, 6);
-                document.getElementById('prod-grid').innerHTML = featured.map(p => `
-                    <a class="prod-card" href="/shop?category=${encodeURIComponent((p.category || '').trim())}">
-                        <img src="${esc(p.image || FALLBACK_IMG)}" alt="${esc(p.name)}" loading="lazy">
-                        <div class="prod-body">
-                            <span class="prod-cat">${esc(p.category || 'Dry Fruits')}</span>
-                            <span class="prod-name">${esc(p.name)}</span>
-                            <div class="prod-foot">
-                                <span class="prod-price">${esc(priceText(p))}</span>
-                                <span class="prod-cta">Order →</span>
-                            </div>
-                        </div>
-                    </a>`).join('');
-                document.getElementById('featured').hidden = false;
             })
-            .catch(() => { /* பிழை வந்தால் இந்தப் பகுதிகள் மறைந்தே இருக்கும் */ });
+            .catch(() => { /* பிழை வந்தால் இந்தப் பகுதி மறைந்தே இருக்கும் */ });
     </script>
 </body>
 </html>
